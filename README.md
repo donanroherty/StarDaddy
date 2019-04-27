@@ -8,3 +8,6 @@ You can see the project requirements here:
 
 AdobeXD design file can be downloaded from OneDrive here:
 [Design File](https://1drv.ms/u/s!Arcuy-4Tl1Q4laUjFtirvPZLcqeYHg)
+
+**Mockup**
+![enter image description here](https://yrkvlw.db.files.1drv.com/y4mbXnO_jmJFPVbzeTbyUUT6ozfWsF9LSTDoYcBNisH2YegXOBPhUC1w-yBnxb5pUKTm41NFBD9aqM856lxtWmqWsvYkWVap27uJhBcCoUARdQRLRbW4zxNXLof2m-Z6PHbGF3GgaugANGdUgDFNIRmGfXQ13g5ep_CXQtzvIlBDuaF-8h6YtJyGmduZCyFMqt5ZYdo-v7w874mQWLTs7EAXw?width=1366&height=768&cropmode=none)
