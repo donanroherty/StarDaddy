@@ -7,4 +7,6 @@ afterEach(() => cleanup)
 it('<App /> renders', () => {
   const component = render(<App />)
   expect(component).toBeTruthy()
+
+  component.debug()
 })
