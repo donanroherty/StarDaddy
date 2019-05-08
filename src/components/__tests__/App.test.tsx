@@ -2,11 +2,14 @@ import React from 'react'
 import App from '../App'
 import { render, cleanup } from 'react-testing-library'
 
-afterEach(() => cleanup)
+afterEach(() => cleanup())
 
-it('<App /> renders', () => {
-  const component = render(<App />)
-  expect(component).toBeTruthy()
+test('<App />', () => {
+  const app = render(<App />)
+  expect(app).toBeTruthy()
 
-  component.debug()
+  const { getByTestId } = app
+  expect(getByTestId('app-bar')).toBeTruthy()
+  expect(getByTestId('tool-panel')).toBeTruthy()
+  expect(getByTestId('results-panel')).toBeTruthy()
 })
