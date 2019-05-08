@@ -1,15 +1,17 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
-  "icons": [
-    {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    }
-  ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "name": "Laniakea",
+  "description": "A browser extension for sorting and rediscovery of starred GitHub repos",
+  "version": "0.01",
+  "manifest_version": 2,
+  "icons": {
+    "48": "icons/logo-48.png"
+  },
+  "permissions": ["activeTab", "tabs"],
+  "browser_action": {
+    "default_icon": "icons/logo-48.png",
+    "default_title": "Laniakea - GitHub star manager"
+  },
+  "background": {
+    "scripts": ["background.js"]
+  }
 }
