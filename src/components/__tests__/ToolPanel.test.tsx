@@ -1,10 +1,15 @@
 import React from 'react'
-import ToolPanel from '../ToolPanel'
+import ToolPanel, { ToolPanelProps } from '../ToolPanel'
 import { render, cleanup } from 'react-testing-library'
+import { ToolbarPanelOptions } from '../App'
 
 afterEach(() => cleanup())
 
+const toolPanelProps: ToolPanelProps = {
+  activeToolbarPanel: ToolbarPanelOptions.Search
+}
+
 test('<ToolPanel /> renders', () => {
-  const component = render(<ToolPanel />)
+  const component = render(<ToolPanel {...toolPanelProps} />)
   expect(component).toBeTruthy()
 })

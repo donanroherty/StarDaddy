@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled, {
   ThemeProvider,
   createGlobalStyle
@@ -6,17 +6,29 @@ import styled, {
 import theme from '../theme/theme'
 
 import AppBar from './AppBar'
-import ToolPanel from './ToolPanel'
 import ResultsPanel from './ResultsPanel'
+import ToolPanel from './ToolPanel'
+
+export enum ToolbarPanelOptions {
+  Search,
+  Settings
+}
 
 const App: React.FC = () => {
+  const [activeToolbarPanel, setActiveToolbarPanel] = useState(
+    ToolbarPanelOptions.Search
+  )
+
   return (
     <ThemeProvider theme={theme}>
       <>
         <GlobalStyle />
         <Wrapper>
-          <AppBar />
-          <ToolPanel />
+          <AppBar
+            setActiveToolbarPanel={setActiveToolbarPanel}
+            activeToolbarPanel={activeToolbarPanel}
+          />
+          <ToolPanel activeToolbarPanel={activeToolbarPanel} />
           <ResultsPanel />
         </Wrapper>
       </>
@@ -25,20 +37,22 @@ const App: React.FC = () => {
 }
 
 const GlobalStyle = createGlobalStyle`
-body{
-  margin: 0;
-  padding: 0;
-  width: 100vw;
-  height: 100vh;
-  @import url('https://fonts.googleapis.com/css?family=Open+Sans');
-  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: ${theme.dark}; 
+html{
+  height: 100%;
+  width: 100%;
 }
+body {
+   height: 100%;
+    width: 100%;
+    margin:0;
+  @import url('https://fonts.googleapis.com/css?family=Open+Sans');
+    font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    color: ${theme.dark};
+  }
   #root{
+    width: 100%;
     height: 100%;
   }
 `

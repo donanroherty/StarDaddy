@@ -17,10 +17,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "run-ext": "cd build & web-ext run --firefox=firefoxdeveloperedition",
+    "run-ext": "cd build && web-ext run --firefox=firefoxdeveloperedition",
     "build": "INLINE_RUNTIME_CHUNK=false react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build-netlify": "INLINE_RUNTIME_CHUNK=false react-scripts build && netlify deploy"
   },
   "eslintConfig": {
     "extends": "react-app"

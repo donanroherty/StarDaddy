@@ -7,6 +7,7 @@ import icons from '../theme/icons'
 interface AppBarButtonProps {
   title: string
   icon: keyof typeof icons
+  onClick: (event: React.MouseEvent<HTMLElement>) => void
   theme?: ThemeInterface
 }
 

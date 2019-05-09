@@ -1,11 +1,21 @@
 import React from 'react'
 import styled from 'styled-components'
 import SettingsToolPanel from './SettingsToolPanel'
+import SearchToolPanel from './SearchToolPanel'
+import { ToolbarPanelOptions } from './App'
 
-const ToolPanel = () => {
+export interface ToolPanelProps {
+  activeToolbarPanel: ToolbarPanelOptions
+}
+
+const ToolPanel = (props: ToolPanelProps) => {
   return (
     <Wrapper data-testid="tool-panel">
-      <SettingsToolPanel />
+      {props.activeToolbarPanel === ToolbarPanelOptions.Settings ? (
+        <SettingsToolPanel />
+      ) : (
+        <SearchToolPanel />
+      )}
     </Wrapper>
   )
 }
