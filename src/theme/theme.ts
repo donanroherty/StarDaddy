@@ -1,13 +1,4 @@
-export interface ThemeInterface {
-  primary: string
-  dark: string
-  light: string
-  borderLight: string
-  bgLight: string
-  bgLighter: string
-}
-
-export const theme: ThemeInterface = {
+const theme = {
   primary: '#0366D6',
   dark: '#24292E',
   light: '#D1D5DA',
@@ -15,3 +6,6 @@ export const theme: ThemeInterface = {
   bgLight: '#FAFBFC',
   bgLighter: '#FFFFFF'
 }
+
+export type ThemeInterface = typeof theme
+export default theme

@@ -1,10 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
+import SettingsToolPanel from './SettingsToolPanel'
 
 const ToolPanel = () => {
   return (
     <Wrapper data-testid="tool-panel">
-      <div />
+      <SettingsToolPanel />
     </Wrapper>
   )
 }

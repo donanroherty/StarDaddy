@@ -3,7 +3,7 @@ import styled, {
   ThemeProvider,
   createGlobalStyle
 } from '../theme/themed-styled-components'
-import { theme } from '../theme/theme'
+import theme from '../theme/theme'
 
 import AppBar from './AppBar'
 import ToolPanel from './ToolPanel'
