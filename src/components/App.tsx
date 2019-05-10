@@ -37,24 +37,8 @@ const App: React.FC = () => {
 }
 
 const GlobalStyle = createGlobalStyle`
-html{
-  height: 100%;
-  width: 100%;
-}
-body {
-   height: 100%;
-    width: 100%;
-    margin:0;
-  @import url('https://fonts.googleapis.com/css?family=Open+Sans');
-    font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    color: ${theme.dark};
-  }
-  #root{
-    width: 100%;
-    height: 100%;
-  }
+@import url('https://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,400i,600,700');
 `
 
 const Wrapper = styled.div`

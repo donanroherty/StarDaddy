@@ -28,8 +28,8 @@ const Wrapper = styled.div`
   width: 100%;
   height: 100%;
 
-  color: ${props => props.theme.light};
-  background-color: ${props => props.theme.dark};
+  color: ${props => props.theme.color.light};
+  background-color: ${props => props.theme.color.dark};
 `
 const UserDetails = styled.div`
   padding: 0 20px 0 20px;
