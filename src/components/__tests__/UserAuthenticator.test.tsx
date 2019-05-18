@@ -1,6 +1,6 @@
 import React from 'react'
 import UserAuthenticator from '../UserAuthenticator'
-import { render, cleanup, fireEvent, wait } from '../utils/test-utils'
+import { render, cleanup, fireEvent } from '../utils/test-utils'
 import userData from '../../mock-data/user.json'
 
 const authorizeMock = jest.fn()

@@ -1,21 +1,29 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import logo from '../assets/vectors/logo.svg'
 import Button from './ui/Button'
 
+enum AuthState {
+  loading,
+  authNewUser
+}
+
 interface UserAuthenticatorProps {
-  authorize: () => {}
+  authorize: () => Promise<void>
 }
 
 const UserAuthenticator = (props: UserAuthenticatorProps) => {
   const { authorize } = props
+  const [authState, setAuthState] = useState(AuthState.loading)
 
   // On mount
   useEffect(() => {
-    // Login user saved in local storage
+    // Attempt login user saved in local storage
     const localUser = localStorage.getItem('user-data')
     if (localUser) {
       authorize()
+    } else {
+      setAuthState(AuthState.authNewUser)
     }
   }, [])
 
@@ -23,21 +31,29 @@ const UserAuthenticator = (props: UserAuthenticatorProps) => {
     <Wrapper data-testid="user-setup-modal">
       <div>
         <Header>
-          <img src={logo} alt="app logo" />
+          <img src={logo} alt="app logo" width="50px" height="50px" />
           <h1>Laniakea</h1>
           <h4>All your stars in one place</h4>
         </Header>
 
         <Content>
-          <p>
-            Laniakea helps you categorize and filter your starred repositories.
-            <br />
-            Click below to get started.
-          </p>
+          {authState === AuthState.loading &&
+          localStorage.getItem('user-data') ? (
+            <p>loading...</p>
+          ) : (
+            <>
+              <p>
+                Laniakea helps you categorize and filter your starred
+                repositories.
+                <br />
+                Click below to get started.
+              </p>
 
-          <ButtonWrapper>
-            <Button label="Login with GitHub" onClick={authorize} />
-          </ButtonWrapper>
+              <ButtonWrapper>
+                <Button label="Login with GitHub" onClick={authorize} />
+              </ButtonWrapper>
+            </>
+          )}
         </Content>
       </div>
     </Wrapper>
@@ -84,7 +100,7 @@ const Header = styled.div`
 `
 const Content = styled.div`
   width: 610px;
-  height: auto;
+  height: 110px;
   padding: 30px 0 30px 0;
   border-radius: 0 0 16px 16px;
   background-color: ${({ theme }) => theme.color.dark};
