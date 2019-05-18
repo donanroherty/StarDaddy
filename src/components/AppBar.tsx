@@ -35,7 +35,7 @@ const AppBar = (props: AppBarProps) => {
 const Wrapper = styled.div`
   width: 50px;
   height: 100%;
-  background-color: ${({ theme }) => theme.dark};
+  background-color: ${({ theme }) => theme.color.dark};
 `
 const Buttons = styled.div`
   height: 100%;

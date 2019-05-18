@@ -12,7 +12,7 @@ interface AppBarButtonProps {
 }
 
 const AppBarButton = (props: AppBarButtonProps) => {
-  const iconColor = theme.light
+  const iconColor = theme.color.light
   const iconSize = 35
 
   return (
@@ -25,7 +25,7 @@ const AppBarButton = (props: AppBarButtonProps) => {
 const Wrapper = styled.div`
   width: 50px;
   height: 50px;
-  background-color: ${({ theme }) => theme.dark};
+  background-color: ${({ theme }) => theme.color.dark};
   display: flex;
   align-items: center;
   justify-content: center;

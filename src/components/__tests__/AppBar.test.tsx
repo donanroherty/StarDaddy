@@ -1,10 +1,10 @@
 import React from 'react'
 import AppBar from '../AppBar'
 import App from '../App'
-import { render, cleanup, fireEvent } from 'react-testing-library'
-import { ThemeProvider } from '../../theme/themed-styled-components'
-import theme from '../../theme/theme'
+import { UserProvider } from '../../state/user-context'
+import { render, cleanup, fireEvent } from '../utils/test-utils'
 import { ToolbarPanelOptions } from '../App'
+import user from '../../mock-data/user.json'
 
 afterEach(() => cleanup())
 
@@ -12,12 +12,10 @@ const setActiveToolbarPanel = jest.fn()
 
 test('<AppBar /> renders itself and buttons', () => {
   const component = render(
-    <ThemeProvider theme={theme}>
-      <AppBar
-        setActiveToolbarPanel={setActiveToolbarPanel}
-        activeToolbarPanel={ToolbarPanelOptions.Search}
-      />
-    </ThemeProvider>
+    <AppBar
+      setActiveToolbarPanel={setActiveToolbarPanel}
+      activeToolbarPanel={ToolbarPanelOptions.Search}
+    />
   )
   expect(component).toBeTruthy()
 
@@ -26,8 +24,12 @@ test('<AppBar /> renders itself and buttons', () => {
   expect(getByTitle('Settings')).toBeTruthy()
 })
 
-test('Clicking buttons opens correct panels', () => {
-  const { getByTestId, getByTitle } = render(<App />)
+test('AppBar buttons open correct panels', () => {
+  const { getByTestId, getByTitle } = render(
+    <UserProvider value={{ user: user, setUser: jest.fn() }}>
+      <App />
+    </UserProvider>
+  )
   expect(getByTestId('search-tool-panel')).toBeTruthy()
   fireEvent.click(getByTitle('Settings'))
   expect(getByTestId('settings-tool-panel')).toBeTruthy()
@@ -37,12 +39,10 @@ test('Clicking buttons opens correct panels', () => {
 
 test('Clicking buttons calls correct functions', () => {
   const { getByTitle } = render(
-    <ThemeProvider theme={theme}>
-      <AppBar
-        setActiveToolbarPanel={setActiveToolbarPanel}
-        activeToolbarPanel={ToolbarPanelOptions.Search}
-      />
-    </ThemeProvider>
+    <AppBar
+      setActiveToolbarPanel={setActiveToolbarPanel}
+      activeToolbarPanel={ToolbarPanelOptions.Search}
+    />
   )
   fireEvent.click(getByTitle('Settings'), ToolbarPanelOptions.Settings)
   expect(setActiveToolbarPanel).toHaveBeenCalledTimes(1)

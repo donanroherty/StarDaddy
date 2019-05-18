@@ -1,23 +1,22 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useUser } from '../state/user-context'
 
 const SettingsToolPanel = () => {
+  const { user, logout } = useUser()
+  const name = user ? user.name : ''
+  const login = user ? user.login : ''
+
   return (
     <Wrapper data-testid="settings-tool-panel">
       <UserDetails>
-        <AccountRealName>Forname Surname</AccountRealName>
-        <AccountUsername>username</AccountUsername>
+        <AccountRealName>{name}</AccountRealName>
+        <AccountUsername>{login}</AccountUsername>
       </UserDetails>
 
       <SettingList>
         <li>
-          <SettingItem>Logout</SettingItem>
-        </li>
-        <li>
-          <SettingItem>Setting</SettingItem>
-        </li>
-        <li>
-          <SettingItem>Setting</SettingItem>
+          <SettingItem onClick={logout}>Logout</SettingItem>
         </li>
       </SettingList>
     </Wrapper>
@@ -28,8 +27,8 @@ const Wrapper = styled.div`
   width: 100%;
   height: 100%;
 
-  color: ${props => props.theme.light};
-  background-color: ${props => props.theme.dark};
+  color: ${props => props.theme.color.light};
+  background-color: ${props => props.theme.color.dark};
 `
 const UserDetails = styled.div`
   padding: 0 20px 0 20px;
