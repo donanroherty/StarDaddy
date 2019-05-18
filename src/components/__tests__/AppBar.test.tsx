@@ -1,8 +1,10 @@
 import React from 'react'
 import AppBar from '../AppBar'
 import App from '../App'
+import { UserProvider } from '../../state/user-context'
 import { render, cleanup, fireEvent } from '../utils/test-utils'
 import { ToolbarPanelOptions } from '../App'
+import user from '../../mock-data/user.json'
 
 afterEach(() => cleanup())
 
@@ -22,8 +24,12 @@ test('<AppBar /> renders itself and buttons', () => {
   expect(getByTitle('Settings')).toBeTruthy()
 })
 
-test('Clicking buttons opens correct panels', () => {
-  const { getByTestId, getByTitle } = render(<App />)
+test('AppBar buttons open correct panels', () => {
+  const { getByTestId, getByTitle } = render(
+    <UserProvider value={{ user: user, setUser: jest.fn() }}>
+      <App />
+    </UserProvider>
+  )
   expect(getByTestId('search-tool-panel')).toBeTruthy()
   fireEvent.click(getByTitle('Settings'))
   expect(getByTestId('settings-tool-panel')).toBeTruthy()

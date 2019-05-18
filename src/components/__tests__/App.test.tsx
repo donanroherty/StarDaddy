@@ -1,15 +1,31 @@
 import React from 'react'
 import App from '../App'
-import { render, cleanup } from 'react-testing-library'
+import { UserProvider } from '../../state/user-context'
+import { render, cleanup } from '../utils/test-utils'
+import user from '../../mock-data/user.json'
 
 afterEach(() => cleanup())
 
-test('<App />', () => {
-  const app = render(<App />)
-  expect(app).toBeTruthy()
+const setUser = jest.fn()
 
-  const { getByTestId } = app
-  expect(getByTestId('app-bar')).toBeTruthy()
-  expect(getByTestId('tool-panel')).toBeTruthy()
-  expect(getByTestId('results-panel')).toBeTruthy()
+test('Renders correct elements is a user is or is not logged in', () => {
+  const { queryByTestId, rerender } = render(
+    <UserProvider value={{ user: undefined, setUser: setUser }}>
+      <App />
+    </UserProvider>
+  )
+  expect(queryByTestId('app-bar')).toBeNull()
+  expect(queryByTestId('tool-panel')).toBeNull()
+  expect(queryByTestId('results-panel')).toBeNull()
+  expect(queryByTestId('user-setup-modal')).not.toBeNull()
+
+  rerender(
+    <UserProvider value={{ user: user, setUser: setUser }}>
+      <App />
+    </UserProvider>
+  )
+  expect(queryByTestId('app-bar')).not.toBeNull()
+  expect(queryByTestId('tool-panel')).not.toBeNull()
+  expect(queryByTestId('results-panel')).not.toBeNull()
+  expect(queryByTestId('user-setup-modal')).toBeNull()
 })
