@@ -1,6 +1,6 @@
 import React from 'react'
 import styled, { withTheme } from 'styled-components'
-import Icon from './ui/Icon'
+import Icon from './Icon'
 import theme, { ThemeInterface } from '../theme/theme'
 import icons from '../theme/icons'
 
