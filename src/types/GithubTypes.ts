@@ -31,3 +31,14 @@ export interface User {
   created_at: string
   updated_at: string
 }
+
+export interface StarredRepo {
+  ownerLogin: string
+  ownerAvatarUrl: string
+  name: string
+  htmlUrl: string
+  description: string
+  stargazersCount: number
+  forksCount: number
+  pushedAt: string
+}
