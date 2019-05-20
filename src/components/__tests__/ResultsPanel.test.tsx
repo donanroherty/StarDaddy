@@ -1,10 +1,15 @@
 import React from 'react'
 import ResultsPanel from '../ResultsPanel'
-import { render, cleanup } from 'react-testing-library'
+import { StarredProvider } from '../../state/starred-context'
+import { render, cleanup } from '../utils/test-utils'
 
 afterEach(() => cleanup())
 
 test('<ResultsPanel /> renders', () => {
-  const component = render(<ResultsPanel />)
+  const component = render(
+    <StarredProvider>
+      <ResultsPanel />
+    </StarredProvider>
+  )
   expect(component).toBeTruthy()
 })

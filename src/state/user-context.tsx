@@ -35,7 +35,7 @@ const useUser = () => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(mockData)
-      }, 500)
+      }, 100)
     })
       .then(data => handleUserLoggedIn(mockData))
       .catch(e => {

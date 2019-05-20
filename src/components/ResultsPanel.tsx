@@ -1,9 +1,10 @@
 import React from 'react'
+import RepoList from './RepoList'
 
 const ResultsPanel = () => {
   return (
     <div data-testid="results-panel">
-      <div />
+      <RepoList />
     </div>
   )
 }
