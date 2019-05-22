@@ -1,13 +1,18 @@
 import React from 'react'
 import { render } from 'react-testing-library'
-import { ThemeProvider } from '../../theme/themed-styled-components'
 import theme from '../../theme/theme'
 import { ThemeProvider } from '../../theme/themed-styled-components'
 import { StarProvider } from '../../state/star-context'
+import { SearchProvider } from '../../state/search-context'
 
 const GlobalProviders = ({ children }) => {
-  return <ThemeProvider theme={theme}>{children}</ThemeProvider>
+  return (
+    <ThemeProvider theme={theme}>
+      <SearchProvider>
         <StarProvider>{children}</StarProvider>
+      </SearchProvider>
+    </ThemeProvider>
+  )
 }
 
 const customRender = (ui, options) =>

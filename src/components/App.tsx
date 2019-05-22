@@ -34,11 +34,10 @@ const App: React.FC = () => {
               setActiveToolbarPanel={setActiveToolbarPanel}
               activeToolbarPanel={activeToolbarPanel}
             />
-            <ToolPanel activeToolbarPanel={activeToolbarPanel} />
-
-            <StarredProvider>
+            <SearchProvider>
+              <ToolPanel activeToolbarPanel={activeToolbarPanel} />
               <ResultsPanel />
-            </StarredProvider>
+            </SearchProvider>
           </MainPanels>
         ) : (
           <UserAuthenticator authorize={authorize} />
