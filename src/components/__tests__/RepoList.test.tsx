@@ -1,11 +1,11 @@
 import React from 'react'
 import RepoList from '../RepoList'
-import { render, cleanup } from '../utils/test-utils'
-import { StarredProvider } from '../../state/starred-context'
+import { render as renderrtl, cleanup } from '../utils/test-utils'
+import { StarProvider } from '../../state/star-context'
 
 afterEach(() => cleanup())
 
-const mockStarred = [
+const mockStars = [
   {
     ownerLogin: 'testing-library',
     ownerAvatarUrl: 'https://avatars1.githubusercontent.com/u/49996085?v=4',
@@ -40,21 +40,25 @@ const mockStarred = [
   }
 ]
 
-test('Renders a <Repo/> for each starred item', () => {
-  const { getByText, container, rerender } = render(
-    <StarredProvider value={{ starred: mockStarred, setStarred: jest.fn() }}>
-      <RepoList />
-    </StarredProvider>
+const render = (ui: any, options?: any) => {
+  return renderrtl(
+    <StarProvider value={{ stars: mockStars, setStars: jest.fn() }}>
+      {ui}
+    </StarProvider>
   )
-  expect(container.firstElementChild!.children.length).toBe(mockStarred.length)
-  expect(getByText(mockStarred[0].name)).not.toBeNull()
-  expect(getByText(mockStarred[1].name)).not.toBeNull()
-  expect(getByText(mockStarred[2].name)).not.toBeNull()
+}
+
+test('Renders a <Repo/> for each starred item', () => {
+  const { getByText, container, rerender } = render(<RepoList />)
+  expect(container.firstElementChild!.children.length).toBe(mockStars.length)
+  expect(getByText(mockStars[0].name)).not.toBeNull()
+  expect(getByText(mockStars[1].name)).not.toBeNull()
+  expect(getByText(mockStars[2].name)).not.toBeNull()
 
   rerender(
-    <StarredProvider value={{ starred: undefined, setStarred: jest.fn() }}>
+    <StarProvider value={{ stars: undefined, setStars: jest.fn() }}>
       <RepoList />
-    </StarredProvider>
+    </StarProvider>
   )
   expect(container.firstElementChild!.children.length).toBe(0)
 })

@@ -1,10 +1,13 @@
 import React from 'react'
 import RepoList from './RepoList'
+import { StarProvider } from '../state/star-context'
 
 const ResultsPanel = () => {
   return (
     <div data-testid="results-panel">
-      <RepoList />
+      <StarProvider>
+        <RepoList />
+      </StarProvider>
     </div>
   )
 }

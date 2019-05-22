@@ -1,15 +1,15 @@
 import React from 'react'
 import ResultsPanel from '../ResultsPanel'
-import { StarredProvider } from '../../state/starred-context'
+import { StarProvider } from '../../state/star-context'
 import { render, cleanup } from '../utils/test-utils'
 
 afterEach(() => cleanup())
 
 test('<ResultsPanel /> renders', () => {
   const component = render(
-    <StarredProvider>
+    <StarProvider>
       <ResultsPanel />
-    </StarredProvider>
+    </StarProvider>
   )
   expect(component).toBeTruthy()
 })

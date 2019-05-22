@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import shortid from 'shortid'
 import Repo from './Repo'
-import { useStarred } from '../state/starred-context'
+import { useStars } from '../state/star-context'
 
 const RepoList = () => {
   const { starred } = useStarred()

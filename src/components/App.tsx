@@ -11,7 +11,7 @@ import ToolPanel from './ToolPanel'
 import UserAuthenticator from './UserAuthenticator'
 
 import { useUser } from '../state/user-context'
-import { StarredProvider } from '../state/starred-context'
+import { SearchProvider } from '../state/search-context'
 
 export enum ToolbarPanelOptions {
   Search,
