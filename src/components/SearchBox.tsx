@@ -28,6 +28,7 @@ const Wrapper = styled.div`
   border-radius: 15px;
   margin: 12.8px;
   box-sizing: border-box;
+  background-color: white;
 `
 const InputField = styled.div`
   display: flex;
@@ -37,7 +38,7 @@ const InputField = styled.div`
   > input {
     font-size: 18px;
     border: none;
-    background-color: transparent;
+
     color: ${({ theme }) => theme.color.text};
   }
 `

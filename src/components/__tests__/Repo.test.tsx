@@ -1,6 +1,6 @@
 import React from 'react'
 import Repo, { RepoProps, formatLastPushTime } from '../Repo'
-import { render, cleanup } from '../utils/test-utils'
+import { render } from '../utils/test-utils'
 
 const repoProps: RepoProps = {
   ownerLogin: 'owner',
@@ -10,11 +10,12 @@ const repoProps: RepoProps = {
   description: 'repo description',
   stargazersCount: 50,
   forksCount: 10,
-  pushedAt: '2018-11-12T23:45:05Z'
+  pushedAt: '2018-11-12T23:45:05Z',
+  style: {}
 }
 
 describe('<Repo/> Renders correct content', () => {
-  const { getByTitle, getByAltText, getByText } = render(
+  const { getByTestId, getByAltText, getByText } = render(
     <Repo {...repoProps} />
   )
 
@@ -25,10 +26,10 @@ describe('<Repo/> Renders correct content', () => {
   })
 
   test('Title is rendered correctly and has correct link href', () => {
-    expect(getByTitle('title').innerHTML).toBe(
+    expect(getByTestId('title').innerHTML).toBe(
       'owner / <strong>repo-name</strong>'
     )
-    expect(getByTitle('title').getAttribute('href')).toBe(repoProps.htmlUrl)
+    expect(getByTestId('title').getAttribute('href')).toBe(repoProps.htmlUrl)
   })
 
   test('Description renders correct text', () => {
@@ -36,19 +37,19 @@ describe('<Repo/> Renders correct content', () => {
   })
 
   test('Star count is displayed and has correct link href', () => {
-    expect(getByTitle('star-count').lastElementChild!.innerHTML).toBe(
+    expect(getByTestId('star-count').lastElementChild!.innerHTML).toBe(
       repoProps.stargazersCount.toString()
     )
-    expect(getByTitle('star-count').getAttribute('href')).toBe(
+    expect(getByTestId('star-count').getAttribute('href')).toBe(
       repoProps.htmlUrl + '/stargazers'
     )
   })
 
   test('Fork count is displayed and has correct link href', () => {
-    expect(getByTitle('fork-count').lastElementChild!.innerHTML).toBe(
+    expect(getByTestId('fork-count').lastElementChild!.innerHTML).toBe(
       repoProps.forksCount.toString()
     )
-    expect(getByTitle('fork-count').getAttribute('href')).toBe(
+    expect(getByTestId('fork-count').getAttribute('href')).toBe(
       repoProps.htmlUrl + '/network/members'
     )
   })
