@@ -11,6 +11,7 @@ export interface RepoProps {
   stargazersCount: number
   forksCount: number
   pushedAt: string
+  style: any
 }
 
 export const formatLastPushTime = (pushedAt: string, now: Date) => {
@@ -54,32 +55,36 @@ const Repo = (props: RepoProps) => {
     description,
     stargazersCount,
     forksCount,
-    pushedAt
+    pushedAt,
+    style
   } = props
 
   const now = new Date()
 
   return (
-    <Wrapper>
+    <Wrapper style={style}>
       <TitleRow>
         <img src={ownerAvatarUrl} alt="avatar" />
         <a
           href={htmlUrl}
           target="_blank"
           rel="noopener noreferrer"
-          title="title"
+          data-testid="title"
+          title={`${ownerLogin} / ${name}`}
         >
           {ownerLogin} / <strong>{name}</strong>
         </a>
       </TitleRow>
+      
       <Description>{description}</Description>
+
       <DetailsRow>
         {/* Stars */}
         <DetailLink
           href={`${htmlUrl}/stargazers`}
           target="_blank"
           rel="noopener noreferrer"
-          title="star-count"
+          data-testid="star-count"
         >
           <GoStar size="14px" />
           <span>{stargazersCount}</span>
@@ -90,7 +95,7 @@ const Repo = (props: RepoProps) => {
           href={`${htmlUrl}/network/members`}
           target="_blank"
           rel="noopener noreferrer"
-          title="fork-count"
+          data-testid="fork-count"
         >
           <GoRepoForked size="14px" />
           <span>{forksCount}</span>
@@ -101,18 +106,29 @@ const Repo = (props: RepoProps) => {
           <span>{formatLastPushTime(pushedAt, now)}</span>
         </LastUpdatedText>
       </DetailsRow>
+      <HR />
     </Wrapper>
   )
 }
 
+export const REPO_HEIGHT: number = 200
+
 const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
   max-width: 688px;
+  height: ${REPO_HEIGHT}px;
+  padding: 24px;
+  color: ${({ theme }) => theme.color.text};
+`
+const HR = styled.hr`
+  width: 100%;
   border-width: 0 0 1px 0;
   border-color: ${({ theme }) => theme.color.borderLight};
   border-style: solid;
-  padding: 24px 0;
-  color: ${({ theme }) => theme.color.text};
 `
+
 const TitleRow = styled.div`
   display: flex;
   align-items: center;
@@ -123,6 +139,12 @@ const TitleRow = styled.div`
     padding: 0px;
     margin: 0px;
     text-decoration: none;
+
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+
     :hover {
       text-decoration: underline;
     }
@@ -139,10 +161,18 @@ const TitleRow = styled.div`
 `
 const Description = styled.div`
   font-size: 14px;
-  padding: 15px 0;
+  margin-top: 15px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 `
 const DetailsRow = styled.div`
+  display: block;
+  margin-top: auto;
   font-size: 12px;
+  overflow: hidden;
+  white-space: nowrap;
 `
 const DetailLink = styled.a`
   display: inline-block;
