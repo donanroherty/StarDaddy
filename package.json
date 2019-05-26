@@ -8,12 +8,17 @@
     "@types/react": "16.8.16",
     "@types/react-dom": "16.8.4",
     "@types/react-icons": "^3.0.0",
+    "@types/react-virtualized-auto-sizer": "^1.0.0",
+    "@types/react-window": "^1.8.0",
     "@types/styled-components": "^4.1.14",
+    "jest-dom": "^3.4.0",
     "polished": "^3.3.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-icons": "^3.7.0",
-    "react-scripts": "3.0.0",
+    "react-scripts": "3.0.1",
+    "react-virtualized-auto-sizer": "^1.0.2",
+    "react-window": "^1.8.1",
     "shortid": "^2.2.14",
     "styled-components": "^4.2.0",
     "typescript": "3.4.5"
@@ -24,7 +29,7 @@
     "build": "INLINE_RUNTIME_CHUNK=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build-netlify": "INLINE_RUNTIME_CHUNK=false react-scripts build && netlify deploy"
+    "build-netlify": "react-scripts build && netlify deploy --prod"
   },
   "eslintConfig": {
     "extends": "react-app"

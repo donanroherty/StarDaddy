@@ -11,7 +11,7 @@ import ToolPanel from './ToolPanel'
 import UserAuthenticator from './UserAuthenticator'
 
 import { useUser } from '../state/user-context'
-import { StarredProvider } from '../state/starred-context'
+import { SearchProvider } from '../state/search-context'
 
 export enum ToolbarPanelOptions {
   Search,
@@ -34,11 +34,10 @@ const App: React.FC = () => {
               setActiveToolbarPanel={setActiveToolbarPanel}
               activeToolbarPanel={activeToolbarPanel}
             />
-            <ToolPanel activeToolbarPanel={activeToolbarPanel} />
-
-            <StarredProvider>
+            <SearchProvider>
+              <ToolPanel activeToolbarPanel={activeToolbarPanel} />
               <ResultsPanel />
-            </StarredProvider>
+            </SearchProvider>
           </MainPanels>
         ) : (
           <UserAuthenticator authorize={authorize} />

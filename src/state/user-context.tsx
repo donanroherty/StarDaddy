@@ -24,23 +24,13 @@ const useUser = () => {
   const handleUserLoggedIn = (data: any) => {
     setUser(data)
     localStorage.setItem('user-data', JSON.stringify(data))
-    console.log(`Logged in as ${data.login}`)
-  }
-
-  const handleAuthFailure = (error: string) => {
-    console.log('Auth failed:', error)
   }
 
   const authorize = () => {
+    handleUserLoggedIn(mockData)
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(mockData)
-      }, 100)
-    })
-      .then(data => handleUserLoggedIn(mockData))
-      .catch(e => {
-        handleAuthFailure(e)
-      })
+      resolve(mockData)
+    }).then(data => handleUserLoggedIn(mockData))
   }
 
   const logout = () => {
