@@ -1,11 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 import SearchBox from './SearchBox'
+import TagList from './TagList'
 
 const SearchToolPanel = () => {
   return (
     <Wrapper data-testid="search-tool-panel">
       <SearchBox />
+      <TagList />
     </Wrapper>
   )
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import starredReposData from '../mock-data/starred.json'
 import { StarredRepo } from '../types/GithubTypes'
 
@@ -38,6 +38,8 @@ const useStars = () => {
 
     setStars(starredRepos)
   }
+
+  useEffect(updateStars, [])
 
   return { stars, updateStars }
 }

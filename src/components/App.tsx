@@ -12,6 +12,7 @@ import UserAuthenticator from './UserAuthenticator'
 
 import { useUser } from '../state/user-context'
 import { SearchProvider } from '../state/search-context'
+import { TagProvider } from '../state/tag-context'
 
 export enum ToolbarPanelOptions {
   Search,
@@ -34,10 +35,12 @@ const App: React.FC = () => {
               setActiveToolbarPanel={setActiveToolbarPanel}
               activeToolbarPanel={activeToolbarPanel}
             />
-            <SearchProvider>
-              <ToolPanel activeToolbarPanel={activeToolbarPanel} />
-              <ResultsPanel />
-            </SearchProvider>
+            <TagProvider>
+              <SearchProvider>
+                <ToolPanel activeToolbarPanel={activeToolbarPanel} />
+                <ResultsPanel />
+              </SearchProvider>
+            </TagProvider>
           </MainPanels>
         ) : (
           <UserAuthenticator authorize={authorize} />

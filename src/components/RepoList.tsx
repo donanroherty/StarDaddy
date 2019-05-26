@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import Repo from './Repo'
 import { useStars } from '../state/star-context'
@@ -59,12 +59,8 @@ export const getSearchResults = (
 }
 
 const RepoList = () => {
-  const { stars, updateStars } = useStars()
+  const { stars } = useStars()
   const { searchTerm } = useSearch()
-
-  useEffect(() => {
-    updateStars()
-  }, [])
 
   if (!stars) return null
 
