@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useUser } from '../state/user-context'
+import { useUser } from 'state/user-context'
 
 const SettingsToolPanel = () => {
   const { user, logout } = useUser()

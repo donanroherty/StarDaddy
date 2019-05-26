@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import Repo from './Repo'
-import { useStars } from '../state/star-context'
-import { useSearch } from '../state/search-context'
-import { StarredRepo } from '../types/GithubTypes'
+import { useStars } from 'state/star-context'
+import { useSearch } from 'state/search-context'
+import { StarredRepo } from 'types/GithubTypes'
 
 type SearchResult = {
   id: number

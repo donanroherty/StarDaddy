@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { render, cleanup } from 'components/utils/test-utils'
+import { render, cleanup } from 'utils/test-utils'
 import TagList from '../TagList'
 
 afterEach(() => cleanup())

@@ -1,6 +1,6 @@
 import React from 'react'
 import ToolPanel, { ToolPanelProps } from '../ToolPanel'
-import { render, cleanup } from '../utils/test-utils'
+import { render, cleanup } from 'utils/test-utils'
 import { ToolbarPanelOptions } from '../App'
 
 afterEach(() => cleanup())

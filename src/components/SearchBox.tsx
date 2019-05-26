@@ -1,8 +1,8 @@
 import React from 'react'
 import styled, { withTheme } from 'styled-components'
-import { useSearch } from '../state/search-context'
+import { useSearch } from 'state/search-context'
 import { GoSearch, GoX } from 'react-icons/go'
-import { ThemeInterface } from '../theme/theme'
+import { ThemeInterface } from 'theme/theme'
 
 interface SearchBoxProps {
   theme: ThemeInterface

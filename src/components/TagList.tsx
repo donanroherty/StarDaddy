@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTags } from '../state/tag-context'
+import { useTags } from 'state/tag-context'
 
 const TagList = () => {
   const { tags } = useTags()

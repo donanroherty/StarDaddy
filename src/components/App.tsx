@@ -2,17 +2,17 @@ import React, { useState } from 'react'
 import styled, {
   ThemeProvider,
   createGlobalStyle
-} from '../theme/themed-styled-components'
-import theme from '../theme/theme'
+} from 'theme/themed-styled-components'
+import theme from 'theme/theme'
 
 import AppBar from './AppBar'
 import ResultsPanel from './ResultsPanel'
 import ToolPanel from './ToolPanel'
 import UserAuthenticator from './UserAuthenticator'
 
-import { useUser } from '../state/user-context'
-import { SearchProvider } from '../state/search-context'
-import { TagProvider } from '../state/tag-context'
+import { useUser } from 'state/user-context'
+import { SearchProvider } from 'state/search-context'
+import { TagProvider } from 'state/tag-context'
 
 export enum ToolbarPanelOptions {
   Search,

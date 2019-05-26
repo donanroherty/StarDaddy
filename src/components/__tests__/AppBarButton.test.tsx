@@ -1,6 +1,6 @@
 import React from 'react'
 import AppBarButton from '../AppBarButton'
-import { render, cleanup, fireEvent } from '../utils/test-utils'
+import { render, cleanup, fireEvent } from 'utils/test-utils'
 
 afterEach(() => cleanup())
 

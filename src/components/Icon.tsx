@@ -5,8 +5,8 @@
  */
 
 import React from 'react'
-import styled from '../theme/themed-styled-components'
-import icons, { getIconDimensions } from '../theme/icons'
+import styled from 'theme/themed-styled-components'
+import icons, { getIconDimensions } from 'theme/icons'
 import shortId from 'shortid'
 
 export interface IconProps {

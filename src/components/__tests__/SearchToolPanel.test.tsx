@@ -1,6 +1,6 @@
 import React from 'react'
 import SearchToolPanel from '../SearchToolPanel'
-import { render, cleanup } from '../utils/test-utils'
+import { render, cleanup } from 'utils/test-utils'
 
 afterEach(() => cleanup())
 

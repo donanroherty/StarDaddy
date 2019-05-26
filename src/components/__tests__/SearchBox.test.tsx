@@ -1,7 +1,7 @@
 import React from 'react'
-import { cleanup, render, fireEvent } from '../utils/test-utils'
+import { cleanup, render, fireEvent } from 'utils/test-utils'
 import SearchBox from '../SearchBox'
-import { SearchProvider } from '../../state/search-context'
+import { SearchProvider } from 'state/search-context'
 
 afterEach(() => cleanup())
 
