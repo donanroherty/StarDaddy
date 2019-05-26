@@ -3,27 +3,21 @@ import Repo, { RepoProps, formatLastPushTime } from '../Repo'
 import { render } from '../utils/test-utils'
 
 const repoProps: RepoProps = {
+  id: 100,
   ownerLogin: 'owner',
-  ownerAvatarUrl: 'www.avatarurl.mock',
   name: 'repo-name',
   htmlUrl: 'www.repoaddress.mock',
   description: 'repo description',
   stargazersCount: 50,
   forksCount: 10,
   pushedAt: '2018-11-12T23:45:05Z',
-  style: {}
+  isVisible: true
 }
 
 describe('<Repo/> Renders correct content', () => {
-  const { getByTestId, getByAltText, getByText } = render(
-    <Repo {...repoProps} />
+  const { getByTestId, getByText } = render(
+    <Repo {...repoProps} isVisible={true} />
   )
-
-  test('Avatar has correct url', () => {
-    expect(getByAltText('avatar').getAttribute('src')).toBe(
-      repoProps.ownerAvatarUrl
-    )
-  })
 
   test('Title is rendered correctly and has correct link href', () => {
     expect(getByTestId('title').innerHTML).toBe(

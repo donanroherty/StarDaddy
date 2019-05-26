@@ -33,8 +33,8 @@ export interface User {
 }
 
 export interface StarredRepo {
+  id: number
   ownerLogin: string
-  ownerAvatarUrl: string
   name: string
   htmlUrl: string
   description: string

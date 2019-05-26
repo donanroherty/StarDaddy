@@ -1,17 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 import { GoStar, GoRepoForked } from 'react-icons/go'
+import { StarredRepo } from '../types/GithubTypes'
 
-export interface RepoProps {
-  ownerLogin: string
-  ownerAvatarUrl: string
-  name: string
-  htmlUrl: string
-  description: string
-  stargazersCount: number
-  forksCount: number
-  pushedAt: string
-  style: any
+export interface RepoProps extends StarredRepo {
+  isVisible: boolean
 }
 
 export const formatLastPushTime = (pushedAt: string, now: Date) => {
@@ -49,22 +42,20 @@ export const formatLastPushTime = (pushedAt: string, now: Date) => {
 const Repo = (props: RepoProps) => {
   const {
     ownerLogin,
-    ownerAvatarUrl,
     name,
     htmlUrl,
     description,
     stargazersCount,
     forksCount,
     pushedAt,
-    style
+    isVisible
   } = props
 
   const now = new Date()
 
   return (
-    <Wrapper style={style}>
+    <Wrapper style={{ display: isVisible ? 'initial' : 'none' }}>
       <TitleRow>
-        <img src={ownerAvatarUrl} alt="avatar" />
         <a
           href={htmlUrl}
           target="_blank"
@@ -75,7 +66,7 @@ const Repo = (props: RepoProps) => {
           {ownerLogin} / <strong>{name}</strong>
         </a>
       </TitleRow>
-      
+
       <Description>{description}</Description>
 
       <DetailsRow>
@@ -111,14 +102,11 @@ const Repo = (props: RepoProps) => {
   )
 }
 
-export const REPO_HEIGHT: number = 200
-
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   max-width: 688px;
-  height: ${REPO_HEIGHT}px;
   padding: 24px;
   color: ${({ theme }) => theme.color.text};
 `
@@ -169,7 +157,7 @@ const Description = styled.div`
 `
 const DetailsRow = styled.div`
   display: block;
-  margin-top: auto;
+  margin-top: 24px;
   font-size: 12px;
   overflow: hidden;
   white-space: nowrap;
@@ -194,4 +182,4 @@ const LastUpdatedText = styled.div`
   margin-left: 30px;
 `
 
-export default Repo
+export default React.memo(Repo)

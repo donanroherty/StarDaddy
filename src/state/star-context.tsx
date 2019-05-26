@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import starredReposData from '../mock-data/starred.json'
 import { StarredRepo } from '../types/GithubTypes'
 
@@ -24,8 +24,8 @@ const useStars = () => {
   const updateStars = () => {
     const starredRepos = starredReposData.map(star => {
       const repo: StarredRepo = {
+        id: star.id,
         ownerLogin: star.owner.login,
-        ownerAvatarUrl: star.owner.avatar_url,
         name: star.name,
         htmlUrl: star.html_url,
         description: star.description || '',

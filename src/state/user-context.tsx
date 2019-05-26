@@ -27,10 +27,9 @@ const useUser = () => {
   }
 
   const authorize = () => {
+    handleUserLoggedIn(mockData)
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(mockData)
-      }, 100)
+      resolve(mockData)
     }).then(data => handleUserLoggedIn(mockData))
   }
 
