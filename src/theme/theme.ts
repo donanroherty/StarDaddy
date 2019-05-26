@@ -8,7 +8,7 @@ const theme = {
     bgLight: '#FAFBFC',
     bgLighter: '#FFFFFF',
     success: '#28D058',
-    failure: '#FC4F4F'
+    warning: '#FC4F4F'
   },
   font: {
     primary: 'Open Sans',

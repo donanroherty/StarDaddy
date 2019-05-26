@@ -1,10 +1,16 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { withTheme } from 'styled-components'
 import { useSearch } from '../state/search-context'
-import { GoSearch } from 'react-icons/go'
+import { GoSearch, GoX } from 'react-icons/go'
+import { ThemeInterface } from '../theme/theme'
 
-const SearchBox = () => {
+interface SearchBoxProps {
+  theme: ThemeInterface
+}
+
+const SearchBox = (props: SearchBoxProps) => {
   const { searchTerm, setSearchTerm } = useSearch()
+  const { theme } = props
 
   return (
     <Wrapper data-testid="search-box">
@@ -16,8 +22,18 @@ const SearchBox = () => {
           onChange={event => setSearchTerm(event.target.value)}
           value={searchTerm}
         />
-
-        <GoSearch size="24px" />
+        {/* <IconWrapper> */}
+        {searchTerm.length === 0 ? (
+          <GoSearch size="24px" data-testid="empty-search-icon" />
+        ) : (
+          <GoX
+            size="24px"
+            color={theme.color.warning}
+            data-testid="clear-search-icon"
+            onClick={e => setSearchTerm('')}
+          />
+        )}
+        {/* </IconWrapper> */}
       </InputField>
     </Wrapper>
   )
@@ -33,15 +49,13 @@ const Wrapper = styled.div`
 const InputField = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
   padding: 12px 12px 12px 20px;
   > input {
     font-size: 18px;
     border: none;
-
     color: ${({ theme }) => theme.color.text};
   }
 `
-const SearchIconWrapper = styled.div``
 
-export default SearchBox
+export default withTheme(SearchBox)
