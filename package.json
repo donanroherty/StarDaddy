@@ -12,7 +12,7 @@
     "@types/react-window": "^1.8.0",
     "@types/styled-components": "^4.1.14",
     "jest-dom": "^3.4.0",
-    "polished": "^3.3.0",
+    "polished": "^3.4.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-icons": "^3.7.0",

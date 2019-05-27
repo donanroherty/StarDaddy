@@ -22,7 +22,7 @@ const ToolPanel = (props: ToolPanelProps) => {
 
 const Wrapper = styled.div`
   width: 289px;
-  height: 100%;
+  height: 100vh;
   background-color: ${props => props.theme.color.bgLight};
   border-style: solid;
   border-width: 0 0.5px 0 0;

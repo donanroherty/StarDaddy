@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from 'react'
-import defaultTagData from '../mock-data/default-tags.json'
-
-export type Tag = {
-  name: string
-}
+import { TagType } from 'types/Types.js'
+import defaultTagData from 'mock-data/default-tags.json'
 
 type TagContextType = {
-  tags: Tag[]
-  setTags: (newTags: Tag[]) => void
+  tags: TagType[]
+  setTags: (newTags: any) => void
 }
 const TagContext = React.createContext<TagContextType | undefined>(undefined)
 
 const TagProvider = (props: any) => {
   const [tags, setTags] = useState()
+
   const value = React.useMemo(() => ({ tags, setTags }), [tags])
   return <TagContext.Provider value={value} {...props} />
 }
 
 // Merges contents of two string arrays, skipping any duplicates
-export const mergeTagArrays = (arrayA: Tag[], arrayB: Tag[]): Tag[] => {
+export const mergeTagArrays = (
+  arrayA: TagType[],
+  arrayB: TagType[]
+): TagType[] => {
   const diff = arrayB.filter(
     b => arrayA.find(a => a.name === b.name) === undefined
   )
@@ -27,13 +28,13 @@ export const mergeTagArrays = (arrayA: Tag[], arrayB: Tag[]): Tag[] => {
 
 const useTags = () => {
   const context = React.useContext(TagContext)
-  if (!context) throw new Error('useSearch must be used within a TagProvider')
+  if (!context) throw new Error('useTags must be used within a TagProvider')
 
   const { tags, setTags } = context
 
   const updateTags = () => {
     const localTags = localStorage.getItem('tags')
-    const defaultTags = defaultTagData as Tag[]
+    const defaultTags = defaultTagData as TagType[]
     // TODO: Add fetched tags
 
     if (localTags) {
@@ -49,7 +50,7 @@ const useTags = () => {
 
   useEffect(updateTags, [])
 
-  return { tags, setTags, updateTags }
+  return { tags }
 }
 
 export { TagProvider, useTags }

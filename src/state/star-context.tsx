@@ -36,7 +36,11 @@ const useStars = () => {
       return repo
     })
 
-    setStars(starredRepos)
+    setStars(
+      starredRepos
+        // TODO: Debug only to speed up rendering during development
+        .filter((val, i) => i < 15)
+    )
   }
 
   useEffect(updateStars, [])
