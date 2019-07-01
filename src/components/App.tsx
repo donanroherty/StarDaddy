@@ -4,6 +4,8 @@ import styled, {
   createGlobalStyle
 } from 'theme/themed-styled-components'
 import theme from 'theme/theme'
+import { DndProvider } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
 
 import AppBar from './AppBar'
 import ResultsPanel from './ResultsPanel'
@@ -27,25 +29,28 @@ const App: React.FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <>
-        <GlobalStyle />
-        {user ? (
-          <MainPanels>
-            <AppBar
-              setActiveToolbarPanel={setActiveToolbarPanel}
-              activeToolbarPanel={activeToolbarPanel}
-            />
-            <TagProvider>
-              <SearchProvider>
-                <ToolPanel activeToolbarPanel={activeToolbarPanel} />
-                <ResultsPanel />
-              </SearchProvider>
-            </TagProvider>
-          </MainPanels>
-        ) : (
-          <UserAuthenticator authorize={authorize} />
-        )}
-      </>
+      <DndProvider backend={HTML5Backend}>
+        <TagProvider>
+          <SearchProvider>
+            <>
+              <GlobalStyle />
+              {user ? (
+                <MainPanels>
+                  <AppBar
+                    setActiveToolbarPanel={setActiveToolbarPanel}
+                    activeToolbarPanel={activeToolbarPanel}
+                  />
+
+                  <ToolPanel activeToolbarPanel={activeToolbarPanel} />
+                  <ResultsPanel />
+                </MainPanels>
+              ) : (
+                <UserAuthenticator authorize={authorize} />
+              )}
+            </>
+          </SearchProvider>
+        </TagProvider>
+      </DndProvider>
     </ThemeProvider>
   )
 }

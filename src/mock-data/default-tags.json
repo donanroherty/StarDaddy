@@ -1,53 +1,19 @@
 [
-  {
-    "name": "C"
-  },
-  {
-    "name": "C#"
-  },
-  {
-    "name": "C++"
-  },
-  {
-    "name": "Clojure"
-  },
-  {
-    "name": "Go"
-  },
-  {
-    "name": "HTML"
-  },
-  {
-    "name": "Java"
-  },
-  {
-    "name": "JavaScript"
-  },
-  {
-    "name": "Jupyter Notebook"
-  },
-  {
-    "name": "Kotlin"
-  },
-  {
-    "name": "OCaml"
-  },
-  {
-    "name": "Objective-C"
-  },
-  {
-    "name": "PHP"
-  },
-  {
-    "name": "PowerShell"
-  },
-  {
-    "name": "Python"
-  },
-  {
-    "name": "Shell"
-  },
-  {
-    "name": "TypeScript"
-  }
+  "C",
+  "C#",
+  "C++",
+  "Clojure",
+  "Go",
+  "HTML",
+  "Java",
+  "JavaScript",
+  "Jupyter Notebook",
+  "Kotlin",
+  "OCaml",
+  "Objective-C",
+  "PHP",
+  "PowerShell",
+  "Python",
+  "Shell",
+  "TypeScript"
 ]

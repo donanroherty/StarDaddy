@@ -1,15 +1,25 @@
-import React, { useEffect } from 'react'
-import { useTags } from 'state/tag-context'
+import React from 'react'
+import styled from 'styled-components'
 import Tag from './Tag'
-import defaultTagData from 'mock-data/default-tags.json'
 
-const TagList = () => {
-  const { tags } = useTags()
+interface TagListProps {
+  tags: string[]
+  thinTags?: boolean
+  delete?: (tagName: string) => void
+}
+
+const TagList: React.FC<TagListProps> = props => {
+  const { tags, thinTags } = props
+
   if (!tags) return null
 
-  const tagComps = tags.map(tag => <Tag tag={tag} key={tag.name} />)
-
-  return <div>{tagComps}</div>
+  return (
+    <div>
+      {tags.map(tag => (
+        <Tag tagName={tag} isThin={thinTags} delete={props.delete} key={tag} />
+      ))}
+    </div>
+  )
 }
 
 export default TagList

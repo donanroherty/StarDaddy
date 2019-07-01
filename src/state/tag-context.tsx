@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { TagType } from 'types/Types.js'
 import defaultTagData from 'mock-data/default-tags.json'
 
 type TagContextType = {
-  tags: TagType[]
+  tags: string[]
   setTags: (newTags: any) => void
 }
 const TagContext = React.createContext<TagContextType | undefined>(undefined)
@@ -17,12 +16,10 @@ const TagProvider = (props: any) => {
 
 // Merges contents of two string arrays, skipping any duplicates
 export const mergeTagArrays = (
-  arrayA: TagType[],
-  arrayB: TagType[]
-): TagType[] => {
-  const diff = arrayB.filter(
-    b => arrayA.find(a => a.name === b.name) === undefined
-  )
+  arrayA: string[],
+  arrayB: string[]
+): string[] => {
+  const diff = arrayB.filter(b => arrayA.find(a => a === b) === undefined)
   return [...arrayA, ...diff]
 }
 
@@ -34,7 +31,7 @@ const useTags = () => {
 
   const updateTags = () => {
     const localTags = localStorage.getItem('tags')
-    const defaultTags = defaultTagData as TagType[]
+    const defaultTags = defaultTagData as string[]
     // TODO: Add fetched tags
 
     if (localTags) {
