@@ -29,7 +29,7 @@
     "start": "react-scripts start",
     "run-ext": "cd build && web-ext run --firefox=firefoxdeveloperedition",
     "build": "INLINE_RUNTIME_CHUNK=false react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!react-dnd)/\"",
     "eject": "react-scripts eject",
     "build-netlify": "react-scripts build && netlify deploy --prod"
   },

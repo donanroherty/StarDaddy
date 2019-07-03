@@ -6,7 +6,7 @@ import { SearchProvider } from 'state/search-context'
 afterEach(() => cleanup())
 
 test('SearchBox icon changes when text is entered', () => {
-  const { queryByTestId, getByPlaceholderText } = render(<SearchBox />)
+  const { queryByTestId, getByPlaceholderText } = render(<SearchBox  />)
 
   expect(queryByTestId('empty-search-icon')).not.toBeNull()
   expect(queryByTestId('clear-search-icon')).toBeNull()

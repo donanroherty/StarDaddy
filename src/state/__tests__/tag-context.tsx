@@ -1,13 +1,13 @@
 import { mergeTagArrays, Tag } from '../tag-context'
 
 test('mergeTagArrays()', () => {
-  const arrA: Tag[] = [{ name: 'abc' }, { name: 'def' }, { name: 'ghi' }]
-  const arrB: Tag[] = [{ name: 'ghi' }, { name: 'jkl' }, { name: 'nmo' }]
+  const arrA: string[] = ['abc', 'def', 'ghi']
+  const arrB: string[] = ['ghi', 'jkl', 'nmo']
   expect(mergeTagArrays(arrA, arrB)).toEqual([
-    { name: 'abc' },
-    { name: 'def' },
-    { name: 'ghi' },
-    { name: 'jkl' },
-    { name: 'nmo' }
+    'abc',
+    'def',
+    'ghi',
+    'jkl',
+    'nmo'
   ])
 })

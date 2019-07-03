@@ -57,7 +57,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ theme }) => {
 
       <HR />
 
-      {searchTags.length === 0 && (
+      {searchTags && searchTags.length === 0 && (
         <DragPrompt>Drag tags here to filter</DragPrompt>
       )}
 
