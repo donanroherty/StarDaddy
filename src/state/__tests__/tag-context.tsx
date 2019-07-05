@@ -1,4 +1,4 @@
-import { mergeTagArrays, Tag } from '../tag-context'
+import { mergeTagArrays } from '../tag-context'
 
 test('mergeTagArrays()', () => {
   const arrA: string[] = ['abc', 'def', 'ghi']

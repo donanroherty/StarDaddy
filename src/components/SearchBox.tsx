@@ -20,7 +20,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ theme }) => {
     removeSearchTag
   } = useSearch()
 
-  const [{ canDrop, isOver }, dropRef] = useDrop({
+  const [, dropRef] = useDrop({
     accept: DnDItemTypes.TAG,
     drop: (item: { name: string; type: string }, monitor) => {
       addSearchTag(item.name)

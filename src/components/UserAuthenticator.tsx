@@ -25,7 +25,7 @@ const UserAuthenticator = (props: UserAuthenticatorProps) => {
     } else {
       setAuthState(AuthState.authNewUser)
     }
-  }, [])
+  }, [authorize])
 
   return (
     <Wrapper data-testid="user-setup-modal">

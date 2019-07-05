@@ -16,7 +16,7 @@ interface TagProps {
 const Tag: React.FC<TagProps> = props => {
   const { tagName } = props
 
-  const [{ isDragging }, drag] = useDrag({
+  const [, drag] = useDrag({
     item: { name: tagName, type: DnDItemTypes.TAG },
     end: (dropResult?: { name: string }) => {
       if (dropResult) {
