@@ -5,7 +5,7 @@ import { GoSearch, GoX } from 'react-icons/go'
 import { ThemeInterface } from 'theme/theme'
 import { useDrop } from 'react-dnd'
 import { DnDItemTypes } from '../types/DnDItemTypes'
-import TagList from './TagList'
+import Tag from './Tag'
 
 interface SearchBoxProps {
   theme: ThemeInterface
@@ -57,11 +57,16 @@ const SearchBox: React.FC<SearchBoxProps> = ({ theme }) => {
 
       <HR />
 
-      {searchTags && searchTags.length === 0 && (
+      {!searchTags || searchTags.length === 0 && (
         <DragPrompt>Drag tags here to filter</DragPrompt>
       )}
 
-      <TagList tags={searchTags} thinTags delete={removeSearchTag} />
+      <TagList>
+        {searchTags &&
+          searchTags.map(tag => (
+            <Tag tagName={tag} isThin delete={removeSearchTag} key={tag} />
+          ))}
+      </TagList>
     </Wrapper>
   )
 }
@@ -97,6 +102,10 @@ const DragPrompt = styled.div`
   font-size: 12px;
   padding-left: 10px;
   padding-top: 5px;
+`
+const TagList = styled.div`
+  display: flex;
+  flex-wrap: wrap;
 `
 
 export default withTheme(SearchBox)

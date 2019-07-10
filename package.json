@@ -49,7 +49,9 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/user-event": "^4.1.0",
     "@types/shortid": "^0.0.29",
+    "@types/testing-library__user-event": "^4.1.0",
     "react-testing-library": "^7.0.0"
   }
 }
