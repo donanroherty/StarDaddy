@@ -106,6 +106,14 @@ const useTags = () => {
   }
   /*************************************/
 
+  /**
+   * Delete tags
+   */
+  const deleteTag = (name: string) => {
+    setTags(prev => prev.filter(t => t !== name))
+  }
+  /*************************************/
+
   const handleKeyPress = (e: KeyboardEvent) => {
     if ((e.key === 'Escape' && editingTag) || isAddingTag) {
       cancelAddTag()
@@ -133,7 +141,9 @@ const useTags = () => {
     beginEditTag,
     cancelEditTag,
     editingTag,
-    submitEditTag
+    submitEditTag,
+
+    deleteTag
   }
 }
 

@@ -19,6 +19,7 @@ const TagToolbar: React.FC<TagToolbarProps> = () => {
 
       <div>
         <ShortcutNotice>shift + click tag to rename</ShortcutNotice>
+        <ShortcutNotice>ctrl + click tag to delete</ShortcutNotice>
       </div>
     </Wrapper>
   )
@@ -31,7 +32,6 @@ const Wrapper = styled.div`
   margin-top: 20px;
   margin-bottom: 10px;
 `
-const Button = styled.div<any>`
 const Button = styled.div`
   display: flex;
   justify-content: center;
@@ -40,10 +40,6 @@ const Button = styled.div`
   height: 27px;
   border-radius: 10px;
   border: 2px solid ${({ theme }) => lighten(0.52, theme.color.primary)};
-    ${({ theme, active }) =>
-      active
-        ? lighten(0.3, theme.color.success)
-        : lighten(0.52, theme.color.primary)};
   color: ${({ theme }) => theme.color.primary};
   background-color: white;
   font-size: 16px;

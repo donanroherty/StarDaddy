@@ -14,7 +14,8 @@ const SearchToolPanel = () => {
     isAddingTag,
     cancelAddTag,
     cancelEditTag,
-    submitAddTag
+    submitAddTag,
+    deleteTag
   } = useTags()
 
   const displayTags = isAddingTag ? ['new tag', ...tags] : tags
@@ -35,6 +36,7 @@ const SearchToolPanel = () => {
     e.stopPropagation()
     const el = e.target as HTMLDivElement
     el.textContent && e.shiftKey && beginEditTag(el.textContent)
+    el.textContent && e.ctrlKey && deleteTag(el.textContent)
   }
 
   return (
