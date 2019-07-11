@@ -1,10 +1,12 @@
 import React from 'react'
 import SearchToolPanel from '../SearchToolPanel'
-import { render, cleanup, fireEvent } from 'utils/test-utils'
+import { render, cleanup, fireEvent, getByTestId } from 'utils/test-utils'
 import userEvent from '@testing-library/user-event'
 import 'jest-dom/extend-expect'
 
-describe('Adding tags', () => {
+afterEach(() => cleanup())
+
+describe('Add tags', () => {
   afterEach(() => cleanup())
 
   test('Clicking add tag button adds a new tag in edit mode', () => {
@@ -39,5 +41,39 @@ describe('Adding tags', () => {
 
     expect(queryByTestId('tag-name-input')).toBeFalsy()
     expect(getAllByTestId('tag')[0]).not.toHaveTextContent('Cancelled Tag Name')
+  })
+})
+
+describe('Edit tags', () => {
+  afterEach(() => cleanup())
+
+  test('Shift-clicking makes a tag editible', () => {
+    const { queryByTestId, getByTestId, getAllByTestId } = render(
+      <SearchToolPanel />
+    )
+    expect(queryByTestId('tag-name-input')).toBeFalsy()
+    const firstTag = getAllByTestId('tag')[0]
+    fireEvent(
+      firstTag,
+      new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+        shiftKey: true
+      })
+    )
+    expect(getByTestId('tag-name-input')).toBeTruthy()
+  })
+
+  test('Submitting a new tag name is reflected in the tag list', () => {
+    const { getByTestId, queryByTestId, getAllByTestId } = render(
+      <SearchToolPanel />
+    )
+    fireEvent.click(getAllByTestId('tag')[0], { shiftKey: true })
+    fireEvent.change(getByTestId('tag-name-input'), {
+      target: { value: 'Edited Tag Name' }
+    })
+    fireEvent.submit(getByTestId('tag-name-input'))
+    expect(queryByTestId('tag-name-input')).toBeFalsy()
+    expect(getAllByTestId('tag')[0]).toHaveTextContent('Edited Tag Name')
   })
 })

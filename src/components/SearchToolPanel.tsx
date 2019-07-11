@@ -8,8 +8,12 @@ import Tag from './Tag'
 const SearchToolPanel = () => {
   const {
     tags,
+    editingTag,
+    submitEditTag,
+    beginEditTag,
     isAddingTag,
     cancelAddTag,
+    cancelEditTag,
     submitAddTag
   } = useTags()
 
@@ -17,9 +21,20 @@ const SearchToolPanel = () => {
 
   const submitTagName = (tagName: string, prevName: string) => {
     if (isAddingTag) submitAddTag(tagName)
+    else if (editingTag > -1) {
+      submitEditTag(tagName, prevName)
+    }
   }
+
   const cancelTagOperation = () => {
     if (isAddingTag) cancelAddTag()
+    else if (editingTag) cancelEditTag()
+  }
+
+  const handleTagClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    const el = e.target as HTMLDivElement
+    el.textContent && e.shiftKey && beginEditTag(el.textContent)
   }
 
   return (
@@ -28,18 +43,19 @@ const SearchToolPanel = () => {
 
       <TagToolbar />
 
-      <Tags>
+      <TagList>
         {displayTags &&
           displayTags.map((tag, i) => (
             <Tag
-              tagName={tag}
+              name={tag}
               key={tag}
-              isEditing={(isAddingTag && i === 0)}
+              isEditing={(isAddingTag && i === 0) || editingTag === i}
               submitName={submitTagName}
               cancelTagOperation={cancelTagOperation}
+              onClick={handleTagClick}
             />
           ))}
-      </Tags>
+      </TagList>
     </Wrapper>
   )
 }
@@ -52,7 +68,7 @@ const Wrapper = styled.div`
   background-color: ${props => props.theme.color.bgLight};
 `
 
-const Tags = styled.div`
+const TagList = styled.div`
   display: flex;
   flex-wrap: wrap;
 `

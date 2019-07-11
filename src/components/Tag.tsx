@@ -7,21 +7,29 @@ import { DnDItemTypes } from '../types/DnDItemTypes'
 import Icon from './Icon'
 
 interface TagProps {
-  tagName: string
+  name: string
   isEditing?: boolean
   isThin?: boolean
-  delete?: (tagName: string) => void
+  hasDeleteIcon?: boolean
   cancelTagOperation?: () => void
+  onClick?: (e: React.MouseEvent) => void
   submitName?: (name: string, prevName: string) => void
   theme: ThemeInterface
 }
 
 const Tag: React.FC<TagProps> = props => {
-  const [value, setValue] = useState('')
-  const { tagName, isEditing, submitName, cancelTagOperation } = props
+  const {
+    name,
+    isEditing,
+    hasDeleteIcon,
+    submitName,
+    cancelTagOperation,
+    onClick
+  } = props
+  const [inputValue, setInputValue] = useState(name)
 
   const [, drag] = useDrag({
-    item: { name: tagName, type: DnDItemTypes.TAG },
+    item: { name: name, type: DnDItemTypes.TAG },
     end: (dropResult?: { name: string }) => {
       if (dropResult) {
       }
@@ -31,46 +39,48 @@ const Tag: React.FC<TagProps> = props => {
     })
   })
 
-  const handleDelete = () => {
-    if (props.delete) props.delete(tagName)
-  }
-
   const handleSubmitTagName = (e: any) => {
     // TODO: Validate input for duplicate tag name, illegal characters, etc.
     e.preventDefault()
     if (!submitName) return
-    submitName(value, tagName)
+    submitName(inputValue, name)
   }
 
   const handleNameInput = (e: any) => {
-    setValue(e.target.value)
+    setInputValue(e.target.value)
+  }
+
+  const handleBlur = () => {
+    setInputValue(name)
+    cancelTagOperation && cancelTagOperation()
   }
 
   return (
     <Wrapper>
-      <Inner ref={drag} data-testid="tag" {...props} onClick={handleDelete}>
+      <Inner ref={drag} data-testid="tag" {...props} onClick={onClick}>
         {isEditing ? (
           <form onSubmit={handleSubmitTagName}>
             <input
               data-testid="tag-name-input"
               type="text"
               placeholder="...tag name"
-              value={value}
+              value={inputValue}
               onChange={handleNameInput}
-              onBlur={cancelTagOperation}
+              onBlur={handleBlur}
               maxLength={20}
               width="20"
               autoFocus
+              onFocus={e => e.target.select()}
               name="tag-name"
               id="tag-name"
             />
           </form>
         ) : (
-          tagName
+          name
         )}
       </Inner>
       <DeleteWrapper>
-        {props.delete && (
+        {hasDeleteIcon && (
           <StyledIcon
             fillColor={props.theme.color.warning}
             icon="delete"

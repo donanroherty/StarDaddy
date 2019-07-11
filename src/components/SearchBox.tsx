@@ -32,6 +32,12 @@ const SearchBox: React.FC<SearchBoxProps> = ({ theme }) => {
     })
   })
 
+  const handleTagClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    const el = e.target as HTMLDivElement
+    el.textContent && removeSearchTag(el.textContent)
+  }
+
   return (
     <Wrapper ref={dropRef} data-testid="search-box">
       <InputField>
@@ -57,15 +63,20 @@ const SearchBox: React.FC<SearchBoxProps> = ({ theme }) => {
 
       <HR />
 
-      {!searchTags || searchTags.length === 0 && (
+      {searchTags.length === 0 && (
         <DragPrompt>Drag tags here to filter</DragPrompt>
       )}
 
       <TagList>
-        {searchTags &&
-          searchTags.map(tag => (
-            <Tag tagName={tag} isThin delete={removeSearchTag} key={tag} />
-          ))}
+        {searchTags.map(tag => (
+          <Tag
+            name={tag}
+            isThin
+            hasDeleteIcon
+            onClick={handleTagClick}
+            key={tag}
+          />
+        ))}
       </TagList>
     </Wrapper>
   )

@@ -6,23 +6,26 @@ type TagContextType = {
   setTags: React.Dispatch<React.SetStateAction<string[]>>
   isAddingTag: boolean
   setIsAddingTag: React.Dispatch<React.SetStateAction<boolean>>
+  editingTag: number
+  setEditingTag: React.Dispatch<React.SetStateAction<number>>
 }
 const TagContext = React.createContext<TagContextType | undefined>(undefined)
 
 const TagProvider = (props: any) => {
   const [tags, setTags] = useState()
   const [isAddingTag, setIsAddingTag] = useState()
+  const [editingTag, setEditingTag] = useState(-1)
 
   const value = React.useMemo(
     () => ({
       tags,
       setTags,
+      editingTag,
+      setEditingTag,
       isAddingTag,
       setIsAddingTag
     }),
-    [tags, 
-      isAddingTag
-    ]
+    [tags, editingTag, isAddingTag]
   )
   return <TagContext.Provider value={value} {...props} />
 }
@@ -43,6 +46,8 @@ const useTags = () => {
   const {
     tags,
     setTags,
+    editingTag,
+    setEditingTag,
     isAddingTag,
     setIsAddingTag
   } = context
@@ -63,25 +68,72 @@ const useTags = () => {
     }
   }
 
+  /**
+   * Add tags
+   */
   const beginAddTag = () => {
     setIsAddingTag(true)
   }
   const submitAddTag = (name: string) => {
-    if (!tags.find(t => t === name)) {
+    const tagExists = tags.find(t => t === name) && name.length > 0
+    if (!tagExists) {
       setTags(prev => [name, ...prev])
       setIsAddingTag(false)
+      return { success: true, message: `Added tag '${name}'` }
+    } else {
+      return { success: false, message: `Tag '${name}' already exists` }
     }
   }
   const cancelAddTag = () => {
     setIsAddingTag(false)
   }
-  useEffect(updateTags, [])
+  /*************************************/
 
-  return { tags }
+  /**
+   * Edit tags
+   */
+  const beginEditTag = (name: string) =>
+    setEditingTag(tags.findIndex(t => t === name))
+  const cancelEditTag = () => setEditingTag(-1)
+  const submitEditTag = (name: string, prevName: string) => {
+    if (!tags.filter(t => t !== prevName).find(t => t === name)) {
+      setTags(prev => prev.map(tag => (tag === prevName ? name : tag)))
+      setEditingTag(-1)
+      return { success: true, message: `Renamed tag '${name}'` }
+    } else {
+      return { success: false, message: `Tag '${name}' already exists` }
+    }
+  }
+  /*************************************/
+
+  const handleKeyPress = (e: KeyboardEvent) => {
+    if ((e.key === 'Escape' && editingTag) || isAddingTag) {
+      cancelAddTag()
+      cancelEditTag()
+    }
+  }
+
+  // Side effects
+  useEffect(updateTags, [])
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyPress, false)
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress, false)
+    }
+  }, [])
+
+  return {
+    tags,
+
     beginAddTag,
     submitAddTag,
     cancelAddTag,
     isAddingTag,
+
+    beginEditTag,
+    cancelEditTag,
+    editingTag,
+    submitEditTag
   }
 }
 
