@@ -5,7 +5,7 @@ import RepoList, {
   stringToArray
 } from '../RepoList'
 import { render as renderrtl, cleanup } from 'utils/test-utils'
-import 'jest-dom/extend-expect'
+import '@testing-library/jest-dom/extend-expect'
 import { StarProvider } from 'state/star-context'
 import { StarredRepo } from 'types/GithubTypes'
 import { SearchProvider } from 'state/search-context'

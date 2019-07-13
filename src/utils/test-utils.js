@@ -1,5 +1,5 @@
 import React from 'react'
-import { render } from 'react-testing-library'
+import { render } from '@testing-library/react'
 import theme from 'theme/theme'
 import { ThemeProvider } from 'theme/themed-styled-components'
 import { StarProvider } from 'state/star-context'
@@ -26,7 +26,7 @@ const customRender = (ui, options) =>
   render(ui, { wrapper: GlobalProviders, ...options })
 
 // re-export everything
-export * from 'react-testing-library'
+export * from '@testing-library/react'
 
 // override render method
 export { customRender as render }

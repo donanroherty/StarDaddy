@@ -2,7 +2,7 @@ import React from 'react'
 import { cleanup, render, fireEvent } from 'utils/test-utils'
 import SearchBox from '../SearchBox'
 import { SearchProvider } from 'state/search-context'
-import 'jest-dom/extend-expect'
+import '@testing-library/jest-dom/extend-expect'
 
 const mockTags = ['C++', 'Clojure', 'Go']
 const mockSetSearchTerm = jest.fn()

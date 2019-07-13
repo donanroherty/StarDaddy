@@ -2,7 +2,7 @@ import React from 'react'
 import SearchToolPanel from '../SearchToolPanel'
 import { render, cleanup, fireEvent, getByTestId } from 'utils/test-utils'
 import userEvent from '@testing-library/user-event'
-import 'jest-dom/extend-expect'
+import '@testing-library/jest-dom/extend-expect'
 
 afterEach(() => cleanup())
 
