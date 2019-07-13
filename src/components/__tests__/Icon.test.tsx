@@ -1,6 +1,6 @@
 import React from 'react'
 import Icon from '../Icon'
-import { render, cleanup } from 'react-testing-library'
+import { render, cleanup } from 'utils/test-utils'
 
 afterEach(() => cleanup())
 

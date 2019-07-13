@@ -3,27 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@types/jest": "24.0.12",
-    "@types/node": "12.0.0",
-    "@types/react": "16.8.16",
-    "@types/react-dom": "16.8.4",
-    "@types/react-icons": "^3.0.0",
-    "@types/react-virtualized-auto-sizer": "^1.0.0",
-    "@types/react-window": "^1.8.0",
-    "@types/styled-components": "^4.1.14",
-    "jest-dom": "^3.4.0",
-    "polished": "^3.4.0",
+    "polished": "^3.4.1",
     "react": "^16.8.6",
-    "react-dnd": "^8.0.3",
-    "react-dnd-html5-backend": "^8.0.3",
+    "react-dnd": "^9.3.2",
+    "react-dnd-html5-backend": "^9.3.2",
     "react-dom": "^16.8.6",
     "react-icons": "^3.7.0",
     "react-scripts": "3.0.1",
     "react-virtualized-auto-sizer": "^1.0.2",
-    "react-window": "^1.8.1",
+    "react-window": "^1.8.5",
     "shortid": "^2.2.14",
-    "styled-components": "^4.2.0",
-    "typescript": "3.4.5"
+    "styled-components": "^4.3.2",
+    "typescript": "3.5.3"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -49,9 +40,18 @@
     ]
   },
   "devDependencies": {
+    "@types/jest": "24.0.15",
+    "@types/node": "12.6.2",
+    "@types/react": "16.8.23",
+    "@types/react-dom": "16.8.4",
+    "@types/react-icons": "^3.0.0",
+    "@types/react-virtualized-auto-sizer": "^1.0.0",
+    "@types/react-window": "^1.8.0",
+    "@types/styled-components": "^4.1.18",
+    "@testing-library/jest-dom": "^4.0.0",
+    "@testing-library/react": "^8.0.5",
     "@testing-library/user-event": "^4.1.0",
     "@types/shortid": "^0.0.29",
-    "@types/testing-library__user-event": "^4.1.0",
-    "react-testing-library": "^7.0.0"
+    "@types/testing-library__user-event": "^4.1.0"
   }
 }
