@@ -16,6 +16,13 @@ const SettingsToolPanel = () => {
 
       <SettingList>
         <li>
+          <SettingItem
+            onClick={() => {
+              localStorage.clear()
+            }}
+          >
+            Clear local data
+          </SettingItem>
           <SettingItem onClick={logout}>Logout</SettingItem>
         </li>
       </SettingList>

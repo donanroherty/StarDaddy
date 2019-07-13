@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import SearchBox from './SearchBox'
 import TagToolbar from './TagToolbar'
@@ -12,24 +12,32 @@ const SearchToolPanel = () => {
     submitEditTag,
     beginEditTag,
     isAddingTag,
-    cancelAddTag,
-    cancelEditTag,
+    cancelTagOperation,
     submitAddTag,
     deleteTag
   } = useTags()
 
   const displayTags = isAddingTag ? ['new tag', ...tags] : tags
 
+  const handleKeyPress = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      cancelTagOperation()
+    }
+  }
+
+  // Side effects
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyPress, false)
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress, false)
+    }
+  }, [])
+
   const submitTagName = (tagName: string, prevName: string) => {
     if (isAddingTag) submitAddTag(tagName)
     else if (editingTag > -1) {
       submitEditTag(tagName, prevName)
     }
-  }
-
-  const cancelTagOperation = () => {
-    if (isAddingTag) cancelAddTag()
-    else if (editingTag) cancelEditTag()
   }
 
   const handleTagClick = (e: React.MouseEvent) => {
