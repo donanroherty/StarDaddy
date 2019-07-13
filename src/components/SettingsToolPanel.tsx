@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useUser } from '../state/user-context'
+import { useUser } from 'state/user-context'
 
 const SettingsToolPanel = () => {
   const { user, logout } = useUser()
@@ -16,6 +16,13 @@ const SettingsToolPanel = () => {
 
       <SettingList>
         <li>
+          <SettingItem
+            onClick={() => {
+              localStorage.clear()
+            }}
+          >
+            Clear local data
+          </SettingItem>
           <SettingItem onClick={logout}>Logout</SettingItem>
         </li>
       </SettingList>

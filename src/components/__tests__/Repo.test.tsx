@@ -1,6 +1,6 @@
 import React from 'react'
 import Repo, { RepoProps, formatLastPushTime } from '../Repo'
-import { render } from '../utils/test-utils'
+import { render } from 'utils/test-utils'
 
 const repoProps: RepoProps = {
   id: 100,

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { GoStar, GoRepoForked } from 'react-icons/go'
-import { StarredRepo } from '../types/GithubTypes'
+import { StarredRepo } from 'types/GithubTypes'
 
 export interface RepoProps extends StarredRepo {
   isVisible: boolean

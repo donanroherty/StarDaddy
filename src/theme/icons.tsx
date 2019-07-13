@@ -3,6 +3,7 @@ import React from 'react'
 interface IconsType {
   settings: IconType
   search: IconType
+  delete: IconType
 }
 
 interface ViewBoxDimensions {
@@ -46,6 +47,12 @@ const icons: IconsType = {
     viewBox: { x1: 0, y1: 0, x2: 72, y2: 72 },
     paths: [
       <path d="M29,0A29,29,0,1,0,47.25,51.5L66.87,71.12a3,3,0,0,0,4.25,0,3,3,0,0,0,0-4.22L51.5,47.28A29,29,0,0,0,29,0Zm0,6A23,23,0,1,1,6,29,23,23,0,0,1,29,6Z" />
+    ]
+  },
+  delete: {
+    viewBox: { x1: 0, y1: 0, x2: 32, y2: 32 },
+    paths: [
+      <path d="M16 0c-8.837 0-16 7.163-16 16s7.163 16 16 16 16-7.163 16-16-7.163-16-16-16zm-5 8.906l5 5 5-5 2.094 2.094-5 5 5 5-2.094 2.094-5-5-5 5-2.094-2.094 5-5-5-5 2.094-2.094z"/>
     ]
   }
 }

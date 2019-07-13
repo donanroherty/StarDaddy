@@ -1,8 +1,8 @@
 import React from 'react'
 import App from '../App'
-import { render, cleanup } from '../utils/test-utils'
-import { UserProvider } from '../../state/user-context'
-import user from '../../mock-data/user.json'
+import { render, cleanup } from 'utils/test-utils'
+import { UserProvider } from 'state/user-context'
+import user from 'mock-data/user.json'
 
 afterEach(() => cleanup())
 

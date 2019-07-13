@@ -2,16 +2,19 @@ import React, { useState } from 'react'
 import styled, {
   ThemeProvider,
   createGlobalStyle
-} from '../theme/themed-styled-components'
-import theme from '../theme/theme'
+} from 'theme/themed-styled-components'
+import theme from 'theme/theme'
+import { DndProvider } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
 
 import AppBar from './AppBar'
 import ResultsPanel from './ResultsPanel'
 import ToolPanel from './ToolPanel'
 import UserAuthenticator from './UserAuthenticator'
 
-import { useUser } from '../state/user-context'
-import { SearchProvider } from '../state/search-context'
+import { useUser } from 'state/user-context'
+import { SearchProvider } from 'state/search-context'
+import { TagProvider } from 'state/tag-context'
 
 export enum ToolbarPanelOptions {
   Search,
@@ -26,23 +29,28 @@ const App: React.FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <>
-        <GlobalStyle />
-        {user ? (
-          <MainPanels>
-            <AppBar
-              setActiveToolbarPanel={setActiveToolbarPanel}
-              activeToolbarPanel={activeToolbarPanel}
-            />
-            <SearchProvider>
-              <ToolPanel activeToolbarPanel={activeToolbarPanel} />
-              <ResultsPanel />
-            </SearchProvider>
-          </MainPanels>
-        ) : (
-          <UserAuthenticator authorize={authorize} />
-        )}
-      </>
+      <DndProvider backend={HTML5Backend}>
+        <TagProvider>
+          <SearchProvider>
+            <>
+              <GlobalStyle />
+              {user ? (
+                <MainPanels>
+                  <AppBar
+                    setActiveToolbarPanel={setActiveToolbarPanel}
+                    activeToolbarPanel={activeToolbarPanel}
+                  />
+
+                  <ToolPanel activeToolbarPanel={activeToolbarPanel} />
+                  <ResultsPanel />
+                </MainPanels>
+              ) : (
+                <UserAuthenticator authorize={authorize} />
+              )}
+            </>
+          </SearchProvider>
+        </TagProvider>
+      </DndProvider>
     </ThemeProvider>
   )
 }

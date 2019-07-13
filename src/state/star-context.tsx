@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import starredReposData from '../mock-data/starred.json'
 import { StarredRepo } from '../types/GithubTypes'
 
@@ -36,8 +36,14 @@ const useStars = () => {
       return repo
     })
 
-    setStars(starredRepos)
+    setStars(
+      starredRepos
+        // TODO: Debug only to speed up rendering during development
+        .filter((val, i) => i < 15)
+    )
   }
+
+  useEffect(updateStars, [])
 
   return { stars, updateStars }
 }

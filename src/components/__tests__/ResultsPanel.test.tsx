@@ -1,7 +1,7 @@
 import React from 'react'
 import ResultsPanel from '../ResultsPanel'
-import { StarProvider } from '../../state/star-context'
-import { render, cleanup } from '../utils/test-utils'
+import { StarProvider } from 'state/star-context'
+import { render, cleanup } from 'utils/test-utils'
 
 afterEach(() => cleanup())
 

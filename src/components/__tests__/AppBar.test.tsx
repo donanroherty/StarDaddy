@@ -1,10 +1,10 @@
 import React from 'react'
 import AppBar from '../AppBar'
 import App from '../App'
-import { UserProvider } from '../../state/user-context'
-import { render, cleanup, fireEvent } from '../utils/test-utils'
+import { UserProvider } from 'state/user-context'
+import { render, cleanup, fireEvent } from 'utils/test-utils'
 import { ToolbarPanelOptions } from '../App'
-import user from '../../mock-data/user.json'
+import user from 'mock-data/user.json'
 
 afterEach(() => cleanup())
 
