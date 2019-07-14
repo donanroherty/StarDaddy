@@ -1,20 +1,13 @@
-import React, { useState } from 'react'
-import styled, {
-  ThemeProvider,
-  createGlobalStyle
-} from 'theme/themed-styled-components'
-import theme from 'theme/theme'
-import { DndProvider } from 'react-dnd'
-import HTML5Backend from 'react-dnd-html5-backend'
+import React, { useState, useEffect } from 'react'
+import styled, { createGlobalStyle } from 'theme/themed-styled-components'
+import { AuthState } from 'types/GithubTypes'
 
 import AppBar from './AppBar'
 import ResultsPanel from './ResultsPanel'
 import ToolPanel from './ToolPanel'
 import UserAuthenticator from './UserAuthenticator'
 
-import { useUser } from 'state/user-context'
-import { SearchProvider } from 'state/search-context'
-import { TagProvider } from 'state/tag-context'
+import { useGithub } from 'state/github-context'
 
 export enum ToolbarPanelOptions {
   Search,
@@ -25,33 +18,29 @@ const App: React.FC = () => {
   const [activeToolbarPanel, setActiveToolbarPanel] = useState(
     ToolbarPanelOptions.Search
   )
-  const { user, authorize } = useUser()
+
+  const { authState, autoLogin } = useGithub()
+
+  useEffect(() => {
+    autoLogin()
+  }, [])
 
   return (
-    <ThemeProvider theme={theme}>
-      <DndProvider backend={HTML5Backend}>
-        <TagProvider>
-          <SearchProvider>
-            <>
-              <GlobalStyle />
-              {user ? (
-                <MainPanels>
-                  <AppBar
-                    setActiveToolbarPanel={setActiveToolbarPanel}
-                    activeToolbarPanel={activeToolbarPanel}
-                  />
-
-                  <ToolPanel activeToolbarPanel={activeToolbarPanel} />
-                  <ResultsPanel />
-                </MainPanels>
-              ) : (
-                <UserAuthenticator authorize={authorize} />
-              )}
-            </>
-          </SearchProvider>
-        </TagProvider>
-      </DndProvider>
-    </ThemeProvider>
+    <>
+      <GlobalStyle />
+      {authState === AuthState.loggedIn ? (
+        <MainPanels>
+          <AppBar
+            setActiveToolbarPanel={setActiveToolbarPanel}
+            activeToolbarPanel={activeToolbarPanel}
+          />
+          <ToolPanel activeToolbarPanel={activeToolbarPanel} />
+          <ResultsPanel />
+        </MainPanels>
+      ) : (
+        <UserAuthenticator />
+      )}
+    </>
   )
 }
 
