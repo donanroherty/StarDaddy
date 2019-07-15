@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { AuthState, User } from 'types/GithubTypes'
+import { reject } from 'q'
 
 type GithubType = {
   accessToken: string
@@ -51,9 +52,6 @@ const GithubProvider = (props: any) => {
   return <GithubContext.Provider value={value} {...props} />
 }
 const api = 'https://api.github.com/'
-const instance = axios.create({
-  baseURL: api
-})
 
 const useGithub = () => {
   const context = React.useContext(GithubContext)
@@ -72,8 +70,8 @@ const useGithub = () => {
   } = context
 
   const request = (endpoint: string, token?: string) => {
-    return instance
-      .get(endpoint, {
+    return axios
+      .get(`${api}${endpoint}`, {
         headers: { Authorization: `token ${token ? token : accessToken}` }
       })
       .then(res => res)
@@ -81,9 +79,9 @@ const useGithub = () => {
   }
 
   const authorize = (token: string) => {
-    request('user', token)
+    return request('user', token)
       .then(res => {
-        if (res.statusText === 'OK') {
+        if (res.status === 200) {
           setAccessToken(token)
           setUser({
             avatar_url: res.data.avatar_url,
@@ -95,17 +93,22 @@ const useGithub = () => {
             url: res.data.url
           })
           setAuthState(AuthState.loggedIn)
-          fetchStars()
+          // fetchStars()
+        } else {
+          reject(new Error('status failed')).catch(e => {
+            setAuthState(AuthState.error)
+            console.log(e, res)
+          })
         }
-        console.log(res)
       })
       .catch(e => {
         setAuthState(AuthState.error)
-        console.log(e.response)
+        console.log('Error:', e.response)
       })
   }
 
   const fetchStars = () => {
+    setLoading(true)
     return request('user/starred')
       .then(res => {
         var regex = /rel="last"/
@@ -125,6 +128,7 @@ const useGithub = () => {
         )
       })
       .then(res => {
+        setLoading(false)
         console.log(res)
         // TODO: Clean data and save to state
       })

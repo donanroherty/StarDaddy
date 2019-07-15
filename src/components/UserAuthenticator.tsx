@@ -16,7 +16,7 @@ const UserAuthenticator = (props: UserAuthenticatorProps) => {
   }
 
   return (
-    <Wrapper data-testid="user-setup-modal">
+    <Wrapper data-testid="user-auth">
       <div>
         <Header>
           <img src={logo} alt="app logo" width="50px" height="50px" />
