@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import AppBarButton from './AppBarButton'
-import { ToolbarPanelOptions } from './App'
+import { ToolbarPanelOptions } from './Panels'
 
 interface AppBarProps {
   activeToolbarPanel: ToolbarPanelOptions

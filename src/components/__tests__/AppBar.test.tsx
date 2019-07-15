@@ -1,6 +1,6 @@
 import React from 'react'
 import AppBar from '../AppBar'
-import App from '../App'
+import Panels from '../Panels'
 import { UserProvider } from 'state/user-context'
 import { render, cleanup, fireEvent } from 'utils/test-utils'
 import { ToolbarPanelOptions } from '../App'

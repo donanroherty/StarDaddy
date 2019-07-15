@@ -8,7 +8,6 @@ import { ThemeProvider } from 'theme/themed-styled-components'
 
 import theme from 'theme/theme'
 
-import { UserProvider } from './state/user-context'
 import { GithubProvider } from 'state/github-context'
 import { SearchProvider } from 'state/search-context'
 import { TagProvider } from 'state/tag-context'
@@ -18,17 +17,15 @@ import HTML5Backend from 'react-dnd-html5-backend'
 
 ReactDOM.render(
   <GithubProvider>
-    <UserProvider>
-      <TagProvider>
-        <SearchProvider>
-          <DndProvider backend={HTML5Backend}>
-            <ThemeProvider theme={theme}>
-              <App />
-            </ThemeProvider>
-          </DndProvider>
-        </SearchProvider>
-      </TagProvider>
-    </UserProvider>
+    <TagProvider>
+      <SearchProvider>
+        <DndProvider backend={HTML5Backend}>
+          <ThemeProvider theme={theme}>
+            <App />
+          </ThemeProvider>
+        </DndProvider>
+      </SearchProvider>
+    </TagProvider>
   </GithubProvider>,
   document.getElementById('root')
 )
