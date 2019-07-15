@@ -6,6 +6,7 @@ interface ButtonProps {
   label?: string
   disabled?: boolean
   onClick?: (event: React.MouseEvent<HTMLElement>) => void
+  type?: 'button' | 'submit' | 'reset' | undefined
 }
 
 const defaultProps: ButtonProps = {
@@ -24,7 +25,12 @@ const Button = (props: ButtonProps) => {
   }
 
   return (
-    <Wrapper disabled={disabled} data-testid="button" onClick={handleClick}>
+    <Wrapper
+      type={props.type}
+      disabled={disabled}
+      data-testid="button"
+      onClick={handleClick}
+    >
       {label}
     </Wrapper>
   )

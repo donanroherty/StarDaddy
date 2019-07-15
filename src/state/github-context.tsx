@@ -141,7 +141,7 @@ const useGithub = () => {
     setAccessToken('')
   }
 
-  return { authorize, user, authState, autoLogin, logout }
+  return { accessToken, authorize, user, authState, autoLogin, logout }
 }
 
 export { GithubProvider, useGithub }

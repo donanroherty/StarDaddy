@@ -1,16 +1,19 @@
-import React, { useState } from 'react'
+import React, { useState, FormEvent } from 'react'
 import styled from 'styled-components'
 import logo from 'assets/vectors/logo.svg'
 import Button from './Button'
 import { useGithub } from 'state/github-context'
-import { AuthState } from 'types/GithubTypes'
 
 interface UserAuthenticatorProps {}
 
 const UserAuthenticator = (props: UserAuthenticatorProps) => {
-  const { authorize } = useGithub()
-  const [accessToken, setAccessToken] = useState('')
-  const { authState } = useGithub()
+  const { authorize, accessToken } = useGithub()
+  const [input, setInput] = useState(accessToken)
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault()
+    authorize(input)
+  }
 
   return (
     <Wrapper data-testid="user-setup-modal">
@@ -22,37 +25,26 @@ const UserAuthenticator = (props: UserAuthenticatorProps) => {
         </Header>
 
         <Content>
-          {authState === AuthState.connecting &&
-          localStorage.getItem('user-data') ? (
-            <p>loading...</p>
-          ) : (
-            <>
-              <p>
-                Laniakea helps you categorize and filter your starred
-                repositories.
-                <br />
-                Click below to get started.
-              </p>
+          <p>
+            Laniakea helps you categorize and filter your starred repositories.
+            <br />
+            Click below to get started.
+          </p>
 
-              <AccessTokenInput>
-                <input
-                  type="text"
-                  name="access token"
-                  title="accesstoken"
-                  placeholder="access token"
-                  value={accessToken}
-                  onChange={e => setAccessToken(e.target.value)}
-                />
-              </AccessTokenInput>
+          <form onSubmit={handleSubmit}>
+            <AccessTokenInput
+              type="text"
+              name="access token"
+              title="access token"
+              placeholder="access token"
+              value={input}
+              onChange={e => setInput(e.target.value)}
+            />
 
-              <ButtonWrapper>
-                <Button
-                  label="Login with GitHub"
-                  onClick={() => authorize(accessToken)}
-                />
-              </ButtonWrapper>
-            </>
-          )}
+            <ButtonWrapper>
+              <Button label="Login with GitHub" type="submit" />
+            </ButtonWrapper>
+          </form>
         </Content>
       </div>
     </Wrapper>
@@ -117,19 +109,18 @@ const ButtonWrapper = styled.div`
   display: flex;
   justify-content: center;
 `
-const AccessTokenInput = styled.div`
+const AccessTokenInput = styled.input`
   margin-top: 24px;
-  > input {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 400px;
-    height: 40px;
-    border-radius: 9px;
-    border: none;
-    text-align: center;
-    font-size: 16px;
-  }
+
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 400px;
+  height: 40px;
+  border-radius: 9px;
+  border: none;
+  text-align: center;
+  font-size: 16px;
 `
 
 export default UserAuthenticator
