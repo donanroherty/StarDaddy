@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { AuthState, User } from 'types/GithubTypes'
+import { AuthState, User, StarredRepo } from 'types/GithubTypes'
 import { reject } from 'q'
 
 type GithubType = {
@@ -12,28 +12,30 @@ type GithubType = {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
   authState: AuthState
   setAuthState: React.Dispatch<React.SetStateAction<AuthState>>
+  stars: StarredRepo[]
+  setStars: React.Dispatch<React.SetStateAction<StarredRepo[]>>
 }
 const GithubContext = React.createContext<GithubType | undefined>(undefined)
 
 const GithubProvider = (props: any) => {
-  const localUserData = localStorage.getItem('user')
-  const [accessToken, setAccessToken] = useState<string>(
-    localUserData ? JSON.parse(localUserData).token : ''
-  )
+  const localToken = localStorage.getItem('token')
+  const [accessToken, setAccessToken] = useState<string>(localToken || '')
+  const localUser = localStorage.getItem('user')
   const [user, setUser] = useState<User>(
-    localUserData ? JSON.parse(localUserData).user : null
+    localUser ? JSON.parse(localUser) : null
   )
+  const localStars = localStorage.getItem('stars')
+  const [stars, setStars] = useState<StarredRepo[]>(
+    localStars ? JSON.parse(localStars) : []
+  )
+
   const [loading, setLoading] = useState(true)
   const [authState, setAuthState] = useState(AuthState.loggedOut)
 
   useEffect(() => {
-    localStorage.setItem(
-      'user',
-      JSON.stringify({
-        token: accessToken,
-        userData: user
-      })
-    )
+    localStorage.setItem('user', JSON.stringify(user))
+    localStorage.setItem('token', accessToken)
+    localStorage.setItem('stars', JSON.stringify(stars))
   }, [accessToken, user])
 
   const value = React.useMemo(
@@ -45,9 +47,11 @@ const GithubProvider = (props: any) => {
       loading,
       setLoading,
       authState,
-      setAuthState
+      setAuthState,
+      stars,
+      setStars
     }),
-    [accessToken, user, loading, authState, setAuthState]
+    [accessToken, user, loading, authState, setAuthState, stars]
   )
   return <GithubContext.Provider value={value} {...props} />
 }
@@ -66,20 +70,22 @@ const useGithub = () => {
     loading,
     setLoading,
     authState,
-    setAuthState
+    setAuthState,
+    stars,
+    setStars
   } = context
 
-  const request = (endpoint: string, token?: string) => {
+  const request = (endpoint: string, headers?: any) => {
     return axios
       .get(`${api}${endpoint}`, {
-        headers: { Authorization: `token ${token ? token : accessToken}` }
+        headers: { Authorization: `token ${accessToken}`, ...headers }
       })
       .then(res => res)
       .catch(e => e.response)
   }
 
   const authorize = (token: string) => {
-    return request('user', token)
+    return request('user', { Authorization: `token ${token}` })
       .then(res => {
         if (res.status === 200) {
           setAccessToken(token)
@@ -93,45 +99,59 @@ const useGithub = () => {
             url: res.data.url
           })
           setAuthState(AuthState.loggedIn)
-          // fetchStars()
         } else {
           reject(new Error('status failed')).catch(e => {
-            setAuthState(AuthState.error)
-            console.log(e, res)
+            setAuthState(AuthState.loggedOut)
+            console.error(e, res)
           })
         }
       })
       .catch(e => {
-        setAuthState(AuthState.error)
-        console.log('Error:', e.response)
+        setAuthState(AuthState.loggedOut)
+        console.error('Error:', e.response)
       })
   }
 
+  /**
+   * Parses pagination links from GitHub /starred response and returns links fro every page
+   * @param links Pagination links from header of GitHub starred response
+   */
+  const getStarredLinks = (links: string) => {
+    var regex = /rel="last"/
+    const last = links.split(',').find((l: string) => regex.test(l)) || ''
+    const lastPage = last.substring(last.search(/page=/) + 5, last.search(/>/))
+    return new Array(Number(lastPage))
+      .fill(undefined)
+      .map((val, i) => `user/starred?page=${i + 1}`)
+  }
+
   const fetchStars = () => {
-    setLoading(true)
-    return request('user/starred')
-      .then(res => {
-        var regex = /rel="last"/
+    return request('user/starred').then(res => {
+      if (res.status === 200) {
+        const pages = getStarredLinks(res.headers.link)
 
-        const last: string = res.headers.link
-          .split(',')
-          .find((l: string) => regex.test(l))
+        axios.all(pages.map((val, i) => request(val))).then(starData => {
+          const starredRepos = starData.reduce((prev: any[], curr) => {
+            const mapped: StarredRepo[] = curr.data.map((star: any) => {
+              return {
+                id: star.id,
+                ownerLogin: star.owner.login,
+                name: star.name,
+                htmlUrl: star.html_url,
+                description: star.description || '',
+                stargazersCount: star.stargazers_count,
+                forksCount: star.forks_count,
+                pushedAt: star.pushed_at
+              }
+            })
+            return [...prev, ...mapped]
+          }, [])
 
-        const lastPage = Number(
-          last.substring(last.search(/page=/) + 5, last.search(/>/))
-        )
-
-        return axios.all(
-          new Array(lastPage)
-            .fill(undefined)
-            .map((val, i) => request(`${api}user/starred?page=${i + 1}`))
-        )
-      })
-      .then(res => {
-        setLoading(false)
-        console.log(res)
-        // TODO: Clean data and save to state
-      })
+          setStars(starredRepos)
+          setLoading(false)
+        })
+      }
+    })
   }
 
   const autoLogin = () => {
@@ -145,7 +165,16 @@ const useGithub = () => {
     setAccessToken('')
   }
 
-  return { accessToken, authorize, user, authState, autoLogin, logout }
+  return {
+    accessToken,
+    authorize,
+    user,
+    authState,
+    autoLogin,
+    logout,
+    fetchStars,
+    stars
+  }
 }
 
 export { GithubProvider, useGithub }

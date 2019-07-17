@@ -10,6 +10,7 @@ import {
 import axios from 'axios'
 import MockAxios from 'axios-mock-adapter'
 import userData from 'mock-data/user.json'
+import starredData from 'mock-data/stars.json'
 
 const mock = new MockAxios(axios)
 afterAll(() => mock.restore())
@@ -29,6 +30,14 @@ test('Authentication', async () => {
   mock.onGet('https://api.github.com/user').reply(200, {
     ...userData
   })
+
+  mock.onGet('https://api.github.com/user/starred').reply(
+    200,
+    {
+      ...starredData.data
+    },
+    { ...starredData.headers }
+  )
 
   const { getByTitle, getByText, getByTestId, queryByTestId } = render(<App />)
 
