@@ -6,8 +6,8 @@ import RepoList, {
 } from '../RepoList'
 import { render as renderrtl, cleanup } from 'utils/test-utils'
 import '@testing-library/jest-dom/extend-expect'
-import { StarProvider } from 'state/star-context'
 import { StarredRepo } from 'types/GithubTypes'
+import { GithubProvider } from 'state/github-context'
 import { SearchProvider } from 'state/search-context'
 
 afterEach(() => cleanup())
@@ -49,9 +49,7 @@ const mockStars: StarredRepo[] = [
 
 const render = (ui: any, options?: any) => {
   return renderrtl(
-    <StarProvider value={{ stars: mockStars, setStars: jest.fn() }}>
-      {ui}
-    </StarProvider>
+    <GithubProvider value={{ stars: mockStars }}>{ui}</GithubProvider>
   )
 }
 

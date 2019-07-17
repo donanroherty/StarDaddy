@@ -116,7 +116,7 @@ const useGithub = () => {
    * Parses pagination links from GitHub /starred response and returns links fro every page
    * @param links Pagination links from header of GitHub starred response
    */
-  const getStarredLinks = (links: string) => {
+  const parseStarredLinks = (links: string) => {
     var regex = /rel="last"/
     const last = links.split(',').find((l: string) => regex.test(l)) || ''
     const lastPage = last.substring(last.search(/page=/) + 5, last.search(/>/))
@@ -128,11 +128,12 @@ const useGithub = () => {
   const fetchStars = () => {
     return request('user/starred').then(res => {
       if (res.status === 200) {
-        const pages = getStarredLinks(res.headers.link)
+        const pages = parseStarredLinks(res.headers.link)
 
-        axios.all(pages.map((val, i) => request(val))).then(starData => {
+        axios.all(pages.map(val => request(val))).then(starData => {
           const starredRepos = starData.reduce((prev: any[], curr) => {
-            const mapped: StarredRepo[] = curr.data.map((star: any) => {
+            const data = Object.values(curr.data)
+            const mapped: StarredRepo[] = data.map((star: any) => {
               return {
                 id: star.id,
                 ownerLogin: star.owner.login,
@@ -146,7 +147,6 @@ const useGithub = () => {
             })
             return [...prev, ...mapped]
           }, [])
-
           setStars(starredRepos)
           setLoading(false)
         })

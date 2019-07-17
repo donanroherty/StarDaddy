@@ -71,9 +71,7 @@ test('Submitting a new tag name is reflected in the tag list', () => {
 })
 
 test('Ctrl-clicking a tag deletes it', () => {
-  const { getByTestId, queryByTestId, getAllByTestId } = render(
-    <SearchToolPanel />
-  )
+  const { getAllByTestId } = render(<SearchToolPanel />)
   const tags = getAllByTestId('tag')
   fireEvent.click(getAllByTestId('tag')[0], { ctrlKey: true })
   expect(getAllByTestId('tag').length).toEqual(tags.length - 1)

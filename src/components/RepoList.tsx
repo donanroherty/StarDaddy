@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import Repo from './Repo'
-import { useStars } from 'state/star-context'
 import { useSearch } from 'state/search-context'
 import { StarredRepo } from 'types/GithubTypes'
 import { useGithub } from 'state/github-context'
@@ -60,7 +59,6 @@ export const getSearchResults = (
 }
 
 const RepoList = () => {
-  // const { stars } = useStars()
   const { searchTerm } = useSearch()
   const { fetchStars, stars } = useGithub()
 
