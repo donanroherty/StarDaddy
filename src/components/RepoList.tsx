@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import Repo from './Repo'
-import { useStars } from 'state/star-context'
 import { useSearch } from 'state/search-context'
 import { StarredRepo } from 'types/GithubTypes'
+import { useGithub } from 'state/github-context'
 
 type SearchResult = {
   id: number
@@ -59,8 +59,12 @@ export const getSearchResults = (
 }
 
 const RepoList = () => {
-  const { stars } = useStars()
   const { searchTerm } = useSearch()
+  const { fetchStars, stars } = useGithub()
+
+  useEffect(() => {
+    fetchStars()
+  }, [])
 
   if (!stars) return null
 

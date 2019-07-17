@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import SettingsToolPanel from './SettingsToolPanel'
 import SearchToolPanel from './SearchToolPanel'
-import { ToolbarPanelOptions } from './App'
+import { ToolbarPanelOptions } from './Panels'
 
 export interface ToolPanelProps {
   activeToolbarPanel: ToolbarPanelOptions

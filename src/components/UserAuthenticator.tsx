@@ -1,34 +1,22 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, FormEvent } from 'react'
 import styled from 'styled-components'
 import logo from 'assets/vectors/logo.svg'
 import Button from './Button'
+import { useGithub } from 'state/github-context'
 
-enum AuthState {
-  loading,
-  authNewUser
-}
-
-interface UserAuthenticatorProps {
-  authorize: () => Promise<void>
-}
+interface UserAuthenticatorProps {}
 
 const UserAuthenticator = (props: UserAuthenticatorProps) => {
-  const { authorize } = props
-  const [authState, setAuthState] = useState(AuthState.loading)
+  const { authorize, accessToken } = useGithub()
+  const [input, setInput] = useState(accessToken)
 
-  // On mount
-  useEffect(() => {
-    // Attempt login user saved in local storage
-    const localUser = localStorage.getItem('user-data')
-    if (localUser) {
-      authorize()
-    } else {
-      setAuthState(AuthState.authNewUser)
-    }
-  }, [authorize])
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault()
+    authorize(input)
+  }
 
   return (
-    <Wrapper data-testid="user-setup-modal">
+    <Wrapper data-testid="user-auth">
       <div>
         <Header>
           <img src={logo} alt="app logo" width="50px" height="50px" />
@@ -37,23 +25,26 @@ const UserAuthenticator = (props: UserAuthenticatorProps) => {
         </Header>
 
         <Content>
-          {authState === AuthState.loading &&
-          localStorage.getItem('user-data') ? (
-            <p>loading...</p>
-          ) : (
-            <>
-              <p>
-                Laniakea helps you categorize and filter your starred
-                repositories.
-                <br />
-                Click below to get started.
-              </p>
+          <p>
+            Laniakea helps you categorize and filter your starred repositories.
+            <br />
+            Click below to get started.
+          </p>
 
-              <ButtonWrapper>
-                <Button label="Login with GitHub" onClick={authorize} />
-              </ButtonWrapper>
-            </>
-          )}
+          <form onSubmit={handleSubmit}>
+            <AccessTokenInput
+              type="text"
+              name="access token"
+              title="access token"
+              placeholder="access token"
+              value={input}
+              onChange={e => setInput(e.target.value)}
+            />
+
+            <ButtonWrapper>
+              <Button label="Login with GitHub" type="submit" />
+            </ButtonWrapper>
+          </form>
         </Content>
       </div>
     </Wrapper>
@@ -100,7 +91,7 @@ const Header = styled.div`
 `
 const Content = styled.div`
   width: 610px;
-  height: 110px;
+  /* height: 110px; */
   padding: 30px 0 30px 0;
   border-radius: 0 0 16px 16px;
   background-color: ${({ theme }) => theme.color.dark};
@@ -117,6 +108,19 @@ const ButtonWrapper = styled.div`
   margin-top: 24px;
   display: flex;
   justify-content: center;
+`
+const AccessTokenInput = styled.input`
+  margin-top: 24px;
+
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 400px;
+  height: 40px;
+  border-radius: 9px;
+  border: none;
+  text-align: center;
+  font-size: 16px;
 `
 
 export default UserAuthenticator

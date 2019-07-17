@@ -1,71 +1,26 @@
-import React, { useState } from 'react'
-import styled, {
-  ThemeProvider,
-  createGlobalStyle
-} from 'theme/themed-styled-components'
-import theme from 'theme/theme'
-import { DndProvider } from 'react-dnd'
-import HTML5Backend from 'react-dnd-html5-backend'
-
-import AppBar from './AppBar'
-import ResultsPanel from './ResultsPanel'
-import ToolPanel from './ToolPanel'
+import React, { useEffect } from 'react'
+import { createGlobalStyle } from 'theme/themed-styled-components'
+import { AuthState } from 'types/GithubTypes'
+import Panels from './Panels'
 import UserAuthenticator from './UserAuthenticator'
-
-import { useUser } from 'state/user-context'
-import { SearchProvider } from 'state/search-context'
-import { TagProvider } from 'state/tag-context'
-
-export enum ToolbarPanelOptions {
-  Search,
-  Settings
-}
+import { useGithub } from 'state/github-context'
 
 const App: React.FC = () => {
-  const [activeToolbarPanel, setActiveToolbarPanel] = useState(
-    ToolbarPanelOptions.Search
-  )
-  const { user, authorize } = useUser()
+  const { authState, autoLogin } = useGithub()
+
+  useEffect(() => autoLogin(), [])
 
   return (
-    <ThemeProvider theme={theme}>
-      <DndProvider backend={HTML5Backend}>
-        <TagProvider>
-          <SearchProvider>
-            <>
-              <GlobalStyle />
-              {user ? (
-                <MainPanels>
-                  <AppBar
-                    setActiveToolbarPanel={setActiveToolbarPanel}
-                    activeToolbarPanel={activeToolbarPanel}
-                  />
-
-                  <ToolPanel activeToolbarPanel={activeToolbarPanel} />
-                  <ResultsPanel />
-                </MainPanels>
-              ) : (
-                <UserAuthenticator authorize={authorize} />
-              )}
-            </>
-          </SearchProvider>
-        </TagProvider>
-      </DndProvider>
-    </ThemeProvider>
+    <>
+      <GlobalStyle />
+      {authState === AuthState.loggedIn ? <Panels /> : <UserAuthenticator />}
+    </>
   )
 }
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700');
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,400i,600,700');
-`
-
-const MainPanels = styled.div`
-  width: 100%;
-  height: 100%;
-  display: grid;
-  grid-template-rows: auto;
-  grid-template-columns: auto auto 1fr;
 `
 
 export default App

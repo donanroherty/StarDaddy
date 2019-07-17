@@ -1,28 +1,20 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useUser } from 'state/user-context'
+
+import { useGithub } from 'state/github-context'
 
 const SettingsToolPanel = () => {
-  const { user, logout } = useUser()
-  const name = user ? user.name : ''
-  const login = user ? user.login : ''
+  const { user, logout } = useGithub()
 
   return (
     <Wrapper data-testid="settings-tool-panel">
       <UserDetails>
-        <AccountRealName>{name}</AccountRealName>
-        <AccountUsername>{login}</AccountUsername>
+        <AccountRealName>{user.name}</AccountRealName>
+        <AccountUsername>{user.login}</AccountUsername>
       </UserDetails>
 
       <SettingList>
         <li>
-          <SettingItem
-            onClick={() => {
-              localStorage.clear()
-            }}
-          >
-            Clear local data
-          </SettingItem>
           <SettingItem onClick={logout}>Logout</SettingItem>
         </li>
       </SettingList>
@@ -33,7 +25,6 @@ const SettingsToolPanel = () => {
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
-
   color: ${props => props.theme.color.light};
   background-color: ${props => props.theme.color.dark};
 `
