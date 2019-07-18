@@ -55,8 +55,33 @@ const GithubProvider = (props: any) => {
   )
   return <GithubContext.Provider value={value} {...props} />
 }
-const api = 'https://api.github.com/'
+
 const GQLApi = 'https://api.github.com/graphql'
+
+export const GET_USER = `{viewer {name login url avatarUrl}}`
+export const queryStars = (batchSize: number, cursor: string) => `{
+      viewer{
+        starredRepositories(first:${batchSize} ${
+  cursor.length > 0 ? `,after: "${cursor}"` : ``
+}){
+          totalCount
+          edges{
+            cursor
+            node{
+              id
+              name
+              url
+              owner {login}
+              description
+              stargazers{totalCount}
+              forkCount
+              pushedAt
+              languages(first: 5) {nodes {name}}
+            }
+          }
+        }
+      }
+    }`
 
 const useGithub = () => {
   const context = React.useContext(GithubContext)
@@ -76,12 +101,6 @@ const useGithub = () => {
     setStars
   } = context
 
-  const request = (endpoint: string, headers?: any) => {
-    return axios.get(`${api}${endpoint}`, {
-      headers: { Authorization: `token ${accessToken}`, ...headers }
-    })
-  }
-
   const gqlRequest = (query: string, headers?: any) => {
     return axios.post(
       `${GQLApi}`,
@@ -92,17 +111,6 @@ const useGithub = () => {
     )
   }
 
-  const GET_USER = `
-    {
-      viewer {
-        name
-        login
-        url
-        avatarUrl
-      }
-    }
-  `
-
   const authorize = async (token: string) => {
     try {
       const res = await gqlRequest(GET_USER, {
@@ -111,10 +119,9 @@ const useGithub = () => {
 
       if (res.status === 200) {
         const data = res.data.data.viewer
-
         setAccessToken(token)
         setUser({
-          login: res.data.login,
+          login: data.login,
           name: data.name,
           url: data.url,
           avatar_url: data.avatarUrl
@@ -128,51 +135,25 @@ const useGithub = () => {
       }
     } catch (error) {
       setAuthState(AuthState.loggedOut)
-      console.log(error.response)
+      console.error(error)
     }
   }
 
-  const starsQuery = (cursor: string | null) => `{
-      viewer{
-        starredRepositories(first:100 ${cursor ? `,after: "${cursor}"` : ``}){
-          totalCount
-          edges{
-            cursor
-            node{
-              id
-              name
-              url
-              owner {
-                login
-              }
-              description
-              stargazers{
-                totalCount
-              }
-              forkCount
-              pushedAt
-              languages(first: 5) {
-                nodes {
-                  name
-                }
-              }
-            }
-          }
-        }
-      }
-    }`
-
-  const fetchStars = () => fetchData(null, [], 0)
-
-  const fetchData = async (
-    cursor: string | null,
-    prev: StarredRepo[],
-    i: number
+  const fetchStars = async (
+    prev: StarredRepo[] = [],
+    i: number = 0,
+    cursor: string = '',
+    batchSize: number = 100
   ) => {
     try {
-      const res = await gqlRequest(starsQuery(cursor))
+      if (batchSize > 100 || batchSize < 0)
+        throw 'batchSize must be between -1 and 101'
+
+      const res = await gqlRequest(queryStars(batchSize, cursor))
+      // console.log(res.data.data.viewer.starredRepositories.edges)
+
       const starredRepositories = res.data.data.viewer.starredRepositories
-      const loopCount = Math.ceil(starredRepositories.totalCount / 100) //100 items per page
+      const loopCount = Math.ceil(starredRepositories.totalCount / batchSize)
       const lastCursor =
         starredRepositories.edges[starredRepositories.edges.length - 1].cursor
 
@@ -193,13 +174,13 @@ const useGithub = () => {
       prev = [...prev, ...repos]
 
       if (++i < loopCount) {
-        fetchData(lastCursor, prev, i)
+        fetchStars(prev, i, lastCursor)
       } else {
         setStars(prev.reverse())
         setLoading(false)
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 
