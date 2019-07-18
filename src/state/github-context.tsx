@@ -93,48 +93,46 @@ const useGithub = () => {
   }
 
   const GET_USER = `
-  {
-    viewer{
-      name
-      login
-      url
-      avatarUrl
-      starredRepositories(last:100){
-        totalCount
+    {
+      viewer {
+        name
+        login
+        url
+        avatarUrl
       }
     }
-  }`
+  `
 
   const authorize = async (token: string) => {
     try {
-      const res = await request('user', { Authorization: `token ${token}` })
+      const res = await gqlRequest(GET_USER, {
+        Authorization: `bearer ${token}`
+      })
+
       if (res.status === 200) {
+        const data = res.data.data.viewer
+
         setAccessToken(token)
         setUser({
-          avatar_url: res.data.avatar_url,
-          gists_url: res.data.gists_url,
-          html_url: res.data.html_url,
           login: res.data.login,
-          name: res.data.name,
-          starred_url: res.data.starred_url,
-          url: res.data.url
+          name: data.name,
+          url: data.url,
+          avatar_url: data.avatarUrl
         })
         setAuthState(AuthState.loggedIn)
-        // fetchRepos()
       } else {
         reject(new Error('status failed')).catch(e => {
           setAuthState(AuthState.loggedOut)
           console.error(e, res)
         })
       }
-    } catch (e_1) {
+    } catch (error) {
       setAuthState(AuthState.loggedOut)
-      console.error('Error:', e_1.response)
+      console.log(error.response)
     }
   }
 
-  const fetchStars = () => {
-    const starsQuery = (cursor: string | null) => `{ 
+  const starsQuery = (cursor: string | null) => `{
       viewer{
         starredRepositories(first:100 ${cursor ? `,after: "${cursor}"` : ``}){
           totalCount
@@ -164,46 +162,45 @@ const useGithub = () => {
       }
     }`
 
-    const fetchStarData = async (
-      cursor: string | null,
-      prev: StarredRepo[],
-      i: number
-    ) => {
-      try {
-        const res = await gqlRequest(starsQuery(cursor))
-        const starredRepositories = res.data.data.viewer.starredRepositories
-        const loopCount = Math.ceil(starredRepositories.totalCount / 100) //100 items per page
-        const lastCursor =
-          starredRepositories.edges[starredRepositories.edges.length - 1].cursor
+  const fetchStars = () => fetchData(null, [], 0)
 
-        const repos: StarredRepo[] = starredRepositories.edges.map(
-          (star: any) => ({
-            id: star.node.id,
-            ownerLogin: star.node.owner.login,
-            name: star.node.name,
-            htmlUrl: star.node.url,
-            description: star.node.description || '',
-            stargazersCount: star.node.stargazers.totalCount,
-            forksCount: star.node.forkCount,
-            pushedAt: star.node.pushedAt,
-            languages: star.node.languages.nodes
-          })
-        )
+  const fetchData = async (
+    cursor: string | null,
+    prev: StarredRepo[],
+    i: number
+  ) => {
+    try {
+      const res = await gqlRequest(starsQuery(cursor))
+      const starredRepositories = res.data.data.viewer.starredRepositories
+      const loopCount = Math.ceil(starredRepositories.totalCount / 100) //100 items per page
+      const lastCursor =
+        starredRepositories.edges[starredRepositories.edges.length - 1].cursor
 
-        prev = [...prev, ...repos]
+      const repos: StarredRepo[] = starredRepositories.edges.map(
+        (star: any) => ({
+          id: star.node.id,
+          ownerLogin: star.node.owner.login,
+          name: star.node.name,
+          htmlUrl: star.node.url,
+          description: star.node.description || '',
+          stargazersCount: star.node.stargazers.totalCount,
+          forksCount: star.node.forkCount,
+          pushedAt: star.node.pushedAt,
+          languages: star.node.languages.nodes
+        })
+      )
 
-        if (++i < loopCount) {
-          fetchStarData(lastCursor, prev, i)
-        } else {
-          setStars(prev.reverse())
-          setLoading(false)
-        }
-      } catch (error) {
-        console.log(error)
+      prev = [...prev, ...repos]
+
+      if (++i < loopCount) {
+        fetchData(lastCursor, prev, i)
+      } else {
+        setStars(prev.reverse())
+        setLoading(false)
       }
+    } catch (error) {
+      console.log(error)
     }
-
-    fetchStarData(null, [], 0)
   }
 
   const autoLogin = () => {
@@ -227,19 +224,6 @@ const useGithub = () => {
     fetchStars,
     stars
   }
-}
-
-/**
- * Parses pagination links from GitHub /starred response and returns links fro every page
- * @param links Pagination links from header of GitHub starred response
- */
-const parseStarredLinks = (links: string) => {
-  var regex = /rel="last"/
-  const last = links.split(',').find((l: string) => regex.test(l)) || ''
-  const lastPage = last.substring(last.search(/page=/) + 5, last.search(/>/))
-  return new Array(Number(lastPage))
-    .fill(undefined)
-    .map((val, i) => `user/starred?page=${i + 1}`)
 }
 
 export { GithubProvider, useGithub }
