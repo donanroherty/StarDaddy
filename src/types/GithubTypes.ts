@@ -1,10 +1,7 @@
 export type User = {
   avatar_url: string
-  gists_url: string
-  html_url: string
   login: string
   name: string
-  starred_url: string
   url: string
 }
 
@@ -17,6 +14,7 @@ export interface StarredRepo {
   stargazersCount: number
   forksCount: number
   pushedAt: string
+  languages: string[]
 }
 
 export enum AuthState {
