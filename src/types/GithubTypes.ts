@@ -6,7 +6,7 @@ export type User = {
 }
 
 export interface StarredRepo {
-  id: number
+  id: string
   ownerLogin: string
   name: string
   htmlUrl: string

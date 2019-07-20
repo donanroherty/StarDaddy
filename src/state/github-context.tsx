@@ -29,7 +29,6 @@ const GithubProvider = (props: any) => {
     localStars ? JSON.parse(localStars) : []
   )
 
-  const [loading, setLoading] = useState(true)
   const [authState, setAuthState] = useState(AuthState.loggedOut)
 
   // TODO: Add tag list items here.  Add new tags for each new language encountered on github
@@ -46,14 +45,12 @@ const GithubProvider = (props: any) => {
       setAccessToken,
       user,
       setUser,
-      loading,
-      setLoading,
       authState,
       setAuthState,
       stars,
       setStars
     }),
-    [accessToken, user, loading, authState, setAuthState, stars]
+    [accessToken, user, authState, setAuthState, stars]
   )
   return <GithubContext.Provider value={value} {...props} />
 }
@@ -101,8 +98,6 @@ const useGithub = () => {
     setAccessToken,
     user,
     setUser,
-    loading,
-    setLoading,
     authState,
     setAuthState,
     stars,
@@ -170,7 +165,6 @@ const useGithub = () => {
       } else {
         const repos = cleanStarData(accumulator, stars)
         setStars(repos.reverse())
-        setLoading(false)
       }
     } catch (error) {
       console.error(error)

@@ -10,7 +10,7 @@ afterEach(() => cleanup())
 
 const mockStars: StarredRepo[] = [
   {
-    id: 123,
+    id: '123',
     ownerLogin: 'testing-library',
     name: 'dom-testing-library',
     htmlUrl: 'https://github.com/testing-library/dom-testing-library',
@@ -22,7 +22,7 @@ const mockStars: StarredRepo[] = [
     tags: []
   },
   {
-    id: 456,
+    id: '456',
     ownerLogin: 'gorangajic',
     name: 'react-svg-morph',
     htmlUrl: 'https://github.com/gorangajic/react-svg-morph',
@@ -34,7 +34,7 @@ const mockStars: StarredRepo[] = [
     tags: []
   },
   {
-    id: 789,
+    id: '789',
     ownerLogin: 'rehooks',
     name: 'awesome-react-hooks',
     htmlUrl: 'https://github.com/rehooks/awesome-react-hooks',

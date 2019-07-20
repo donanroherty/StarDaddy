@@ -29,7 +29,7 @@ const SearchProvider = (props: any) => {
 }
 
 type SearchResult = {
-  id: number
+  id: string
   matches: SearchMatch[]
 }
 type SearchMatch = {
