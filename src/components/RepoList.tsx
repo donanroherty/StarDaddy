@@ -53,13 +53,13 @@ export const getSearchResults = (
           }
         }
       )
-      // Filter out results which don't contain a match for eact search term
+      // Filter out results which don't contain a match for each search term
       .filter(val => val.matches.length === splitTerms.length)
   )
 }
 
 const RepoList = () => {
-  const { searchTerm } = useSearch()
+  const { searchTerm, searchTags } = useSearch()
   const { fetchStars, stars } = useGithub()
 
   useEffect(() => {
@@ -69,7 +69,7 @@ const RepoList = () => {
   if (!stars) return null
 
   const searchResults = getSearchResults(stars, searchTerm)
-  const repos = stars.map((star, i) => {
+  const repos = stars.map(star => {
     const visible =
       // show all results if no search term is provided
       stringToArray(searchTerm).length === 0 ||

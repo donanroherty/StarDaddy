@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { GoStar, GoRepoForked } from 'react-icons/go'
 import { StarredRepo } from 'types/GithubTypes'
+import Tag from './Tag'
 
 export interface RepoProps extends StarredRepo {
   isVisible: boolean
@@ -41,6 +42,7 @@ export const formatLastPushTime = (pushedAt: string, now: Date) => {
 
 const Repo = (props: RepoProps) => {
   const {
+    id,
     ownerLogin,
     name,
     htmlUrl,
@@ -48,7 +50,8 @@ const Repo = (props: RepoProps) => {
     stargazersCount,
     forksCount,
     pushedAt,
-    isVisible
+    isVisible,
+    tags
   } = props
 
   const now = new Date()
@@ -68,6 +71,10 @@ const Repo = (props: RepoProps) => {
       </TitleRow>
 
       <Description>{description}</Description>
+
+      <TagList>
+        {tags && tags.map(tag => <Tag name={tag} key={tag} isThin={true} />)}
+      </TagList>
 
       <DetailsRow>
         {/* Stars */}
@@ -155,9 +162,14 @@ const Description = styled.div`
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 `
+const TagList = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 12px;
+`
 const DetailsRow = styled.div`
   display: block;
-  margin-top: 24px;
+  margin-top: 12px;
   font-size: 12px;
   overflow: hidden;
   white-space: nowrap;

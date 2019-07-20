@@ -32,11 +32,13 @@ const GithubProvider = (props: any) => {
   const [loading, setLoading] = useState(true)
   const [authState, setAuthState] = useState(AuthState.loggedOut)
 
+  // TODO: Add tag list items here.  Add new tags for each new language encountered on github
+
   useEffect(() => {
     localStorage.setItem('user', JSON.stringify(user))
     localStorage.setItem('token', accessToken)
     localStorage.setItem('stars', JSON.stringify(stars))
-  }, [accessToken, user])
+  }, [accessToken, user, stars])
 
   const value = React.useMemo(
     () => ({
@@ -76,7 +78,13 @@ export const queryStars = (batchSize: number, cursor: string) => `{
               stargazers{totalCount}
               forkCount
               pushedAt
-              languages(first: 5) {nodes {name}}
+              languages(last: 50) {
+                totalSize
+                edges {
+                  node {name}
+                  size
+                }
+              }
             }
           }
         }
@@ -140,7 +148,7 @@ const useGithub = () => {
   }
 
   const fetchStars = async (
-    prev: StarredRepo[] = [],
+    accumulator: StarredRepo[] = [],
     i: number = 0,
     cursor: string = '',
     batchSize: number = 100
@@ -150,33 +158,18 @@ const useGithub = () => {
         throw 'batchSize must be between -1 and 101'
 
       const res = await gqlRequest(queryStars(batchSize, cursor))
-      // console.log(res.data.data.viewer.starredRepositories.edges)
 
-      const starredRepositories = res.data.data.viewer.starredRepositories
-      const loopCount = Math.ceil(starredRepositories.totalCount / batchSize)
-      const lastCursor =
-        starredRepositories.edges[starredRepositories.edges.length - 1].cursor
+      const repos = res.data.data.viewer.starredRepositories
+      const loopCount = Math.ceil(repos.totalCount / batchSize)
 
-      const repos: StarredRepo[] = starredRepositories.edges.map(
-        (star: any) => ({
-          id: star.node.id,
-          ownerLogin: star.node.owner.login,
-          name: star.node.name,
-          htmlUrl: star.node.url,
-          description: star.node.description || '',
-          stargazersCount: star.node.stargazers.totalCount,
-          forksCount: star.node.forkCount,
-          pushedAt: star.node.pushedAt,
-          languages: star.node.languages.nodes
-        })
-      )
-
-      prev = [...prev, ...repos]
+      cursor = repos.edges[repos.edges.length - 1].cursor
+      accumulator = [...accumulator, ...repos.edges.map((s: any) => s.node)]
 
       if (++i < loopCount) {
-        fetchStars(prev, i, lastCursor)
+        fetchStars(accumulator, i, cursor)
       } else {
-        setStars(prev.reverse())
+        const repos = cleanStarData(accumulator, stars)
+        setStars(repos.reverse())
         setLoading(false)
       }
     } catch (error) {
@@ -193,6 +186,7 @@ const useGithub = () => {
   const logout = () => {
     setAuthState(AuthState.loggedOut)
     setAccessToken('')
+    window.localStorage.clear()
   }
 
   return {
@@ -205,6 +199,40 @@ const useGithub = () => {
     fetchStars,
     stars
   }
+}
+
+export const cleanStarData = (starData: any[], localStars: StarredRepo[]) => {
+  const repos: StarredRepo[] = starData.map((star: any) => {
+    const existing = localStars.find(s => s.id === star.id)
+    const totalSize = star.languages.totalSize
+
+    const languages = star.languages.edges
+      .map((l: any) => {
+        return {
+          name: l.node.name,
+          size: l.size,
+          perc: (l.size / totalSize) * 100
+        }
+      })
+      .filter((l: any) => l.perc > 30)
+      .map((l: any) => l.name)
+
+    const tags = existing ? existing.tags : languages
+
+    return {
+      id: star.id,
+      ownerLogin: star.owner.login,
+      name: star.name,
+      htmlUrl: star.url,
+      description: star.description || '',
+      stargazersCount: star.stargazers.totalCount,
+      forksCount: star.forkCount,
+      pushedAt: star.pushedAt,
+      tags: tags
+    }
+  })
+
+  return repos
 }
 
 export { GithubProvider, useGithub }

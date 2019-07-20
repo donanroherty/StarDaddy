@@ -15,6 +15,7 @@ export interface StarredRepo {
   forksCount: number
   pushedAt: string
   languages: string[]
+  tags: string[]
 }
 
 export enum AuthState {
