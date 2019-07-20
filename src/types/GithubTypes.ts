@@ -14,7 +14,6 @@ export interface StarredRepo {
   stargazersCount: number
   forksCount: number
   pushedAt: string
-  languages: string[]
   tags: string[]
 }
 

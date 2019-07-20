@@ -206,16 +206,20 @@ export const cleanStarData = (starData: any[], localStars: StarredRepo[]) => {
     const existing = localStars.find(s => s.id === star.id)
     const totalSize = star.languages.totalSize
 
-    const languages = star.languages.edges
-      .map((l: any) => {
-        return {
-          name: l.node.name,
-          size: l.size,
-          perc: (l.size / totalSize) * 100
-        }
-      })
-      .filter((l: any) => l.perc > 30)
-      .map((l: any) => l.name)
+    let languages = []
+
+    if (star.languages.edges) {
+      languages = star.languages.edges
+        .map((l: any) => {
+          return {
+            name: l.node.name,
+            size: l.size,
+            perc: (l.size / totalSize) * 100
+          }
+        })
+        .filter((l: any) => l.perc > 30)
+        .map((l: any) => l.name)
+    }
 
     const tags = existing ? existing.tags : languages
 

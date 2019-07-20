@@ -1,9 +1,5 @@
 import React from 'react'
-import RepoList, {
-  getSearchResults,
-  sanitizeString,
-  stringToArray
-} from '../RepoList'
+import RepoList from '../RepoList'
 import { render as renderrtl, cleanup } from 'utils/test-utils'
 import '@testing-library/jest-dom/extend-expect'
 import { StarredRepo } from 'types/GithubTypes'
@@ -22,7 +18,8 @@ const mockStars: StarredRepo[] = [
       '🐙 Simple and complete DOM testing utilities that encourage good testing practices.',
     stargazersCount: 1313,
     forksCount: 145,
-    pushedAt: '2019-05-12T19:04:44Z'
+    pushedAt: '2019-05-12T19:04:44Z',
+    tags: []
   },
   {
     id: 456,
@@ -33,7 +30,8 @@ const mockStars: StarredRepo[] = [
       ':crystal_ball: morph your svg component one into another other',
     stargazersCount: 643,
     forksCount: 44,
-    pushedAt: '2018-11-12T23:45:05Z'
+    pushedAt: '2018-11-12T23:45:05Z',
+    tags: []
   },
   {
     id: 789,
@@ -43,7 +41,8 @@ const mockStars: StarredRepo[] = [
     description: 'Awesome React Hooks',
     stargazersCount: 1510,
     forksCount: 119,
-    pushedAt: '2019-05-15T11:29:26Z'
+    pushedAt: '2019-05-15T11:29:26Z',
+    tags: []
   }
 ]
 
@@ -82,30 +81,4 @@ test('RepoList renders nothing for failed search term match', () => {
   expect(getByText(mockStars[0].name)).not.toBeVisible()
   expect(getByText(mockStars[1].name)).not.toBeVisible()
   expect(getByText(mockStars[2].name)).not.toBeVisible()
-})
-
-test('getSearchResults()', () => {
-  expect(getSearchResults(mockStars, 'dom')).toEqual([
-    { id: 123, matches: [{ term: 'dom', count: 2 }] }
-  ])
-
-  expect(getSearchResults(mockStars, 'react')).toEqual([
-    { id: 456, matches: [{ term: 'react', count: 1 }] },
-    { id: 789, matches: [{ term: 'react', count: 2 }] }
-  ])
-
-  expect(getSearchResults(mockStars, 'react-svg')).toEqual([
-    {
-      id: 456,
-      matches: [{ term: 'react', count: 1 }, { term: 'svg', count: 2 }]
-    }
-  ])
-})
-
-test('sanitizeString()', () => {
-  expect(sanitizeString('A,b-C_d*e.f')).toBe('A b C d e f')
-})
-
-test('stringToArray()', () => {
-  expect(stringToArray('A,b-C_d*e.f')).toEqual(['A', 'b', 'C', 'd', 'e', 'f'])
 })
