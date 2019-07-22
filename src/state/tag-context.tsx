@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import defaultTagData from 'mock-data/default-tags.json'
+import { useGithub } from './github-context'
 
 type TagContextType = {
   tags: string[]
@@ -50,6 +51,8 @@ const useTags = () => {
     setIsAddingTag
   } = context
 
+  const { stars, renameTagOnRepo } = useGithub()
+
   // Add tags
   /*************************************/
   const beginAddTag = () => {
@@ -84,6 +87,7 @@ const useTags = () => {
     if (!tags.filter(t => t !== prevName).find(t => t === name)) {
       setTags(prev => prev.map(tag => (tag === prevName ? name : tag)))
       setEditingTag(-1)
+      renameTagOnRepo(prevName, name)
       return {
         success: true,
         message: `Renamed tag '${name}'`

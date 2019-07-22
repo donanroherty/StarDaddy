@@ -171,6 +171,15 @@ const useGithub = () => {
     }
   }
 
+  const renameTagOnRepo = (prevName: string, newName: string) => {
+    setStars(prev =>
+      prev.map(star => ({
+        ...star,
+        tags: star.tags.map(tag => (tag === prevName ? newName : tag))
+      }))
+    )
+  }
+
   const autoLogin = () => {
     if (accessToken !== '') {
       authorize(accessToken)
@@ -191,7 +200,8 @@ const useGithub = () => {
     autoLogin,
     logout,
     fetchStars,
-    stars
+    stars,
+    renameTagOnRepo
   }
 }
 

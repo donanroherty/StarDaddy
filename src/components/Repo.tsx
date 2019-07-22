@@ -57,7 +57,10 @@ const Repo = (props: RepoProps) => {
   const now = new Date()
 
   return (
-    <Wrapper style={{ display: isVisible ? 'initial' : 'none' }}>
+    <Wrapper
+      data-testid="repo"
+      style={{ display: isVisible ? 'initial' : 'none' }}
+    >
       <TitleRow>
         <a
           href={htmlUrl}
