@@ -28,11 +28,18 @@ const SearchProvider = (props: any) => {
   return <SearchContext.Provider value={value} {...props} />
 }
 
-type SearchResult = {
+type SearchResultType = {
   id: string
-  matches: SearchMatch[]
+  name: string
+  termMatches: TermMatch[]
+  tagMatches: string[]
+  searchRanking: number
 }
-type SearchMatch = {
+type TermSearchResult = {
+  id: string
+  termMatches: TermMatch[]
+}
+type TermMatch = {
   term: string
   count: number
 }
@@ -64,7 +71,7 @@ const useSearch = () => {
 }
 
 // Returns an array of repos that contain the given search terms separated by spaces
-export const getSearchResults = (
+export const searchByTerm = (
   starredRepos: StarredRepo[],
   searchString: string
 ) => {
@@ -73,29 +80,82 @@ export const getSearchResults = (
   return (
     starredRepos
       .map(
-        (star): SearchResult => {
+        (star): TermSearchResult => {
           const repoName = sanitizeString(star.name) // Sanitize repo name
           const content = `${star.ownerLogin} ${repoName} ${star.description}` // Text to search
 
-          const matches = splitTerms.reduce((prev: SearchMatch[], word) => {
+          const matches = splitTerms.reduce((acc: TermMatch[], word) => {
             // Get number of occurences of a regex match for the given word
             const matchCount = (
               (content || '').match(new RegExp(word, 'gi')) || []
             ).length
 
             return matchCount === 0
-              ? prev
-              : [...prev, { term: word, count: matchCount }]
+              ? acc
+              : [...acc, { term: word, count: matchCount }]
           }, [])
 
           return {
             id: star.id,
-            matches: matches
+            termMatches: matches
           }
         }
       )
       // Filter out results which don't contain a match for each search term
-      .filter(val => val.matches.length === splitTerms.length)
+      .filter(val => val.termMatches.length === splitTerms.length)
+  )
+}
+
+export const searchByTag = (
+  starredRepos: StarredRepo[],
+  searchTags: string[]
+) => {
+  const matches = starredRepos
+    .map(repo => {
+      const found = repo.tags.reduce((acc: any, tag: any) => {
+        return searchTags.find(st => st === tag) ? [...acc, tag] : acc
+      }, [])
+
+      return { id: repo.id, tagMatches: found }
+    })
+    // Filter out repos with no matched tags
+    .filter(m => m.tagMatches.length === searchTags.length)
+
+  return matches
+}
+
+export const getCombinedSearch = (
+  starredRepos: StarredRepo[],
+  searchString: string,
+  searchTags: string[]
+): SearchResultType[] => {
+  const termResults = searchByTerm(starredRepos, searchString)
+  const tagResults = searchByTag(starredRepos, searchTags)
+
+  const combined: SearchResultType[] = starredRepos.map(star => {
+    const termRes = termResults.find(res => res.id === star.id)
+    const termMatches = termRes ? termRes.termMatches : []
+
+    const tagRes = tagResults.find(res => res.id === star.id)
+    const tagMatches = tagRes ? tagRes.tagMatches : []
+
+    return {
+      id: star.id,
+      name: star.name,
+      termMatches: termMatches,
+      tagMatches: tagMatches,
+      searchRanking: termMatches.length + tagMatches.length
+    }
+  })
+
+  return (
+    combined
+      // Should contain every search term and tag
+      .filter(
+        res =>
+          res.searchRanking ===
+          stringToArray(searchString).length + searchTags.length
+      )
   )
 }
 

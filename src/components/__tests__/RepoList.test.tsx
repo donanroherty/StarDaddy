@@ -42,7 +42,7 @@ const mockStars: StarredRepo[] = [
     stargazersCount: 1510,
     forksCount: 119,
     pushedAt: '2019-05-15T11:29:26Z',
-    tags: []
+    tags: ['Mock Tag']
   }
 ]
 
@@ -61,7 +61,7 @@ test('RepoList renders all repos for empty search term', () => {
 
 test('RepoList correctly filters by search term', () => {
   const { getByText } = render(
-    <SearchProvider value={{ searchTerm: 'react', setSearchTerm: jest.fn() }}>
+    <SearchProvider value={{ searchTerm: 'react', searchTags: [] }}>
       <RepoList />
     </SearchProvider>
   )
@@ -72,13 +72,22 @@ test('RepoList correctly filters by search term', () => {
 
 test('RepoList renders nothing for failed search term match', () => {
   const { getByText } = render(
-    <SearchProvider
-      value={{ searchTerm: 'react fail', setSearchTerm: jest.fn() }}
-    >
+    <SearchProvider value={{ searchTerm: 'react fail', searchTags: [] }}>
       <RepoList />
     </SearchProvider>
   )
   expect(getByText(mockStars[0].name)).not.toBeVisible()
   expect(getByText(mockStars[1].name)).not.toBeVisible()
   expect(getByText(mockStars[2].name)).not.toBeVisible()
+})
+
+test('RepoList correctly filters by search term and tag', () => {
+  const { getByText } = render(
+    <SearchProvider value={{ searchTerm: 'react', searchTags: ['Mock Tag'] }}>
+      <RepoList />
+    </SearchProvider>
+  )
+  expect(getByText(mockStars[0].name)).not.toBeVisible()
+  expect(getByText(mockStars[1].name)).not.toBeVisible()
+  expect(getByText(mockStars[2].name)).toBeVisible()
 })

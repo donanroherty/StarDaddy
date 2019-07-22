@@ -199,6 +199,7 @@ export const cleanStarData = (starData: any[], localStars: StarredRepo[]) => {
   const repos: StarredRepo[] = starData.map((star: any) => {
     const existing = localStars.find(s => s.id === star.id)
     const totalSize = star.languages.totalSize
+    const inclusionPerc = 15.0 // Percentage threshold for language to be included as a tag
 
     let languages = []
 
@@ -211,7 +212,7 @@ export const cleanStarData = (starData: any[], localStars: StarredRepo[]) => {
             perc: (l.size / totalSize) * 100
           }
         })
-        .filter((l: any) => l.perc > 30)
+        .filter((l: any) => l.perc > inclusionPerc)
         .map((l: any) => l.name)
     }
 

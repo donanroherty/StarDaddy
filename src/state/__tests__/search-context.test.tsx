@@ -1,5 +1,5 @@
 import { render, cleanup } from 'utils/test-utils'
-import { getSearchResults } from '../search-context'
+import { getCombinedSearch } from '../search-context'
 import { StarredRepo } from 'types/GithubTypes'
 
 afterEach(() => cleanup())
@@ -26,7 +26,7 @@ const mockStars: StarredRepo[] = [
     stargazersCount: 643,
     forksCount: 44,
     pushedAt: '2018-11-12T23:45:05Z',
-    tags: []
+    tags: ['C++', 'Shell', 'HTML']
   },
   {
     id: '789',
@@ -37,24 +37,45 @@ const mockStars: StarredRepo[] = [
     stargazersCount: 1510,
     forksCount: 119,
     pushedAt: '2019-05-15T11:29:26Z',
-    tags: []
+    tags: ['JavaScript']
   }
 ]
 
 test('getSearchResults()', () => {
-  expect(getSearchResults(mockStars, 'dom')).toEqual([
-    { id: '123', matches: [{ term: 'dom', count: 2 }] }
+  expect(getCombinedSearch(mockStars, 'dom', [])).toEqual([
+    {
+      id: '123',
+      name: 'dom-testing-library',
+      termMatches: [{ term: 'dom', count: 2 }],
+      tagMatches: [],
+      searchRanking: 1
+    }
   ])
 
-  expect(getSearchResults(mockStars, 'react')).toEqual([
-    { id: '456', matches: [{ term: 'react', count: 1 }] },
-    { id: '789', matches: [{ term: 'react', count: 2 }] }
-  ])
-
-  expect(getSearchResults(mockStars, 'react-svg')).toEqual([
+  expect(getCombinedSearch(mockStars, 'react', [])).toEqual([
     {
       id: '456',
-      matches: [{ term: 'react', count: 1 }, { term: 'svg', count: 2 }]
+      name: 'react-svg-morph',
+      termMatches: [{ term: 'react', count: 1 }],
+      tagMatches: [],
+      searchRanking: 1
+    },
+    {
+      id: '789',
+      name: 'awesome-react-hooks',
+      termMatches: [{ term: 'react', count: 2 }],
+      tagMatches: [],
+      searchRanking: 1
+    }
+  ])
+
+  expect(getCombinedSearch(mockStars, 'react-svg', [])).toEqual([
+    {
+      id: '456',
+      name: 'react-svg-morph',
+      termMatches: [{ term: 'react', count: 1 }, { term: 'svg', count: 2 }],
+      tagMatches: [],
+      searchRanking: 2
     }
   ])
 })

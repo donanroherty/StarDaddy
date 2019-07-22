@@ -1,29 +1,31 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import Repo from './Repo'
-import { useSearch, getSearchResults } from 'state/search-context'
+import { useSearch, getCombinedSearch } from 'state/search-context'
 import { useGithub } from 'state/github-context'
 import { stringToArray } from 'utils/string-helpers'
+import { AuthState } from 'types/GithubTypes'
 
 const RepoList = () => {
-  const { searchTerm } = useSearch()
-  const { fetchStars, stars } = useGithub()
+  const { searchTerm, searchTags } = useSearch()
+  const { fetchStars, stars, authState } = useGithub()
 
   useEffect(() => {
-    fetchStars()
-  }, [])
+    if (authState === AuthState.loggedIn) fetchStars()
+  }, [authState])
 
   if (!stars) return null
 
-  const searchResults = getSearchResults(stars, searchTerm)
+  const results = getCombinedSearch(stars, searchTerm, searchTags)
+
   const repos = stars.map(star => {
     const visible =
       // show all results if no search term is provided
       stringToArray(searchTerm).length === 0 ||
-      searchResults.find(
-        res =>
+      results.find(
+        (res: any) =>
           // result has matched search terms
-          res.matches.length > 0 &&
+          res.termMatches.length > 0 &&
           // match result with star id
           star.id === res.id
       ) !== undefined

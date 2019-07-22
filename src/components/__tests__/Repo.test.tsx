@@ -3,7 +3,7 @@ import Repo, { RepoProps, formatLastPushTime } from '../Repo'
 import { render } from 'utils/test-utils'
 
 const repoProps: RepoProps = {
-  id: 100,
+  id: '100',
   ownerLogin: 'owner',
   name: 'repo-name',
   htmlUrl: 'www.repoaddress.mock',
@@ -11,11 +11,12 @@ const repoProps: RepoProps = {
   stargazersCount: 50,
   forksCount: 10,
   pushedAt: '2018-11-12T23:45:05Z',
+  tags: ['TagName1', 'TagName2'],
   isVisible: true
 }
 
 describe('<Repo/> Renders correct content', () => {
-  const { getByTestId, getByText } = render(
+  const { getByTestId, getAllByTestId, getByText } = render(
     <Repo {...repoProps} isVisible={true} />
   )
 
@@ -28,6 +29,12 @@ describe('<Repo/> Renders correct content', () => {
 
   test('Description renders correct text', () => {
     expect(getByText(repoProps.description)).not.toBeNull()
+  })
+
+  test('Tags are displayed', () => {
+    expect(getAllByTestId('tag').length).toBe(2)
+    expect(getByText('TagName1')).not.toBeNull()
+    expect(getByText('TagName2')).not.toBeNull()
   })
 
   test('Star count is displayed and has correct link href', () => {
