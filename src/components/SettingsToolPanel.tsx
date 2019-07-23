@@ -2,9 +2,11 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { useGithub } from 'state/github-context'
+import useAppState from 'state/hooks/useAppState'
 
 const SettingsToolPanel = () => {
-  const { user, logout } = useGithub()
+  const { user } = useAppState()
+  const { logout } = useGithub()
 
   return (
     <Wrapper data-testid="settings-tool-panel">

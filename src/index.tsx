@@ -14,19 +14,22 @@ import { TagProvider } from 'state/tag-context'
 
 import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
+import AppStateProvider from 'state/providers/AppStateProvider'
 
 ReactDOM.render(
-  <GithubProvider>
-    <TagProvider>
-      <SearchProvider>
-        <DndProvider backend={HTML5Backend}>
-          <ThemeProvider theme={theme}>
-            <App />
-          </ThemeProvider>
-        </DndProvider>
-      </SearchProvider>
-    </TagProvider>
-  </GithubProvider>,
+  <AppStateProvider>
+    <GithubProvider>
+      <TagProvider>
+        <SearchProvider>
+          <DndProvider backend={HTML5Backend}>
+            <ThemeProvider theme={theme}>
+              <App />
+            </ThemeProvider>
+          </DndProvider>
+        </SearchProvider>
+      </TagProvider>
+    </GithubProvider>
+  </AppStateProvider>,
   document.getElementById('root')
 )
 

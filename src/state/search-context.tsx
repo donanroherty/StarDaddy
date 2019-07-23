@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { StarredRepo } from 'types/GithubTypes'
 import { stringToArray, sanitizeString } from 'utils/string-helpers'
 import { useGithub } from './github-context'
+import useAppState from './hooks/useAppState'
 
 type SearchContextType = {
   searchTerm: string
@@ -64,7 +65,7 @@ const useSearch = () => {
     setSearchResults
   } = context
 
-  const { stars } = useGithub()
+  const { stars } = useAppState()
 
   const addSearchTag = (tag: string) => {
     if (!searchTags.find(val => val === tag))

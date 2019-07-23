@@ -5,10 +5,12 @@ import { useSearch, getCombinedSearch } from 'state/search-context'
 import { useGithub } from 'state/github-context'
 import { stringToArray } from 'utils/string-helpers'
 import { AuthState } from 'types/GithubTypes'
+import useAppState from 'state/hooks/useAppState'
 
 const RepoList = () => {
-  const { searchTerm, searchTags, searchResults } = useSearch()
-  const { fetchStars, stars, authState } = useGithub()
+  const { stars } = useAppState()
+  const { searchResults } = useSearch()
+  const { fetchStars, authState } = useGithub()
 
   useEffect(() => {
     if (authState === AuthState.loggedIn) fetchStars()

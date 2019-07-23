@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { AuthState, User, StarredRepo } from 'types/GithubTypes'
 import { reject } from 'q'
+import useAppState from './hooks/useAppState'
 
 type GithubType = {
   accessToken: string
@@ -18,16 +19,14 @@ type GithubType = {
 const GithubContext = React.createContext<GithubType | undefined>(undefined)
 
 const GithubProvider = (props: any) => {
-  const localToken = localStorage.getItem('token')
-  const [accessToken, setAccessToken] = useState<string>(localToken || '')
-  const localUser = localStorage.getItem('user')
-  const [user, setUser] = useState<User>(
-    localUser ? JSON.parse(localUser) : null
-  )
-  const localStars = localStorage.getItem('stars')
-  const [stars, setStars] = useState<StarredRepo[]>(
-    localStars ? JSON.parse(localStars) : []
-  )
+  const {
+    accessToken,
+    setAccessToken,
+    user,
+    setUser,
+    stars,
+    setStars
+  } = useAppState()
 
   const [authState, setAuthState] = useState(AuthState.loggedOut)
 
@@ -218,14 +217,12 @@ const useGithub = () => {
   }
 
   return {
-    accessToken,
     authorize,
-    user,
+
     authState,
     autoLogin,
     logout,
     fetchStars,
-    stars,
     renameTagOnRepo,
     addTagToRepo,
     removeTagFromRepo
