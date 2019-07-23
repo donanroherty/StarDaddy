@@ -32,10 +32,11 @@ const SearchBox: React.FC<SearchBoxProps> = ({ theme }) => {
     })
   })
 
-  const handleTagClick = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    const el = e.target as HTMLDivElement
-    el.textContent && removeSearchTag(el.textContent)
+  const handleTagClick = (
+    tag: string,
+    modifiers: { ctrlKey: boolean; shiftKey: boolean }
+  ) => {
+    removeSearchTag(tag)
   }
 
   return (
@@ -73,7 +74,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ theme }) => {
             name={tag}
             isThin
             hasDeleteIcon
-            onClick={handleTagClick}
+            handleTagClick={handleTagClick}
             key={tag}
           />
         ))}

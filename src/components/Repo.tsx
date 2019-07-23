@@ -2,6 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 import { GoStar, GoRepoForked } from 'react-icons/go'
 import { StarredRepo } from 'types/GithubTypes'
+import Tag from './Tag'
+import { DnDItemTypes } from 'types/DnDItemTypes'
+import { useDrop } from 'react-dnd'
+import { useGithub } from 'state/github-context'
 
 export interface RepoProps extends StarredRepo {
   isVisible: boolean
@@ -41,6 +45,7 @@ export const formatLastPushTime = (pushedAt: string, now: Date) => {
 
 const Repo = (props: RepoProps) => {
   const {
+    id,
     ownerLogin,
     name,
     htmlUrl,
@@ -48,13 +53,37 @@ const Repo = (props: RepoProps) => {
     stargazersCount,
     forksCount,
     pushedAt,
-    isVisible
+    isVisible,
+    tags
   } = props
 
-  const now = new Date()
+  const { addTagToRepo, removeTagFromRepo } = useGithub()
+
+  const [, dropRef] = useDrop({
+    accept: DnDItemTypes.TAG,
+    drop: (item: { name: string; type: string }, monitor) => {
+      addTagToRepo(item.name, id)
+      return { name: 'Repo' }
+    },
+    collect: monitor => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop()
+    })
+  })
+
+  const handleTagClick = (
+    tag: string,
+    modifiers: { ctrlKey: boolean; shiftKey: boolean }
+  ) => {
+    removeTagFromRepo(tag, id)
+  }
 
   return (
-    <Wrapper style={{ display: isVisible ? 'initial' : 'none' }}>
+    <Wrapper
+      data-testid="repo"
+      ref={dropRef}
+      style={{ display: isVisible ? 'initial' : 'none' }}
+    >
       <TitleRow>
         <a
           href={htmlUrl}
@@ -68,6 +97,19 @@ const Repo = (props: RepoProps) => {
       </TitleRow>
 
       <Description>{description}</Description>
+
+      <TagList>
+        {tags &&
+          tags.map(tag => (
+            <Tag
+              name={tag}
+              key={tag}
+              handleTagClick={handleTagClick}
+              isThin
+              hasDeleteIcon
+            />
+          ))}
+      </TagList>
 
       <DetailsRow>
         {/* Stars */}
@@ -94,7 +136,7 @@ const Repo = (props: RepoProps) => {
 
         {/* Updated */}
         <LastUpdatedText>
-          <span>{formatLastPushTime(pushedAt, now)}</span>
+          <span>{formatLastPushTime(pushedAt, new Date())}</span>
         </LastUpdatedText>
       </DetailsRow>
       <HR />
@@ -155,9 +197,14 @@ const Description = styled.div`
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 `
+const TagList = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 12px;
+`
 const DetailsRow = styled.div`
   display: block;
-  margin-top: 24px;
+  margin-top: 12px;
   font-size: 12px;
   overflow: hidden;
   white-space: nowrap;

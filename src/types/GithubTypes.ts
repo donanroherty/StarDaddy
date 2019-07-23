@@ -6,7 +6,7 @@ export type User = {
 }
 
 export interface StarredRepo {
-  id: number
+  id: string
   ownerLogin: string
   name: string
   htmlUrl: string
@@ -14,7 +14,7 @@ export interface StarredRepo {
   stargazersCount: number
   forksCount: number
   pushedAt: string
-  languages: string[]
+  tags: string[]
 }
 
 export enum AuthState {
