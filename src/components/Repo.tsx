@@ -80,8 +80,8 @@ const Repo = (props: RepoProps) => {
 
   return (
     <Wrapper
-      ref={dropRef}
       data-testid="repo"
+      ref={dropRef}
       style={{ display: isVisible ? 'initial' : 'none' }}
     >
       <TitleRow>

@@ -7,7 +7,7 @@ import { stringToArray } from 'utils/string-helpers'
 import { AuthState } from 'types/GithubTypes'
 
 const RepoList = () => {
-  const { searchTerm, searchTags } = useSearch()
+  const { searchTerm, searchTags, searchResults } = useSearch()
   const { fetchStars, stars, authState } = useGithub()
 
   useEffect(() => {
@@ -16,16 +16,11 @@ const RepoList = () => {
 
   if (!stars) return null
 
-  const results = getCombinedSearch(stars, searchTerm, searchTags)
-
   const repos = stars.map(star => {
     const visible =
       // show all results if no search term is provided
-      stringToArray(searchTerm).length === 0 ||
-      results.find(
+      searchResults.find(
         (res: any) =>
-          // result has matched search terms
-          res.termMatches.length > 0 &&
           // match result with star id
           star.id === res.id
       ) !== undefined

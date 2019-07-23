@@ -51,7 +51,7 @@ const useTags = () => {
     setIsAddingTag
   } = context
 
-  const { stars, renameTagOnRepo } = useGithub()
+  const { renameTagOnRepo } = useGithub()
 
   // Add tags
   /*************************************/

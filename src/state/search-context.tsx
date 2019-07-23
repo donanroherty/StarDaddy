@@ -1,12 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StarredRepo } from 'types/GithubTypes'
 import { stringToArray, sanitizeString } from 'utils/string-helpers'
+import { useGithub } from './github-context'
 
 type SearchContextType = {
   searchTerm: string
   setSearchTerm: React.Dispatch<React.SetStateAction<string>>
   searchTags: string[]
   setSearchTags: React.Dispatch<React.SetStateAction<string[]>>
+  searchResults: SearchResultType[]
+  setSearchResults: React.Dispatch<React.SetStateAction<SearchResultType[]>>
 }
 const SearchContext = React.createContext<SearchContextType | undefined>(
   undefined
@@ -15,15 +18,18 @@ const SearchContext = React.createContext<SearchContextType | undefined>(
 const SearchProvider = (props: any) => {
   const [searchTerm, setSearchTerm] = useState('')
   const [searchTags, setSearchTags] = useState<string[]>([])
+  const [searchResults, setSearchResults] = useState<SearchResultType[]>([])
 
   const value = React.useMemo(
     () => ({
       searchTerm,
       setSearchTerm,
       searchTags,
-      setSearchTags
+      setSearchTags,
+      searchResults,
+      setSearchResults
     }),
-    [searchTerm, searchTags]
+    [searchTerm, searchTags, searchResults]
   )
   return <SearchContext.Provider value={value} {...props} />
 }
@@ -49,7 +55,16 @@ const useSearch = () => {
   if (!context)
     throw new Error('useSearch must be used within a SearchProvider')
 
-  const { searchTerm, setSearchTerm, searchTags, setSearchTags } = context
+  const {
+    searchTerm,
+    setSearchTerm,
+    searchTags,
+    setSearchTags,
+    searchResults,
+    setSearchResults
+  } = context
+
+  const { stars } = useGithub()
 
   const addSearchTag = (tag: string) => {
     if (!searchTags.find(val => val === tag))
@@ -60,13 +75,18 @@ const useSearch = () => {
     setSearchTags(prev => prev.filter(t => t !== tag))
   }
 
+  useEffect(() => {
+    setSearchResults(getCombinedSearch(stars, searchTerm, searchTags))
+  }, [searchTerm, searchTags])
+
   return {
     searchTerm,
     setSearchTerm,
     searchTags,
     setSearchTags,
     addSearchTag,
-    removeSearchTag
+    removeSearchTag,
+    searchResults
   }
 }
 
@@ -148,15 +168,15 @@ export const getCombinedSearch = (
     }
   })
 
-  return (
-    combined
-      // Should contain every search term and tag
-      .filter(
-        res =>
-          res.searchRanking ===
-          stringToArray(searchString).length + searchTags.length
-      )
-  )
+  const final = combined
+    // Should contain every search term and tag
+    .filter(
+      res =>
+        res.searchRanking ===
+        stringToArray(searchString).length + searchTags.length
+    )
+
+  return final
 }
 
 export { SearchProvider, useSearch }
