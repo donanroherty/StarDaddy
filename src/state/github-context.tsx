@@ -180,6 +180,31 @@ const useGithub = () => {
     )
   }
 
+  const addTagToRepo = (tag: string, repoId: string) => {
+    setStars(prev =>
+      prev.map(star => ({
+        ...star,
+        tags:
+          star.id === repoId && !star.tags.find(t => t === tag)
+            ? [...star.tags, tag]
+            : star.tags
+      }))
+    )
+  }
+
+  const removeTagFromRepo = (tag: string, repoId: string) => {
+    setStars(prev =>
+      prev.map(star =>
+        star.id !== repoId
+          ? star
+          : {
+              ...star,
+              tags: star.tags.filter(t => t !== tag)
+            }
+      )
+    )
+  }
+
   const autoLogin = () => {
     if (accessToken !== '') {
       authorize(accessToken)
@@ -201,7 +226,9 @@ const useGithub = () => {
     logout,
     fetchStars,
     stars,
-    renameTagOnRepo
+    renameTagOnRepo,
+    addTagToRepo,
+    removeTagFromRepo
   }
 }
 

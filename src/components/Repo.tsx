@@ -3,6 +3,9 @@ import styled from 'styled-components'
 import { GoStar, GoRepoForked } from 'react-icons/go'
 import { StarredRepo } from 'types/GithubTypes'
 import Tag from './Tag'
+import { DnDItemTypes } from 'types/DnDItemTypes'
+import { useDrop } from 'react-dnd'
+import { useGithub } from 'state/github-context'
 
 export interface RepoProps extends StarredRepo {
   isVisible: boolean
@@ -54,10 +57,30 @@ const Repo = (props: RepoProps) => {
     tags
   } = props
 
-  const now = new Date()
+  const { addTagToRepo, removeTagFromRepo } = useGithub()
+
+  const [, dropRef] = useDrop({
+    accept: DnDItemTypes.TAG,
+    drop: (item: { name: string; type: string }, monitor) => {
+      addTagToRepo(item.name, id)
+      return { name: 'Repo' }
+    },
+    collect: monitor => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop()
+    })
+  })
+
+  const handleTagClick = (
+    tag: string,
+    modifiers: { ctrlKey: boolean; shiftKey: boolean }
+  ) => {
+    removeTagFromRepo(tag, id)
+  }
 
   return (
     <Wrapper
+      ref={dropRef}
       data-testid="repo"
       style={{ display: isVisible ? 'initial' : 'none' }}
     >
@@ -76,7 +99,16 @@ const Repo = (props: RepoProps) => {
       <Description>{description}</Description>
 
       <TagList>
-        {tags && tags.map(tag => <Tag name={tag} key={tag} isThin={true} />)}
+        {tags &&
+          tags.map(tag => (
+            <Tag
+              name={tag}
+              key={tag}
+              handleTagClick={handleTagClick}
+              isThin
+              hasDeleteIcon
+            />
+          ))}
       </TagList>
 
       <DetailsRow>
@@ -104,7 +136,7 @@ const Repo = (props: RepoProps) => {
 
         {/* Updated */}
         <LastUpdatedText>
-          <span>{formatLastPushTime(pushedAt, now)}</span>
+          <span>{formatLastPushTime(pushedAt, new Date())}</span>
         </LastUpdatedText>
       </DetailsRow>
       <HR />

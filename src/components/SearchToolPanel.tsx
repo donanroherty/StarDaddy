@@ -40,11 +40,12 @@ const SearchToolPanel = () => {
     }
   }
 
-  const handleTagClick = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    const el = e.target as HTMLDivElement
-    el.textContent && e.shiftKey && beginEditTag(el.textContent)
-    el.textContent && e.ctrlKey && deleteTag(el.textContent)
+  const handleTagClick = (
+    tag: string,
+    modifiers: { ctrlKey: boolean; shiftKey: boolean }
+  ) => {
+    modifiers.shiftKey && beginEditTag(tag)
+    modifiers.ctrlKey && deleteTag(tag)
   }
 
   return (
@@ -62,7 +63,7 @@ const SearchToolPanel = () => {
               isEditing={(isAddingTag && i === 0) || editingTag === i}
               submitName={submitTagName}
               cancelTagOperation={cancelTagOperation}
-              onClick={handleTagClick}
+              handleTagClick={handleTagClick}
             />
           ))}
       </TagList>

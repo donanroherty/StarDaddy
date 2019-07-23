@@ -12,7 +12,10 @@ interface TagProps {
   isThin?: boolean
   hasDeleteIcon?: boolean
   cancelTagOperation?: () => void
-  onClick?: (e: React.MouseEvent) => void
+  handleTagClick?: (
+    tag: string,
+    modifiers: { ctrlKey: boolean; shiftKey: boolean }
+  ) => void
   submitName?: (name: string, prevName: string) => void
   theme: ThemeInterface
 }
@@ -24,7 +27,8 @@ const Tag: React.FC<TagProps> = props => {
     hasDeleteIcon,
     submitName,
     cancelTagOperation,
-    onClick
+
+    handleTagClick
   } = props
   const [inputValue, setInputValue] = useState(name)
 
@@ -55,9 +59,15 @@ const Tag: React.FC<TagProps> = props => {
     cancelTagOperation && cancelTagOperation()
   }
 
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    handleTagClick &&
+      handleTagClick(name, { shiftKey: e.shiftKey, ctrlKey: e.ctrlKey })
+  }
+
   return (
     <Wrapper>
-      <Inner ref={drag} data-testid="tag" {...props} onClick={onClick}>
+      <Inner ref={drag} data-testid="tag" {...props} onClick={handleClick}>
         {isEditing ? (
           <form onSubmit={handleSubmitTagName}>
             <input
