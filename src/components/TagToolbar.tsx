@@ -2,7 +2,7 @@ import React from 'react'
 import styled, { withTheme } from 'styled-components'
 import { ThemeInterface } from 'theme/theme'
 import { lighten } from 'polished'
-import { useTags } from 'state/tag-context'
+import useTags from 'state/hooks/useTags'
 
 interface TagToolbarProps {
   theme: ThemeInterface

@@ -1,57 +1,17 @@
-import React, { useState, useEffect } from 'react'
-import defaultTagData from 'mock-data/default-tags.json'
-import { useGithub } from './github-context'
+import React from 'react'
+import { TagContext } from 'state/providers/TagProvider'
+import useAppState from './useAppState'
+import { AppStateContext } from 'state/providers/AppStateProvider'
 
-type TagContextType = {
-  tags: string[]
-  setTags: React.Dispatch<React.SetStateAction<string[]>>
-  isAddingTag: boolean
-  setIsAddingTag: React.Dispatch<React.SetStateAction<boolean>>
-  editingTag: number
-  setEditingTag: React.Dispatch<React.SetStateAction<number>>
-}
-const TagContext = React.createContext<TagContextType | undefined>(undefined)
-
-const TagProvider = (props: any) => {
-  const localTags = localStorage.getItem('tags')
-  const [tags, setTags] = useState<string[]>(
-    localTags ? JSON.parse(localTags) : (defaultTagData as string[])
-  )
-  useEffect(() => {
-    localStorage.setItem('tags', JSON.stringify(tags))
-  }, [tags])
-
-  const [isAddingTag, setIsAddingTag] = useState()
-  const [editingTag, setEditingTag] = useState(-1)
-
-  const value = React.useMemo(
-    () => ({
-      tags,
-      setTags,
-      editingTag,
-      setEditingTag,
-      isAddingTag,
-      setIsAddingTag
-    }),
-    [tags, editingTag, isAddingTag]
-  )
-  return <TagContext.Provider value={value} {...props} />
-}
-
-const useTags = () => {
+export default function useTags() {
   const context = React.useContext(TagContext)
   if (!context) throw new Error('useTags must be used within a TagProvider')
+  if (!React.useContext(AppStateContext))
+    throw new Error('useSearch must be used within a AppStateContext')
 
-  const {
-    tags,
-    setTags,
-    editingTag,
-    setEditingTag,
-    isAddingTag,
-    setIsAddingTag
-  } = context
+  const { editingTag, setEditingTag, isAddingTag, setIsAddingTag } = context
 
-  const { renameTagOnRepo } = useGithub()
+  const { setStars, tags, setTags } = useAppState()
 
   // Add tags
   /*************************************/
@@ -78,6 +38,18 @@ const useTags = () => {
     setIsAddingTag(false)
   }
 
+  const addTagToRepo = (tag: string, repoId: string) => {
+    setStars(prev =>
+      prev.map(star => ({
+        ...star,
+        tags:
+          star.id === repoId && !star.tags.find(t => t === tag)
+            ? [...star.tags, tag]
+            : star.tags
+      }))
+    )
+  }
+
   // Edit tags
   /*************************************/
   const beginEditTag = (name: string) =>
@@ -87,7 +59,14 @@ const useTags = () => {
     if (!tags.filter(t => t !== prevName).find(t => t === name)) {
       setTags(prev => prev.map(tag => (tag === prevName ? name : tag)))
       setEditingTag(-1)
-      renameTagOnRepo(prevName, name)
+
+      setStars(prev =>
+        prev.map(star => ({
+          ...star,
+          tags: star.tags.map(tag => (tag === prevName ? name : tag))
+        }))
+      )
+
       return {
         success: true,
         message: `Renamed tag '${name}'`
@@ -111,6 +90,19 @@ const useTags = () => {
     cancelEditTag()
   }
 
+  const removeTagFromRepo = (tag: string, repoId: string) => {
+    setStars(prev =>
+      prev.map(star =>
+        star.id !== repoId
+          ? star
+          : {
+              ...star,
+              tags: star.tags.filter(t => t !== tag)
+            }
+      )
+    )
+  }
+
   return {
     tags,
     beginAddTag,
@@ -120,8 +112,8 @@ const useTags = () => {
     editingTag,
     submitEditTag,
     deleteTag,
-    cancelTagOperation
+    cancelTagOperation,
+    addTagToRepo,
+    removeTagFromRepo
   }
 }
-
-export { TagProvider, useTags }

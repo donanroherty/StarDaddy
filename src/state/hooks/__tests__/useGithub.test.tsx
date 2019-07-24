@@ -1,6 +1,5 @@
-import { render, cleanup } from 'utils/test-utils'
-import { cleanStarData } from 'state/github-context'
-import { StarredRepo } from 'types/GithubTypes'
+import { cleanup } from 'utils/test-utils'
+import { cleanStarData } from 'state/hooks/useGithub'
 
 afterEach(() => cleanup())
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { cleanup, render, fireEvent } from 'utils/test-utils'
 import SearchBox from '../SearchBox'
-import { SearchProvider } from 'state/search-context'
+import SearchProvider from 'state/providers/SearchProvider'
 import '@testing-library/jest-dom/extend-expect'
 
 const mockTags = ['C++', 'Clojure', 'Go']
@@ -19,7 +19,8 @@ const renderComp = () =>
         searchTerm: 'abc',
         setSearchTerm: mockSetSearchTerm,
         searchTags: mockTags,
-        setSearchTags: jest.fn()
+        setSearchTags: jest.fn(),
+        setSearchResults: jest.fn()
       }}
     >
       <SearchBox />

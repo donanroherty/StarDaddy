@@ -2,12 +2,14 @@ import React, { useState, FormEvent } from 'react'
 import styled from 'styled-components'
 import logo from 'assets/vectors/logo.svg'
 import Button from './Button'
-import { useGithub } from 'state/github-context'
+import useGithub from 'state/hooks/useGithub'
+import useAppState from 'state/hooks/useAppState'
 
 interface UserAuthenticatorProps {}
 
 const UserAuthenticator = (props: UserAuthenticatorProps) => {
-  const { authorize, accessToken } = useGithub()
+  const { accessToken } = useAppState()
+  const { authorize } = useGithub()
   const [input, setInput] = useState(accessToken)
 
   const handleSubmit = (e: FormEvent) => {

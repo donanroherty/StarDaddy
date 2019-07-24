@@ -2,12 +2,12 @@ import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import SearchBox from './SearchBox'
 import TagToolbar from './TagToolbar'
-import { useTags } from 'state/tag-context'
+import useTags from 'state/hooks/useTags'
 import Tag from './Tag'
+import useAppState from 'state/hooks/useAppState'
 
 const SearchToolPanel = () => {
   const {
-    tags,
     editingTag,
     submitEditTag,
     beginEditTag,
@@ -16,6 +16,8 @@ const SearchToolPanel = () => {
     submitAddTag,
     deleteTag
   } = useTags()
+
+  const { tags } = useAppState()
 
   const displayTags = isAddingTag ? ['new tag', ...tags] : tags
 
