@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { useGithub } from 'state/github-context'
+import useGithub from 'state/hooks/useGithub'
 import useAppState from 'state/hooks/useAppState'
 
 const SettingsToolPanel = () => {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { StarredRepo, User } from 'types/GithubTypes'
+import defaultTagData from 'mock-data/default-tags.json'
 
 type AppStateContextType = {
   accessToken: string
@@ -8,6 +9,8 @@ type AppStateContextType = {
   setUser: React.Dispatch<React.SetStateAction<User>>
   stars: StarredRepo[]
   setStars: React.Dispatch<React.SetStateAction<StarredRepo[]>>
+  tags: string[]
+  setTags: React.Dispatch<React.SetStateAction<string[]>>
 }
 export const AppStateContext = React.createContext<
   AppStateContextType | undefined
@@ -25,12 +28,16 @@ export default function AppStateProvider(props: any) {
     localStars ? JSON.parse(localStars) : []
   )
 
-  // TODO: Add tag list items here.  Add new tags for each new language encountered on github
+  const localTags = localStorage.getItem('tags')
+  const [tags, setTags] = useState<string[]>(
+    localTags ? JSON.parse(localTags) : (defaultTagData as string[])
+  )
 
   useEffect(() => {
     localStorage.setItem('user', JSON.stringify(user))
     localStorage.setItem('token', accessToken)
     localStorage.setItem('stars', JSON.stringify(stars))
+    localStorage.setItem('tags', JSON.stringify(tags))
   }, [accessToken, user, stars])
 
   const value = React.useMemo(
@@ -40,9 +47,11 @@ export default function AppStateProvider(props: any) {
       user,
       setUser,
       stars,
-      setStars
+      setStars,
+      tags,
+      setTags
     }),
-    [accessToken, user, stars]
+    [accessToken, user, stars, tags]
   )
   return <AppStateContext.Provider value={value} {...props} />
 }

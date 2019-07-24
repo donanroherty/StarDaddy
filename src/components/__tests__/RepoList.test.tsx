@@ -1,10 +1,10 @@
 import React from 'react'
 import RepoList from '../RepoList'
-import { render as renderrtl, cleanup } from 'utils/test-utils'
+import { render, cleanup } from 'utils/test-utils'
 import '@testing-library/jest-dom/extend-expect'
 import { StarredRepo } from 'types/GithubTypes'
-import { GithubProvider } from 'state/github-context'
-import { SearchProvider } from 'state/search-context'
+import SearchProvider from 'state/providers/SearchProvider'
+import AppStateProvider from 'state/providers/AppStateProvider'
 
 afterEach(() => cleanup())
 
@@ -46,47 +46,46 @@ const mockStars: StarredRepo[] = [
   }
 ]
 
-const render = (ui: any, options?: any) => {
-  return renderrtl(
-    <GithubProvider value={{ stars: mockStars }}>{ui}</GithubProvider>
+const renderComp = (term: string = '', tags: string[] = []) => {
+  return render(
+    <AppStateProvider value={{ stars: mockStars }}>
+      <SearchProvider
+        value={{
+          searchTerm: term,
+          searchTags: tags,
+          setSearchResults: jest.fn()
+        }}
+      >
+        <RepoList />
+      </SearchProvider>
+    </AppStateProvider>
   )
 }
 
 test('RepoList renders all repos for empty search term', () => {
-  const { getByText } = render(<RepoList />)
+  const { getByText } = renderComp()
   expect(getByText(mockStars[0].name)).toBeVisible()
   expect(getByText(mockStars[1].name)).toBeVisible()
   expect(getByText(mockStars[2].name)).toBeVisible()
 })
 
 test('RepoList correctly filters by search term', () => {
-  const { getByText } = render(
-    <SearchProvider value={{ searchTerm: 'react', searchTags: [] }}>
-      <RepoList />
-    </SearchProvider>
-  )
+  const { getByText } = renderComp('react')
+
   expect(getByText(mockStars[0].name)).not.toBeVisible()
   expect(getByText(mockStars[1].name)).toBeVisible()
   expect(getByText(mockStars[2].name)).toBeVisible()
 })
 
 test('RepoList renders nothing for failed search term match', () => {
-  const { getByText } = render(
-    <SearchProvider value={{ searchTerm: 'react fail', searchTags: [] }}>
-      <RepoList />
-    </SearchProvider>
-  )
+  const { getByText } = renderComp('react fail')
   expect(getByText(mockStars[0].name)).not.toBeVisible()
   expect(getByText(mockStars[1].name)).not.toBeVisible()
   expect(getByText(mockStars[2].name)).not.toBeVisible()
 })
 
 test('RepoList correctly filters by search term and tag', () => {
-  const { getByText } = render(
-    <SearchProvider value={{ searchTerm: 'react', searchTags: ['Mock Tag'] }}>
-      <RepoList />
-    </SearchProvider>
-  )
+  const { getByText } = renderComp('react', ['Mock Tag'])
   expect(getByText(mockStars[0].name)).not.toBeVisible()
   expect(getByText(mockStars[1].name)).not.toBeVisible()
   expect(getByText(mockStars[2].name)).toBeVisible()

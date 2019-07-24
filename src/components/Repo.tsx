@@ -5,7 +5,7 @@ import { StarredRepo } from 'types/GithubTypes'
 import Tag from './Tag'
 import { DnDItemTypes } from 'types/DnDItemTypes'
 import { useDrop } from 'react-dnd'
-import { useGithub } from 'state/github-context'
+import useTags from 'state/hooks/useTags'
 
 export interface RepoProps extends StarredRepo {
   isVisible: boolean
@@ -57,7 +57,7 @@ const Repo = (props: RepoProps) => {
     tags
   } = props
 
-  const { addTagToRepo, removeTagFromRepo } = useGithub()
+  const { addTagToRepo, removeTagFromRepo } = useTags()
 
   const [, dropRef] = useDrop({
     accept: DnDItemTypes.TAG,

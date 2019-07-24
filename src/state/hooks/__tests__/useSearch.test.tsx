@@ -1,5 +1,5 @@
 import { render, cleanup } from 'utils/test-utils'
-import { getCombinedSearch } from '../search-context'
+import { getCombinedSearch } from '../useSearch'
 import { StarredRepo } from 'types/GithubTypes'
 
 afterEach(() => cleanup())

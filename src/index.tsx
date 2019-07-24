@@ -8,9 +8,9 @@ import { ThemeProvider } from 'theme/themed-styled-components'
 
 import theme from 'theme/theme'
 
-import { GithubProvider } from 'state/github-context'
-import { SearchProvider } from 'state/search-context'
-import { TagProvider } from 'state/tag-context'
+import GithubProvider from 'state/providers/GithubProvider'
+import SearchProvider from 'state/providers/SearchProvider'
+import TagProvider from 'state/providers/TagProvider'
 
 import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'

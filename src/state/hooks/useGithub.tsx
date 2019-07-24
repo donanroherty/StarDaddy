@@ -1,58 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import axios from 'axios'
 import { AuthState, User, StarredRepo } from 'types/GithubTypes'
 import { reject } from 'q'
-import useAppState from './hooks/useAppState'
-
-type GithubType = {
-  accessToken: string
-  setAccessToken: React.Dispatch<React.SetStateAction<string>>
-  user: User
-  setUser: React.Dispatch<React.SetStateAction<User>>
-  loading: boolean
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>
-  authState: AuthState
-  setAuthState: React.Dispatch<React.SetStateAction<AuthState>>
-  stars: StarredRepo[]
-  setStars: React.Dispatch<React.SetStateAction<StarredRepo[]>>
-}
-const GithubContext = React.createContext<GithubType | undefined>(undefined)
-
-const GithubProvider = (props: any) => {
-  const {
-    accessToken,
-    setAccessToken,
-    user,
-    setUser,
-    stars,
-    setStars
-  } = useAppState()
-
-  const [authState, setAuthState] = useState(AuthState.loggedOut)
-
-  // TODO: Add tag list items here.  Add new tags for each new language encountered on github
-
-  useEffect(() => {
-    localStorage.setItem('user', JSON.stringify(user))
-    localStorage.setItem('token', accessToken)
-    localStorage.setItem('stars', JSON.stringify(stars))
-  }, [accessToken, user, stars])
-
-  const value = React.useMemo(
-    () => ({
-      accessToken,
-      setAccessToken,
-      user,
-      setUser,
-      authState,
-      setAuthState,
-      stars,
-      setStars
-    }),
-    [accessToken, user, authState, setAuthState, stars]
-  )
-  return <GithubContext.Provider value={value} {...props} />
-}
+import useAppState from './useAppState'
+import { GithubContext } from '../providers/GithubProvider'
+import { AppStateContext } from 'state/providers/AppStateProvider'
 
 const GQLApi = 'https://api.github.com/graphql'
 
@@ -87,21 +39,22 @@ export const queryStars = (batchSize: number, cursor: string) => `{
       }
     }`
 
-const useGithub = () => {
+export default function useGithub() {
   const context = React.useContext(GithubContext)
   if (!context)
     throw new Error('useGithub must be used within a GithubProvider')
+  if (!React.useContext(AppStateContext))
+    throw new Error('useSearch must be used within a AppStateContext')
+
+  const { authState, setAuthState } = context
 
   const {
     accessToken,
     setAccessToken,
-    user,
     setUser,
-    authState,
-    setAuthState,
     stars,
     setStars
-  } = context
+  } = useAppState()
 
   const gqlRequest = (query: string, headers?: any) => {
     return axios.post(
@@ -170,40 +123,6 @@ const useGithub = () => {
     }
   }
 
-  const renameTagOnRepo = (prevName: string, newName: string) => {
-    setStars(prev =>
-      prev.map(star => ({
-        ...star,
-        tags: star.tags.map(tag => (tag === prevName ? newName : tag))
-      }))
-    )
-  }
-
-  const addTagToRepo = (tag: string, repoId: string) => {
-    setStars(prev =>
-      prev.map(star => ({
-        ...star,
-        tags:
-          star.id === repoId && !star.tags.find(t => t === tag)
-            ? [...star.tags, tag]
-            : star.tags
-      }))
-    )
-  }
-
-  const removeTagFromRepo = (tag: string, repoId: string) => {
-    setStars(prev =>
-      prev.map(star =>
-        star.id !== repoId
-          ? star
-          : {
-              ...star,
-              tags: star.tags.filter(t => t !== tag)
-            }
-      )
-    )
-  }
-
   const autoLogin = () => {
     if (accessToken !== '') {
       authorize(accessToken)
@@ -218,14 +137,10 @@ const useGithub = () => {
 
   return {
     authorize,
-
     authState,
     autoLogin,
     logout,
-    fetchStars,
-    renameTagOnRepo,
-    addTagToRepo,
-    removeTagFromRepo
+    fetchStars
   }
 }
 
@@ -267,5 +182,3 @@ export const cleanStarData = (starData: any[], localStars: StarredRepo[]) => {
 
   return repos
 }
-
-export { GithubProvider, useGithub }

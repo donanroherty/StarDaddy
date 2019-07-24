@@ -3,7 +3,7 @@ import { createGlobalStyle } from 'theme/themed-styled-components'
 import { AuthState } from 'types/GithubTypes'
 import Panels from './Panels'
 import UserAuthenticator from './UserAuthenticator'
-import { useGithub } from 'state/github-context'
+import useGithub from 'state/hooks/useGithub'
 
 const App: React.FC = () => {
   const { authState, autoLogin } = useGithub()

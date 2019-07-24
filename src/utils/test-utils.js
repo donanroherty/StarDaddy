@@ -2,27 +2,26 @@ import React from 'react'
 import { render } from '@testing-library/react'
 import theme from 'theme/theme'
 import { ThemeProvider } from 'theme/themed-styled-components'
-import { SearchProvider } from 'state/search-context'
-import { TagProvider } from 'state/tag-context'
+import SearchProvider from 'state/providers/SearchProvider'
+import TagProvider from 'state/providers/TagProvider'
+import AppStateProvider from 'state/providers/AppStateProvider'
+import GithubProvider from 'state/providers/GithubProvider'
 import { DndProvider } from 'react-dnd'
-import { GithubProvider } from 'state/github-context'
 import HTML5Backend from 'react-dnd-html5-backend'
 
-const GlobalProviders = ({ children }) => {
-  return (
+const GlobalProviders = ({ children }) => (
+  <AppStateProvider>
     <GithubProvider>
-      <ThemeProvider theme={theme}>
-        <DndProvider backend={HTML5Backend}>
-          <TagProvider>
-            <SearchProvider>
-             {children}
-            </SearchProvider>
-          </TagProvider>
-        </DndProvider>
-      </ThemeProvider>
+      <TagProvider>
+        <SearchProvider>
+          <DndProvider backend={HTML5Backend}>
+            <ThemeProvider theme={theme}>{children}</ThemeProvider>
+          </DndProvider>
+        </SearchProvider>
+      </TagProvider>
     </GithubProvider>
-  )
-}
+  </AppStateProvider>
+)
 
 const customRender = (ui, options) =>
   render(ui, { wrapper: GlobalProviders, ...options })
