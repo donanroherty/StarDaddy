@@ -11,8 +11,7 @@ const ResultsPanel = () => {
 }
 
 const Wrapper = styled.div`
-  overflow-y: scroll;
-  padding: 24px 48px;
+  width: 100%;
 `
 
 export default ResultsPanel

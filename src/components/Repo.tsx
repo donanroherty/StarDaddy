@@ -9,6 +9,7 @@ import useTags from 'state/hooks/useTags'
 
 export interface RepoProps extends StarredRepo {
   isVisible: boolean
+  style: React.CSSProperties
 }
 
 export const formatLastPushTime = (pushedAt: string, now: Date) => {
@@ -54,7 +55,8 @@ const Repo = (props: RepoProps) => {
     forksCount,
     pushedAt,
     isVisible,
-    tags
+    tags,
+    style
   } = props
 
   const { addTagToRepo, removeTagFromRepo } = useTags()
@@ -79,11 +81,7 @@ const Repo = (props: RepoProps) => {
   }
 
   return (
-    <Wrapper
-      data-testid="repo"
-      ref={dropRef}
-      style={{ display: isVisible ? 'initial' : 'none' }}
-    >
+    <Wrapper data-testid="repo" ref={dropRef} style={style}>
       <TitleRow>
         <a
           href={htmlUrl}
@@ -112,7 +110,6 @@ const Repo = (props: RepoProps) => {
       </TagList>
 
       <DetailsRow>
-        {/* Stars */}
         <DetailLink
           href={`${htmlUrl}/stargazers`}
           target="_blank"
@@ -123,7 +120,6 @@ const Repo = (props: RepoProps) => {
           <span>{stargazersCount}</span>
         </DetailLink>
 
-        {/* Forks */}
         <DetailLink
           href={`${htmlUrl}/network/members`}
           target="_blank"
@@ -134,21 +130,28 @@ const Repo = (props: RepoProps) => {
           <span>{forksCount}</span>
         </DetailLink>
 
-        {/* Updated */}
         <LastUpdatedText>
           <span>{formatLastPushTime(pushedAt, new Date())}</span>
         </LastUpdatedText>
       </DetailsRow>
+
       <HR />
     </Wrapper>
   )
 }
 
+const titleFontSize = 20
+const descFontSize = 14
+const descMarginTop = 15
+const lineHeight = 1.4
+const detailsRowHeight = 18
+const detailsMarginTop = 12
+const hrMargin = 10
+
 const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
   box-sizing: border-box;
-  max-width: 688px;
+  width: 500px;
+  height: 248px;
   padding: 24px;
   color: ${({ theme }) => theme.color.text};
 `
@@ -157,6 +160,7 @@ const HR = styled.hr`
   border-width: 0 0 1px 0;
   border-color: ${({ theme }) => theme.color.borderLight};
   border-style: solid;
+  margin: 10px 0;
 `
 
 const TitleRow = styled.div`
@@ -164,6 +168,7 @@ const TitleRow = styled.div`
   align-items: center;
   > a {
     font-size: 20px;
+    line-height: 1.4;
     font-weight: normal;
     color: ${({ theme }) => theme.color.primary};
     padding: 0px;
@@ -191,6 +196,8 @@ const TitleRow = styled.div`
 `
 const Description = styled.div`
   font-size: 14px;
+  line-height: 1.4;
+  height: 39px;
   margin-top: 15px;
   overflow: hidden;
   display: -webkit-box;
@@ -201,6 +208,7 @@ const TagList = styled.div`
   display: flex;
   flex-wrap: wrap;
   margin-top: 12px;
+  height: 60px;
 `
 const DetailsRow = styled.div`
   display: block;
