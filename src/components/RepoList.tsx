@@ -22,37 +22,38 @@ const RepoList = () => {
   const results = getCombinedSearch(stars, searchTerm, searchTags)
 
   const reposData = stars.filter(
-    star =>
-      // show all results if no search term is provided
-      results.find(
-        (res: any) =>
-          // match result with star id
-          star.id === res.id
-      ) !== undefined
+    star => results.find((res: any) => star.id === res.id) !== undefined
   )
 
-  const Repos = ({ index, style }: { index: number; style: any }) => (
-    <Repo {...reposData[index]} isVisible style={style} />
-  )
+  const Repos = ({
+    index,
+    style
+  }: {
+    index: number
+    style: React.CSSProperties
+  }) => <Repo repo={reposData[index]} style={style} />
 
   return (
-    <Wrapper>
-      {p => (
-        <List
-          height={p.height}
-          itemCount={reposData.length}
-          itemSize={248}
-          width={p.width}
-        >
-          {Repos}
-        </List>
-      )}
+    <Wrapper data-testid="repo-list">
+      <AutoSizer defaultHeight={1000} defaultWidth={500}>
+        {autosizer => (
+          <List
+            height={autosizer.height}
+            itemCount={reposData.length}
+            itemSize={248}
+            width={autosizer.width}
+          >
+            {Repos}
+          </List>
+        )}
+      </AutoSizer>
     </Wrapper>
   )
 }
 
-const Wrapper = styled(AutoSizer)`
+const Wrapper = styled.div`
   width: 100%;
+  height: 100%;
 `
 
 export default RepoList

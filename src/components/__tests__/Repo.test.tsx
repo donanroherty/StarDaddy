@@ -1,8 +1,9 @@
 import React from 'react'
 import Repo, { RepoProps, formatLastPushTime } from '../Repo'
 import { render } from 'utils/test-utils'
+import { StarredRepo } from 'types/GithubTypes'
 
-const repoProps: RepoProps = {
+const repoMock: StarredRepo = {
   id: '100',
   ownerLogin: 'owner',
   name: 'repo-name',
@@ -11,24 +12,25 @@ const repoProps: RepoProps = {
   stargazersCount: 50,
   forksCount: 10,
   pushedAt: '2018-11-12T23:45:05Z',
-  tags: ['TagName1', 'TagName2'],
-  isVisible: true
+  tags: ['TagName1', 'TagName2']
 }
+
+const styleMock: React.CSSProperties = {}
 
 describe('<Repo/> Renders correct content', () => {
   const { getByTestId, getAllByTestId, getByText } = render(
-    <Repo {...repoProps} isVisible={true} />
+    <Repo repo={repoMock} style={styleMock} />
   )
 
   test('Title is rendered correctly and has correct link href', () => {
     expect(getByTestId('title').innerHTML).toBe(
       'owner / <strong>repo-name</strong>'
     )
-    expect(getByTestId('title').getAttribute('href')).toBe(repoProps.htmlUrl)
+    expect(getByTestId('title').getAttribute('href')).toBe(repoMock.htmlUrl)
   })
 
   test('Description renders correct text', () => {
-    expect(getByText(repoProps.description)).not.toBeNull()
+    expect(getByText(repoMock.description)).not.toBeNull()
   })
 
   test('Tags are displayed', () => {
@@ -39,19 +41,19 @@ describe('<Repo/> Renders correct content', () => {
 
   test('Star count is displayed and has correct link href', () => {
     expect(getByTestId('star-count').lastElementChild!.innerHTML).toBe(
-      repoProps.stargazersCount.toString()
+      repoMock.stargazersCount.toString()
     )
     expect(getByTestId('star-count').getAttribute('href')).toBe(
-      repoProps.htmlUrl + '/stargazers'
+      repoMock.htmlUrl + '/stargazers'
     )
   })
 
   test('Fork count is displayed and has correct link href', () => {
     expect(getByTestId('fork-count').lastElementChild!.innerHTML).toBe(
-      repoProps.forksCount.toString()
+      repoMock.forksCount.toString()
     )
     expect(getByTestId('fork-count').getAttribute('href')).toBe(
-      repoProps.htmlUrl + '/network/members'
+      repoMock.htmlUrl + '/network/members'
     )
   })
 

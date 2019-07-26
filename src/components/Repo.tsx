@@ -7,8 +7,8 @@ import { DnDItemTypes } from 'types/DnDItemTypes'
 import { useDrop } from 'react-dnd'
 import useTags from 'state/hooks/useTags'
 
-export interface RepoProps extends StarredRepo {
-  isVisible: boolean
+export interface RepoProps {
+  repo: StarredRepo
   style: React.CSSProperties
 }
 
@@ -44,7 +44,7 @@ export const formatLastPushTime = (pushedAt: string, now: Date) => {
   }
 }
 
-const Repo = (props: RepoProps) => {
+const Repo: React.FC<RepoProps> = ({ repo, style }) => {
   const {
     id,
     ownerLogin,
@@ -54,10 +54,8 @@ const Repo = (props: RepoProps) => {
     stargazersCount,
     forksCount,
     pushedAt,
-    isVisible,
-    tags,
-    style
-  } = props
+    tags
+  } = repo
 
   const { addTagToRepo, removeTagFromRepo } = useTags()
 
