@@ -66,7 +66,7 @@ const Tag: React.FC<TagProps> = props => {
   }
 
   return (
-    <Wrapper>
+    <Wrapper {...props}>
       <Inner ref={drag} data-testid="tag" {...props} onClick={handleClick}>
         {isEditing ? (
           <form onSubmit={handleSubmitTagName}>
@@ -110,9 +110,10 @@ const StyledIcon = styled(Icon)`
 const DeleteWrapper = styled.div`
   height: 100%;
 `
-const Wrapper = styled.span`
+const Wrapper = styled.span<TagProps>`
   display: flex;
   flex-direction: row;
+  height: ${({ isThin }) => `${isThin ? '22px' : 'auto'}`};
   margin: 4px 10px 4px 0px;
   user-select: none;
 

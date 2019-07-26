@@ -5,6 +5,8 @@ import useSearch, { getCombinedSearch } from 'state/hooks/useSearch'
 import useGithub from 'state/hooks/useGithub'
 import { AuthState } from 'types/GithubTypes'
 import useAppState from 'state/hooks/useAppState'
+import { FixedSizeList as List } from 'react-window'
+import AutoSizer from 'react-virtualized-auto-sizer'
 
 const RepoList = () => {
   const { stars } = useAppState()
@@ -19,23 +21,39 @@ const RepoList = () => {
 
   const results = getCombinedSearch(stars, searchTerm, searchTags)
 
-  const repos = stars.map(star => {
-    const visible =
-      // show all results if no search term is provided
-      results.find(
-        (res: any) =>
-          // match result with star id
-          star.id === res.id
-      ) !== undefined
+  const reposData = stars.filter(
+    star => results.find((res: any) => star.id === res.id) !== undefined
+  )
 
-    return <Repo {...star} isVisible={visible} key={star.id} />
-  })
+  const Repos = ({
+    index,
+    style
+  }: {
+    index: number
+    style: React.CSSProperties
+  }) => <Repo repo={reposData[index]} style={style} />
 
-  return <Wrapper data-testid="repo-list">{repos}</Wrapper>
+  return (
+    <Wrapper data-testid="repo-list">
+      <AutoSizer defaultHeight={1000} defaultWidth={500}>
+        {autosizer => (
+          <List
+            height={autosizer.height}
+            itemCount={reposData.length}
+            itemSize={248}
+            width={autosizer.width}
+          >
+            {Repos}
+          </List>
+        )}
+      </AutoSizer>
+    </Wrapper>
+  )
 }
 
 const Wrapper = styled.div`
   width: 100%;
+  height: 100%;
 `
 
 export default RepoList
