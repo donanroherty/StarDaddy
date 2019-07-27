@@ -14,8 +14,6 @@ export const GithubContext = React.createContext<GithubType | undefined>(
 export default function GithubProvider(props: any) {
   const [authState, setAuthState] = useState(AuthState.loggedOut)
 
-  // TODO: Add tag list items here.  Add new tags for each new language encountered on github
-
   const value = React.useMemo(
     () => ({
       authState,

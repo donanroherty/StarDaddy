@@ -13,7 +13,8 @@ const theme = {
   },
   font: {
     primary: 'Open Sans',
-    brand: 'PT Sans Narrow'
+    brand: 'PT Sans Narrow',
+    mono: 'Inconsolata'
   }
 }
 

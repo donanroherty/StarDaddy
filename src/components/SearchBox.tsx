@@ -1,12 +1,11 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styled, { withTheme } from 'styled-components'
-import useSearch, { getCombinedSearch } from 'state/hooks/useSearch'
+import useSearch from 'state/hooks/useSearch'
 import { GoSearch, GoX } from 'react-icons/go'
 import { ThemeInterface } from 'theme/theme'
 import { useDrop } from 'react-dnd'
 import { DnDItemTypes } from '../types/DnDItemTypes'
 import Tag from './Tag'
-import useAppState from 'state/hooks/useAppState'
 
 interface SearchBoxProps {
   theme: ThemeInterface
@@ -33,10 +32,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ theme }) => {
     })
   })
 
-  const handleTagClick = (
-    tag: string,
-    modifiers: { ctrlKey: boolean; shiftKey: boolean }
-  ) => {
+  const handleTagClick = (tag: string, event: React.MouseEvent) => {
     removeSearchTag(tag)
   }
 

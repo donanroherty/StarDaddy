@@ -1,12 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './components/App'
 import * as serviceWorker from './serviceWorker'
-
-import './index.css'
 import { ThemeProvider } from 'theme/themed-styled-components'
-
 import theme from 'theme/theme'
+
+import App from './components/App'
 
 import GithubProvider from 'state/providers/GithubProvider'
 import SearchProvider from 'state/providers/SearchProvider'
