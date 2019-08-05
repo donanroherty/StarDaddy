@@ -13,8 +13,8 @@ const App: React.FC = () => {
   return (
     <Wrapper>
       <GlobalStyle />
-      {authState === AuthState.loggedIn ? <Panels /> : <UserAuthenticator />}
       <ConfirmationPopup />
+      {authState === AuthState.loggedIn ? <Panels /> : <UserAuthenticator />}
     </Wrapper>
   )
 }

@@ -5,6 +5,8 @@ type PopupType = {
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>
   size: [number, number]
   setSize: React.Dispatch<React.SetStateAction<[number, number]>>
+  screenCenter: boolean
+  setScreenCenter: React.Dispatch<React.SetStateAction<boolean>>
   position: [number, number]
   setPosition: React.Dispatch<React.SetStateAction<[number, number]>>
   content: React.ReactNode
@@ -21,6 +23,7 @@ export const PopupContext = React.createContext<PopupType | undefined>(
 export default function PopupProvider(props: any) {
   const [isVisible, setIsVisible] = useState(false)
   const [size, setSize] = useState<[number, number]>([0, 0])
+  const [screenCenter, setScreenCenter] = useState(false)
   const [position, setPosition] = useState<[number, number]>([0, 0])
   const [content, setContent] = useState<React.ReactNode>(
     <p>Popup content not set</p>
@@ -38,6 +41,8 @@ export default function PopupProvider(props: any) {
       setIsVisible,
       size,
       setSize,
+      screenCenter,
+      setScreenCenter,
       position,
       setPosition,
       content,
@@ -47,7 +52,15 @@ export default function PopupProvider(props: any) {
       cancellationAction,
       setCancellationAction
     }),
-    [isVisible, size, position, confirmationAction, cancellationAction, content]
+    [
+      isVisible,
+      size,
+      screenCenter,
+      position,
+      confirmationAction,
+      cancellationAction,
+      content
+    ]
   )
   return <PopupContext.Provider value={value} {...props} />
 }

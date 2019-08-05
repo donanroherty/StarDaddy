@@ -9,6 +9,8 @@ export default function usePopup() {
     setIsVisible,
     size,
     setSize,
+    screenCenter,
+    setScreenCenter,
     position,
     setPosition,
     content,
@@ -20,14 +22,15 @@ export default function usePopup() {
   } = context
 
   const showConfirmPopup = (
-    size: [number, number],
     dialogContent: React.ReactNode,
+    screenCenter: boolean,
     position: [number, number],
     onConfirmation: () => void,
     onCancel: () => void
   ) => {
     setContent(dialogContent)
     setPosition(position)
+    setScreenCenter(screenCenter)
     setConfirmationAction(() => onConfirmation)
     setCancellationAction(() => onCancel)
     setSize(size)
@@ -50,6 +53,7 @@ export default function usePopup() {
     isVisible,
     content,
     size,
+    screenCenter,
     position,
     showConfirmPopup,
     handleCancel,
