@@ -6,6 +6,7 @@ import Tag from './Tag'
 import { DnDItemTypes } from 'types/DnDItemTypes'
 import { useDrop } from 'react-dnd'
 import useTags from 'state/hooks/useTags'
+import usePopup from 'state/hooks/usePopup'
 
 export interface RepoProps {
   repo: StarredRepo
@@ -58,6 +59,7 @@ const Repo: React.FC<RepoProps> = ({ repo, style }) => {
   } = repo
 
   const { addTagToRepo, removeTagFromRepo } = useTags()
+  const { showConfirmPopup, handleCancel } = usePopup()
 
   const [, dropRef] = useDrop({
     accept: DnDItemTypes.TAG,
@@ -72,7 +74,20 @@ const Repo: React.FC<RepoProps> = ({ repo, style }) => {
   })
 
   const handleTagClick = (tag: string, event: React.MouseEvent) => {
-    removeTagFromRepo(tag, id)
+    const target = event.target as HTMLDivElement
+    console.log(target)
+
+    showConfirmPopup(
+      <div>
+        Remove <strong>{tag}</strong> from <strong>{name}</strong>?
+      </div>,
+      true,
+      [target.offsetLeft, target.offsetTop],
+      () => {
+        removeTagFromRepo(tag, id)
+      },
+      () => {}
+    )
   }
 
   return (

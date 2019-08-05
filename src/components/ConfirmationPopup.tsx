@@ -13,9 +13,9 @@ const ConfirmationPopup: React.FC<ConfirmationPopupProps> = () => {
     isVisible,
     handleConfirm,
     handleCancel,
-    size,
     content,
-    position
+    position,
+    screenCenter
   } = usePopup()
 
   useKeyPress((e: KeyboardEvent) => {
@@ -29,37 +29,39 @@ const ConfirmationPopup: React.FC<ConfirmationPopupProps> = () => {
 
   // return ReactDOM.createPortal(
   return (
-    <Wrapper
-      data-testid="popup"
-      position={position}
-      size={size}
-      height={85}
-      isVisible={isVisible}
-    >
-      <Content size={size}>
-        <Message>{content}</Message>
-        <ButtonWrapper data-testid="popup-buttons">
-          <Button
-            data-testid="popup-btn-cancel"
-            isRound
-            radius={15}
-            isHollow
-            onClick={handleCancel}
-          >
-            <GoX color={theme.color.primary} />
-          </Button>
-          <Button
-            data-testid="popup-btn-tick"
-            isRound
-            radius={15}
-            onClick={handleConfirm}
-          >
-            <GoCheck />
-          </Button>
-        </ButtonWrapper>
-        <Arrow />
-      </Content>
-    </Wrapper>
+    <Outer>
+      <Wrapper
+        data-testid="popup"
+        position={position}
+        height={85}
+        isVisible={isVisible}
+        screenCenter={screenCenter}
+      >
+        <Content>
+          <Message>{content}</Message>
+          <ButtonWrapper data-testid="popup-buttons">
+            <Button
+              data-testid="popup-btn-cancel"
+              isRound
+              radius={15}
+              isHollow
+              onClick={handleCancel}
+            >
+              <GoX color={theme.color.primary} />
+            </Button>
+            <Button
+              data-testid="popup-btn-tick"
+              isRound
+              radius={15}
+              onClick={handleConfirm}
+            >
+              <GoCheck />
+            </Button>
+          </ButtonWrapper>
+          <Arrow screenCenter={screenCenter} />
+        </Content>
+      </Wrapper>
+    </Outer>
   )
 
   // document.body)
@@ -67,10 +69,22 @@ const ConfirmationPopup: React.FC<ConfirmationPopupProps> = () => {
 
 const arrowSize = 15
 
+const Outer = styled.div`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+`
+
 const Wrapper = styled.div<any>`
   z-index: 500;
   filter: drop-shadow(0px 3px 6px rgba(0, 0, 0, 0.26));
-  position: absolute;
+  position: ${({ screenCenter }) => (screenCenter ? 'initial' : 'absolute')};
   top: ${({ position, height }) => {
     return position[1] - height - arrowSize / 2
   }}px;
@@ -98,9 +112,11 @@ const ButtonWrapper = styled.div`
   display: grid;
   grid-template-columns: auto auto;
   grid-gap: 16.5px;
+  pointer-events: all;
 `
 
-const Arrow = styled.div`
+const Arrow = styled.div<any>`
+  visibility: ${({ screenCenter }) => (screenCenter ? 'hidden' : 'inherit')};
   position: absolute;
   left: 10px;
   top: calc(100%);

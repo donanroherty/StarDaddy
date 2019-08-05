@@ -46,10 +46,10 @@ const SearchToolPanel = () => {
         : [0, 0]
 
       showConfirmPopup(
-        [280, 80],
         <div>
           Rename <strong>{prevName}</strong> to <strong>{tagName}</strong>?
         </div>,
+        false,
         pos,
         () => {
           submitEditTag(tagName, prevName)
@@ -70,10 +70,10 @@ const SearchToolPanel = () => {
       const target = event.target as HTMLDivElement
 
       showConfirmPopup(
-        [230, 80],
         <div>
           Delete <strong>{tag}</strong>?
         </div>,
+        false,
         [target.offsetLeft, target.offsetTop],
         () => {
           deleteTag(tag)
