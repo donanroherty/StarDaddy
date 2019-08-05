@@ -1,8 +1,15 @@
 import React from 'react'
 import SearchToolPanel from '../SearchToolPanel'
-import { render, cleanup, fireEvent, getByTestId } from 'utils/test-utils'
+import ConfirmationPopup from 'components/ConfirmationPopup'
+import { render, cleanup, fireEvent } from 'utils/test-utils'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom/extend-expect'
+
+/**
+ * Note
+ * Currently cant test editing/deletion propagation to repos due to
+ * react-window implementation.
+ */
 
 afterEach(() => cleanup())
 
@@ -40,40 +47,93 @@ test('Defocusing a tag in add mode deletes it', () => {
   expect(getAllByTestId('tag')[0]).not.toHaveTextContent('Cancelled Tag Name')
 })
 
-test('Shift-clicking makes a tag editible', () => {
-  const { queryByTestId, getByTestId, getAllByTestId } = render(
-    <SearchToolPanel />
-  )
-  expect(queryByTestId('tag-name-input')).toBeFalsy()
-  const firstTag = getAllByTestId('tag')[0]
-  fireEvent(
-    firstTag,
-    new MouseEvent('click', {
-      bubbles: true,
-      cancelable: true,
-      shiftKey: true
-    })
-  )
-  expect(getByTestId('tag-name-input')).toBeTruthy()
-})
+describe('Tag renaming process', () => {
+  afterEach(() => cleanup())
 
-test('Submitting a new tag name is reflected in the tag list', () => {
-  const { getByTestId, queryByTestId, getAllByTestId } = render(
-    <SearchToolPanel />
-  )
-  fireEvent.click(getAllByTestId('tag')[0], { shiftKey: true })
-  fireEvent.change(getByTestId('tag-name-input'), {
-    target: { value: 'Edited Tag Name' }
+  test('Shift-clicking makes a tag editible', () => {
+    const { queryByTestId, getByTestId, getAllByTestId } = render(
+      <SearchToolPanel />
+    )
+    expect(queryByTestId('tag-name-input')).toBeFalsy()
+    const firstTag = getAllByTestId('tag')[0]
+    fireEvent(
+      firstTag,
+      new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+        shiftKey: true
+      })
+    )
+    expect(getByTestId('tag-name-input')).toBeTruthy()
   })
-  fireEvent.submit(getByTestId('tag-name-input'))
-  expect(queryByTestId('tag-name-input')).toBeFalsy()
-  expect(getAllByTestId('tag')[0]).toHaveTextContent('Edited Tag Name')
+
+  test('Tag renaming flow', () => {
+    const { getByTestId, queryByTestId, getAllByTestId } = render(
+      <>
+        <SearchToolPanel />
+        <ConfirmationPopup />
+      </>
+    )
+    fireEvent.click(getAllByTestId('tag')[0], { shiftKey: true }) // Initiate rename
+    expect(queryByTestId('tag-name-input')).toBeTruthy()
+    fireEvent.change(getByTestId('tag-name-input'), {
+      target: { value: 'Edited Tag Name' }
+    })
+    fireEvent.submit(getByTestId('tag-name-input'))
+    expect(queryByTestId('popup')).toBeVisible()
+    fireEvent.click(getAllByTestId('button')[1]) //Click confirm button
+    expect(queryByTestId('popup')).not.toBeVisible()
+    expect(queryByTestId('tag-name-input')).toBeFalsy()
+    expect(getAllByTestId('tag')[0]).toHaveTextContent('Edited Tag Name')
+  })
+
+  test('Cancel tag renaming', () => {
+    const { getByTestId, getAllByTestId } = render(
+      <>
+        <SearchToolPanel />
+        <ConfirmationPopup />
+      </>
+    )
+    const tag = getAllByTestId('tag')[0].textContent
+    fireEvent.click(getAllByTestId('tag')[0], { shiftKey: true }) // Initiate rename
+    fireEvent.change(getByTestId('tag-name-input'), {
+      target: { value: 'Edited Tag Name2' }
+    })
+    fireEvent.submit(getByTestId('tag-name-input'))
+    fireEvent.click(getAllByTestId('button')[0]) //Click cancel button
+    expect(getAllByTestId('tag')[0].textContent).toEqual(tag)
+  })
 })
 
-test('Ctrl-clicking a tag deletes it', () => {
-  const { getAllByTestId } = render(<SearchToolPanel />)
-  const tags = getAllByTestId('tag')
-  fireEvent.click(getAllByTestId('tag')[0], { ctrlKey: true })
-  expect(getAllByTestId('tag').length).toEqual(tags.length - 1)
-  expect(getAllByTestId('tag')[0]).toEqual(tags[1])
+describe('Tag deletion process', () => {
+  afterEach(() => cleanup())
+
+  test('Tag deletion flow', () => {
+    const { getAllByTestId, queryByTestId } = render(
+      <>
+        <SearchToolPanel />
+        <ConfirmationPopup />
+      </>
+    )
+    const tags = getAllByTestId('tag')
+    fireEvent.click(getAllByTestId('tag')[0], { ctrlKey: true }) // Initiate delete
+    expect(queryByTestId('popup')).toBeVisible()
+    fireEvent.click(getAllByTestId('button')[1]) //Click confirm button
+    expect(queryByTestId('popup')).not.toBeVisible()
+    expect(getAllByTestId('tag').length).toEqual(tags.length - 1)
+    expect(getAllByTestId('tag')[0]).toEqual(tags[1])
+  })
+
+  test('Cancel tag deletion', () => {
+    const { getAllByTestId } = render(
+      <>
+        <SearchToolPanel />
+        <ConfirmationPopup />
+      </>
+    )
+    const tags = getAllByTestId('tag')
+    fireEvent.click(getAllByTestId('tag')[0], { ctrlKey: true }) // Initiate delete
+    fireEvent.click(getAllByTestId('button')[0]) //Click cancel button
+    expect(getAllByTestId('tag')).toEqual(tags)
+  })
 })

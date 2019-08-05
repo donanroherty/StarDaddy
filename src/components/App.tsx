@@ -3,17 +3,18 @@ import styled, { createGlobalStyle } from 'theme/themed-styled-components'
 import { AuthState } from 'types/GithubTypes'
 import Panels from './Panels'
 import UserAuthenticator from './UserAuthenticator'
+import ConfirmationPopup from './ConfirmationPopup'
 import useGithub from 'state/hooks/useGithub'
 
 const App: React.FC = () => {
   const { authState, autoLogin } = useGithub()
-
   useEffect(() => autoLogin(), [])
 
   return (
     <Wrapper>
       <GlobalStyle />
       {authState === AuthState.loggedIn ? <Panels /> : <UserAuthenticator />}
+      <ConfirmationPopup />
     </Wrapper>
   )
 }

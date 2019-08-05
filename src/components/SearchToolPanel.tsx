@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, RefObject } from 'react'
 import styled from 'styled-components'
 import SearchBox from './SearchBox'
 import TagToolbar from './TagToolbar'
 import useTags from 'state/hooks/useTags'
 import Tag from './Tag'
 import useAppState from 'state/hooks/useAppState'
+import usePopup from 'state/hooks/usePopup'
+import useKeyPress from 'hooks/useKeyPress'
 
 const SearchToolPanel = () => {
   const {
@@ -16,38 +18,69 @@ const SearchToolPanel = () => {
     submitAddTag,
     deleteTag
   } = useTags()
-
   const { tags } = useAppState()
+  const { showConfirmPopup, handleCancel } = usePopup()
 
   const displayTags = isAddingTag ? ['new tag', ...tags] : tags
 
-  const handleKeyPress = (e: KeyboardEvent) => {
+  useKeyPress((e: KeyboardEvent) => {
     if (e.key === 'Escape') {
       cancelTagOperation()
     }
-  }
+  })
 
-  // Side effects
-  useEffect(() => {
-    document.addEventListener('keydown', handleKeyPress, false)
-    return () => {
-      document.removeEventListener('keydown', handleKeyPress, false)
-    }
-  }, [])
-
-  const submitTagName = (tagName: string, prevName: string) => {
+  const submitTagName = (
+    tagName: string,
+    prevName: string,
+    tagRef: RefObject<HTMLDivElement>
+  ) => {
     if (isAddingTag) submitAddTag(tagName)
     else if (editingTag > -1) {
-      submitEditTag(tagName, prevName)
+      if (tagName === prevName) {
+        cancelTagOperation()
+        return
+      }
+
+      const pos: [number, number] = tagRef.current
+        ? [tagRef.current.offsetLeft, tagRef.current.offsetTop]
+        : [0, 0]
+
+      showConfirmPopup(
+        [280, 80],
+        <div>
+          Rename <strong>{prevName}</strong> to <strong>{tagName}</strong>?
+        </div>,
+        pos,
+        () => {
+          submitEditTag(tagName, prevName)
+        },
+        () => {
+          cancelTagOperation()
+        }
+      )
     }
   }
 
-  const handleTagClick = (
-    tag: string,
-    modifiers: { ctrlKey: boolean; shiftKey: boolean }
-  ) => {
-    modifiers.shiftKey && beginEditTag(tag)
-    modifiers.ctrlKey && deleteTag(tag)
+  const handleTagClick = (tag: string, event: React.MouseEvent) => {
+    handleCancel()
+
+    event.shiftKey && beginEditTag(tag)
+
+    if (event.ctrlKey) {
+      const target = event.target as HTMLDivElement
+
+      showConfirmPopup(
+        [230, 80],
+        <div>
+          Delete <strong>{tag}</strong>?
+        </div>,
+        [target.offsetLeft, target.offsetTop],
+        () => {
+          deleteTag(tag)
+        },
+        () => {}
+      )
+    }
   }
 
   return (
@@ -62,6 +95,7 @@ const SearchToolPanel = () => {
             <Tag
               name={tag}
               key={tag}
+              isSearchPanelTag
               isEditing={(isAddingTag && i === 0) || editingTag === i}
               submitName={submitTagName}
               cancelTagOperation={cancelTagOperation}

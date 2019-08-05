@@ -13,6 +13,7 @@ import TagProvider from 'state/providers/TagProvider'
 import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import AppStateProvider from 'state/providers/AppStateProvider'
+import PopupProvider from 'state/providers/PopupProvider'
 
 ReactDOM.render(
   <AppStateProvider>
@@ -21,7 +22,9 @@ ReactDOM.render(
         <SearchProvider>
           <DndProvider backend={HTML5Backend}>
             <ThemeProvider theme={theme}>
-              <App />
+              <PopupProvider>
+                <App />
+              </PopupProvider>
             </ThemeProvider>
           </DndProvider>
         </SearchProvider>
