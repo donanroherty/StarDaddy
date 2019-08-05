@@ -71,10 +71,7 @@ const Repo: React.FC<RepoProps> = ({ repo, style }) => {
     })
   })
 
-  const handleTagClick = (
-    tag: string,
-    modifiers: { ctrlKey: boolean; shiftKey: boolean }
-  ) => {
+  const handleTagClick = (tag: string, event: React.MouseEvent) => {
     removeTagFromRepo(tag, id)
   }
 

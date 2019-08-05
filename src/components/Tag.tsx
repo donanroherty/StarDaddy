@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, RefObject } from 'react'
 import styled, { withTheme } from 'styled-components'
 import { lighten } from 'polished'
 import { ThemeInterface } from 'theme/theme'
@@ -10,13 +10,15 @@ interface TagProps {
   name: string
   isEditing?: boolean
   isThin?: boolean
+  isSearchPanelTag?: boolean
   hasDeleteIcon?: boolean
   cancelTagOperation?: () => void
-  handleTagClick?: (
-    tag: string,
-    modifiers: { ctrlKey: boolean; shiftKey: boolean }
+  handleTagClick?: (tag: string, event: React.MouseEvent) => void
+  submitName?: (
+    name: string,
+    prevName: string,
+    ref: RefObject<HTMLDivElement>
   ) => void
-  submitName?: (name: string, prevName: string) => void
   theme: ThemeInterface
 }
 
@@ -27,10 +29,11 @@ const Tag: React.FC<TagProps> = props => {
     hasDeleteIcon,
     submitName,
     cancelTagOperation,
-
     handleTagClick
   } = props
   const [inputValue, setInputValue] = useState(name)
+
+  const ref = useRef<HTMLDivElement>(null)
 
   const [, drag] = useDrag({
     item: { name: name, type: DnDItemTypes.TAG },
@@ -47,7 +50,7 @@ const Tag: React.FC<TagProps> = props => {
     // TODO: Validate input for duplicate tag name, illegal characters, etc.
     e.preventDefault()
     if (!submitName) return
-    submitName(inputValue, name)
+    submitName(inputValue, name, ref)
   }
 
   const handleNameInput = (e: any) => {
@@ -61,12 +64,12 @@ const Tag: React.FC<TagProps> = props => {
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation()
-    handleTagClick &&
-      handleTagClick(name, { shiftKey: e.shiftKey, ctrlKey: e.ctrlKey })
+    e.preventDefault()
+    handleTagClick && handleTagClick(name, e)
   }
 
   return (
-    <Wrapper {...props}>
+    <Wrapper {...props} ref={ref}>
       <Inner ref={drag} data-testid="tag" {...props} onClick={handleClick}>
         {isEditing ? (
           <form onSubmit={handleSubmitTagName}>

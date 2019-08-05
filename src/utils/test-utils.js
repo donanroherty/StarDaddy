@@ -6,6 +6,7 @@ import SearchProvider from 'state/providers/SearchProvider'
 import TagProvider from 'state/providers/TagProvider'
 import AppStateProvider from 'state/providers/AppStateProvider'
 import GithubProvider from 'state/providers/GithubProvider'
+import PopupProvider from 'state/providers/PopupProvider'
 import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 
@@ -14,9 +15,11 @@ const GlobalProviders = ({ children }) => (
     <GithubProvider>
       <TagProvider>
         <SearchProvider>
-          <DndProvider backend={HTML5Backend}>
-            <ThemeProvider theme={theme}>{children}</ThemeProvider>
-          </DndProvider>
+          <PopupProvider>
+            <DndProvider backend={HTML5Backend}>
+              <ThemeProvider theme={theme}>{children}</ThemeProvider>
+            </DndProvider>
+          </PopupProvider>
         </SearchProvider>
       </TagProvider>
     </GithubProvider>
