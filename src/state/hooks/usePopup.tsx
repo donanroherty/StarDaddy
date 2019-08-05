@@ -7,8 +7,6 @@ export default function usePopup() {
   const {
     isVisible,
     setIsVisible,
-    size,
-    setSize,
     screenCenter,
     setScreenCenter,
     position,
@@ -33,7 +31,6 @@ export default function usePopup() {
     setScreenCenter(screenCenter)
     setConfirmationAction(() => onConfirmation)
     setCancellationAction(() => onCancel)
-    setSize(size)
     setIsVisible(true)
   }
 
@@ -52,7 +49,6 @@ export default function usePopup() {
   return {
     isVisible,
     content,
-    size,
     screenCenter,
     position,
     showConfirmPopup,

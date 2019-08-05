@@ -13,7 +13,6 @@ const ConfirmationPopup: React.FC<ConfirmationPopupProps> = () => {
     isVisible,
     handleConfirm,
     handleCancel,
-    size,
     content,
     position,
     screenCenter
@@ -34,12 +33,11 @@ const ConfirmationPopup: React.FC<ConfirmationPopupProps> = () => {
       <Wrapper
         data-testid="popup"
         position={position}
-        size={size}
         height={85}
         isVisible={isVisible}
         screenCenter={screenCenter}
       >
-        <Content size={size}>
+        <Content>
           <Message>{content}</Message>
           <ButtonWrapper data-testid="popup-buttons">
             <Button

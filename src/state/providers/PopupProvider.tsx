@@ -3,8 +3,6 @@ import React, { useState } from 'react'
 type PopupType = {
   isVisible: boolean
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>
-  size: [number, number]
-  setSize: React.Dispatch<React.SetStateAction<[number, number]>>
   screenCenter: boolean
   setScreenCenter: React.Dispatch<React.SetStateAction<boolean>>
   position: [number, number]
@@ -22,7 +20,6 @@ export const PopupContext = React.createContext<PopupType | undefined>(
 
 export default function PopupProvider(props: any) {
   const [isVisible, setIsVisible] = useState(false)
-  const [size, setSize] = useState<[number, number]>([0, 0])
   const [screenCenter, setScreenCenter] = useState(false)
   const [position, setPosition] = useState<[number, number]>([0, 0])
   const [content, setContent] = useState<React.ReactNode>(
@@ -39,8 +36,6 @@ export default function PopupProvider(props: any) {
     () => ({
       isVisible,
       setIsVisible,
-      size,
-      setSize,
       screenCenter,
       setScreenCenter,
       position,
@@ -54,7 +49,6 @@ export default function PopupProvider(props: any) {
     }),
     [
       isVisible,
-      size,
       screenCenter,
       position,
       confirmationAction,
