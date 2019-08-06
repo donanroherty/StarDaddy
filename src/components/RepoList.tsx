@@ -7,6 +7,7 @@ import { AuthState } from 'types/GithubTypes'
 import useAppState from 'state/hooks/useAppState'
 import { FixedSizeList as List } from 'react-window'
 import AutoSizer from 'react-virtualized-auto-sizer'
+import { CustomScrollbarsVirtualList } from './CustomScrollbar'
 
 const RepoList = () => {
   const { stars } = useAppState()
@@ -42,6 +43,7 @@ const RepoList = () => {
             itemCount={reposData.length}
             itemSize={248}
             width={autosizer.width}
+            outerElementType={CustomScrollbarsVirtualList}
           >
             {Repos}
           </List>
@@ -55,5 +57,4 @@ const Wrapper = styled.div`
   width: 100%;
   height: 100%;
 `
-
 export default RepoList
