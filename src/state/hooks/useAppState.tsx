@@ -14,7 +14,9 @@ export default function useAppState() {
     stars,
     setStars,
     tags,
-    setTags
+    setTags,
+    lastSyncDate,
+    setLastSyncDate
   } = context
 
   return {
@@ -25,6 +27,8 @@ export default function useAppState() {
     stars,
     setStars,
     tags,
-    setTags
+    setTags,
+    lastSyncDate,
+    setLastSyncDate
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import Repo, { RepoProps, formatLastPushTime } from '../Repo'
+import Repo from '../Repo'
 import { render } from 'utils/test-utils'
 import { StarredRepo } from 'types/GithubTypes'
 
@@ -59,53 +59,5 @@ describe('<Repo/> Renders correct content', () => {
 
   test('Renders correct last push time', () => {
     expect(getByText('Updated on Nov 12, 2018')).not.toBeNull()
-  })
-})
-
-describe('formatLastPushTime() returns correct values', () => {
-  const now = new Date('2019-05-19T21:46:04.897Z')
-  let then = new Date(now)
-  afterEach(() => {
-    then = new Date(now)
-  })
-
-  test('months, previous year', () => {
-    then.setMonth(now.getMonth() - 22)
-    expect(formatLastPushTime(then.toISOString(), now)).toBe(
-      'Updated on Jul 19, 2017'
-    )
-  })
-
-  test('month, same year', () => {
-    then.setMonth(now.getMonth() - 3)
-    expect(formatLastPushTime(then.toISOString(), now)).toBe('Updated  Feb 19')
-  })
-
-  test('days', () => {
-    then.setDate(now.getDate() - 20)
-    expect(formatLastPushTime(then.toISOString(), now)).toBe(
-      'Updated 20 days ago'
-    )
-  })
-
-  test('hours', () => {
-    then.setHours(now.getHours() - 5)
-    expect(formatLastPushTime(then.toISOString(), now)).toBe(
-      'Updated 5 hours ago'
-    )
-  })
-
-  test('minutes', () => {
-    then.setMinutes(now.getMinutes() - 13)
-    expect(formatLastPushTime(then.toISOString(), now)).toBe(
-      'Updated 13 minutes ago'
-    )
-  })
-
-  test('seconds', () => {
-    then.setSeconds(now.getSeconds() - 27)
-    expect(formatLastPushTime(then.toISOString(), now)).toBe(
-      'Updated a moment ago'
-    )
   })
 })
