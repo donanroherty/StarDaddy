@@ -18,19 +18,24 @@ const ResultsToolbar: React.FC<ResultsToolbarProps> = ({ theme }) => {
     if (authState === AuthState.loggedIn) fetchStars()
   }
 
-  const lastUpdated = lastSyncDate
-    ? `${new Date(lastSyncDate).toDateString()} at ${new Date(
-        lastSyncDate
-      ).toLocaleTimeString()}`
-    : 'never'
+  const lastUpdated = lastSyncDate ? (
+    <>
+      <em>{new Date(lastSyncDate).toDateString()}</em>&nbsp; at &nbsp;
+      <em>{new Date(lastSyncDate).toLocaleTimeString()}</em>
+    </>
+  ) : (
+    'never'
+  )
 
   return (
     <Wrapper>
-      <SyncButton onClick={handleSyncRepos} isSyncing={isSyncing}>
-        <GoSync size={25} />
-      </SyncButton>
-
-      <LastUpdated>Last updated: {lastUpdated}</LastUpdated>
+      <SyncWrapper>
+        <SyncButton onClick={handleSyncRepos} isSyncing={isSyncing}>
+          <GoSync size={25} />
+        </SyncButton>
+        <LastUpdated>Last updated: &nbsp;{lastUpdated}</LastUpdated>
+      </SyncWrapper>
+      <HR />
     </Wrapper>
   )
 }
@@ -38,14 +43,19 @@ const ResultsToolbar: React.FC<ResultsToolbarProps> = ({ theme }) => {
 const Wrapper = styled.div`
   height: 45px;
   display: flex;
-  justify-content: flex-start;
+  flex-direction: column;
+`
+const SyncWrapper = styled.div`
+  margin-top: 10px;
+  margin-left: 18px;
+  display: flex;
+  flex-direction: row;
   align-items: center;
-  padding-left: 18px;
 `
 const LastUpdated = styled.div`
-  margin-left: 10px;
+  margin-left: 6px;
   font-size: 12px;
-  color: ${({ theme }) => theme.color.text};
+  color: ${({ theme }) => lighten(0.2, theme.color.text)};
 `
 const SyncButton = styled.div<any>`
   display: flex;
@@ -71,4 +81,13 @@ const SyncButton = styled.div<any>`
   }
 `
 
+const HR = styled.div`
+  border-top: 1px solid ${({ theme }) => theme.color.borderLight};
+  height: 1px;
+  width: calc(100% - 50px);
+  align-self: center;
+  padding: 0;
+  margin: 0;
+  margin-top: auto;
+`
 export default withTheme(ResultsToolbar)
