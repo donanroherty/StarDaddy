@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import { AuthState, User, StarredRepo } from 'types/GithubTypes'
+import { AuthState, StarredRepo } from 'types/GithubTypes'
 import { reject } from 'q'
 import useAppState from './useAppState'
 import { GithubContext } from '../providers/GithubProvider'
@@ -46,14 +46,16 @@ export default function useGithub() {
   if (!React.useContext(AppStateContext))
     throw new Error('useSearch must be used within a AppStateContext')
 
-  const { authState, setAuthState } = context
+  const { authState, setAuthState, isSyncing, setIsSyncing } = context
 
   const {
     accessToken,
     setAccessToken,
     setUser,
     stars,
-    setStars
+    setStars,
+    lastSyncDate,
+    setLastSyncDate
   } = useAppState()
 
   const gqlRequest = (query: string, headers?: any) => {
@@ -100,6 +102,7 @@ export default function useGithub() {
     cursor: string = '',
     batchSize: number = 100
   ) => {
+    setIsSyncing(true)
     try {
       if (batchSize > 100 || batchSize < 0)
         throw 'batchSize must be between -1 and 101'
@@ -117,8 +120,11 @@ export default function useGithub() {
       } else {
         const repos = cleanStarData(accumulator, stars)
         setStars(repos.reverse())
+        setIsSyncing(false)
+        setLastSyncDate(new Date())
       }
     } catch (error) {
+      setIsSyncing(false)
       console.error(error)
     }
   }
@@ -140,7 +146,8 @@ export default function useGithub() {
     authState,
     autoLogin,
     logout,
-    fetchStars
+    fetchStars,
+    isSyncing
   }
 }
 

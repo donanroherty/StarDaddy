@@ -11,6 +11,8 @@ type AppStateContextType = {
   setStars: React.Dispatch<React.SetStateAction<StarredRepo[]>>
   tags: string[]
   setTags: React.Dispatch<React.SetStateAction<string[]>>
+  lastSyncDate: Date
+  setLastSyncDate: React.Dispatch<React.SetStateAction<Date>>
 }
 export const AppStateContext = React.createContext<
   AppStateContextType | undefined
@@ -32,12 +34,17 @@ export default function AppStateProvider(props: any) {
   const [tags, setTags] = useState<string[]>(
     localTags ? JSON.parse(localTags) : (defaultTagData as string[])
   )
+  const localSyncDate = localStorage.getItem('lastSyncDate')
+  const [lastSyncDate, setLastSyncDate] = useState<Date | null>(
+    localSyncDate ? JSON.parse(localSyncDate) : null
+  )
 
   useEffect(() => {
     localStorage.setItem('user', JSON.stringify(user))
     localStorage.setItem('token', accessToken)
     localStorage.setItem('stars', JSON.stringify(stars))
     localStorage.setItem('tags', JSON.stringify(tags))
+    localStorage.setItem('lastSyncDate', JSON.stringify(lastSyncDate))
   }, [accessToken, user, stars])
 
   const value = React.useMemo(
@@ -49,9 +56,11 @@ export default function AppStateProvider(props: any) {
       stars,
       setStars,
       tags,
-      setTags
+      setTags,
+      lastSyncDate,
+      setLastSyncDate
     }),
-    [accessToken, user, stars, tags]
+    [accessToken, user, stars, tags, lastSyncDate]
   )
   return <AppStateContext.Provider value={value} {...props} />
 }

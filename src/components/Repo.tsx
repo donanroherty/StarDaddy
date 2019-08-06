@@ -7,42 +7,11 @@ import { DnDItemTypes } from 'types/DnDItemTypes'
 import { useDrop } from 'react-dnd'
 import useTags from 'state/hooks/useTags'
 import usePopup from 'state/hooks/usePopup'
+import { formatTime } from 'utils/string-helpers'
 
 export interface RepoProps {
   repo: StarredRepo
   style: React.CSSProperties
-}
-
-export const formatLastPushTime = (pushedAt: string, now: Date) => {
-  const last = new Date(pushedAt)
-  const diff = now.getTime() - last.getTime()
-  const seconds = Math.floor(diff / 1000)
-
-  const oneMinute = 60
-  const oneHour = oneMinute * 60
-  const oneDay = oneHour * 24
-  const oneMonth = oneDay * 30
-
-  if (seconds > oneMonth) {
-    const lastPushTime = new Date(pushedAt)
-    const isSameYear = now.getUTCFullYear() !== lastPushTime.getUTCFullYear()
-    const split = lastPushTime.toUTCString().split(' ')
-
-    return `Updated ${isSameYear ? 'on' : ''} ${split[2]} ${split[1]}${
-      isSameYear ? `, ${split[3]}` : ''
-    }`
-  } else if (seconds > oneDay) {
-    const days = Math.round(seconds / oneDay)
-    return `Updated ${days} ${days > 1 ? 'days' : 'day'} ago`
-  } else if (seconds > oneHour) {
-    const hours = Math.round(seconds / oneHour)
-    return `Updated ${hours} ${hours > 1 ? 'hours' : 'hour'} ago`
-  } else if (seconds > oneMinute) {
-    const minutes = Math.round(seconds / oneMinute)
-    return `Updated ${minutes} ${minutes > 1 ? 'minutes' : 'minute'} ago`
-  } else {
-    return 'Updated a moment ago'
-  }
 }
 
 const Repo: React.FC<RepoProps> = ({ repo, style }) => {
@@ -141,7 +110,7 @@ const Repo: React.FC<RepoProps> = ({ repo, style }) => {
         </DetailLink>
 
         <LastUpdatedText>
-          <span>{formatLastPushTime(pushedAt, new Date())}</span>
+          <span>{formatTime(pushedAt, new Date())}</span>
         </LastUpdatedText>
       </DetailsRow>
 
