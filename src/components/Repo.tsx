@@ -8,6 +8,7 @@ import { useDrop } from 'react-dnd'
 import useTags from 'state/hooks/useTags'
 import usePopup from 'state/hooks/usePopup'
 import { formatTime } from 'utils/string-helpers'
+import { CustomScrollbarsVirtualList } from './CustomScrollbar'
 import Scrollbars from 'react-custom-scrollbars'
 import { lighten } from 'polished'
 
@@ -144,7 +145,8 @@ const hrMargin = 10
 
 const Wrapper = styled.div`
   box-sizing: border-box;
-  width: 500px;
+  min-width: 450px;
+  max-width: 450px;
   height: 248px;
   padding: 24px;
   color: ${({ theme }) => theme.color.text};
@@ -202,7 +204,6 @@ const TagList = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  height: 60px;
 `
 const DetailsRow = styled.div`
   display: block;
