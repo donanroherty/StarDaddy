@@ -8,7 +8,6 @@ import { useDrop } from 'react-dnd'
 import useTags from 'state/hooks/useTags'
 import usePopup from 'state/hooks/usePopup'
 import { formatTime } from 'utils/string-helpers'
-import { CustomScrollbarsVirtualList } from './CustomScrollbar'
 import Scrollbars from 'react-custom-scrollbars'
 import { lighten } from 'polished'
 
@@ -83,9 +82,7 @@ const Repo: React.FC<RepoProps> = ({ repo, style }) => {
           {ownerLogin} / <strong>{name}</strong>
         </a>
       </TitleRow>
-
       <Description>{description}</Description>
-
       <Scrollbars
         style={{ width: 400, height: 60 }}
         renderThumbVertical={thumb}
@@ -103,7 +100,6 @@ const Repo: React.FC<RepoProps> = ({ repo, style }) => {
             ))}
         </TagList>
       </Scrollbars>
-
       <DetailsRow>
         <DetailLink
           href={`${htmlUrl}/stargazers`}
@@ -129,19 +125,10 @@ const Repo: React.FC<RepoProps> = ({ repo, style }) => {
           <span>{formatTime(pushedAt, new Date())}</span>
         </LastUpdatedText>
       </DetailsRow>
-
       <HR />
     </Wrapper>
   )
 }
-
-const titleFontSize = 20
-const descFontSize = 14
-const descMarginTop = 15
-const lineHeight = 1.4
-const detailsRowHeight = 18
-const detailsMarginTop = 12
-const hrMargin = 10
 
 const Wrapper = styled.div`
   box-sizing: border-box;

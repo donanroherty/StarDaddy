@@ -15,7 +15,7 @@ test('Login', async () => {
   fireEvent.change(getByTitle(/access token/i), {
     target: { value: 'abcdef' }
   })
-  fireEvent.click(getByText(/Login with GitHub/i))
+  fireEvent.click(getByText(/Authenticate/i))
   await waitForElement(() => getByTestId('app-bar'))
   expect(queryByTestId('user-auth')).toBeFalsy()
   expect(queryByTestId('app-bar')).toBeTruthy()
