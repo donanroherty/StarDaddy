@@ -2,7 +2,7 @@
 
 Star Daddy is an application for categorization and re-discovery of starred GitHub repositories. It aims to improve on GitHubs existing starred repository system by allowing users to tag repos with labels that make sense to them and the use these labels to filter their stars down to that one perfect repo when they need it.
 
-This project is a **work in progress** and still in the planning phase.
+This project is a **work in progress** and still in early alpha.
 
 See [Requirements Doc](https://github.com/donanroherty/StarDaddy/wiki/Requirements) for more info, or download [AdobeXD Design File](https://1drv.ms/u/s!Arcuy-4Tl1Q4laUjFtirvPZLcqeYHg).
 
