@@ -8,6 +8,8 @@ import { useDrop } from 'react-dnd'
 import useTags from 'state/hooks/useTags'
 import usePopup from 'state/hooks/usePopup'
 import { formatTime } from 'utils/string-helpers'
+import Scrollbars from 'react-custom-scrollbars'
+import { lighten } from 'polished'
 
 export interface RepoProps {
   repo: StarredRepo
@@ -59,6 +61,14 @@ const Repo: React.FC<RepoProps> = ({ repo, style }) => {
     )
   }
 
+  const thumb = () => {
+    const ThumbStyle = styled.div`
+      background-color: ${({ theme }) => lighten(0.4, theme.color.primary)};
+      border-radius: 5px;
+    `
+    return <ThumbStyle />
+  }
+
   return (
     <Wrapper data-testid="repo" ref={dropRef} style={style}>
       <TitleRow>
@@ -75,18 +85,23 @@ const Repo: React.FC<RepoProps> = ({ repo, style }) => {
 
       <Description>{description}</Description>
 
-      <TagList>
-        {tags &&
-          tags.map(tag => (
-            <Tag
-              name={tag}
-              key={tag}
-              handleTagClick={handleTagClick}
-              isThin
-              hasDeleteIcon
-            />
-          ))}
-      </TagList>
+      <Scrollbars
+        style={{ width: 400, height: 60 }}
+        renderThumbVertical={thumb}
+      >
+        <TagList>
+          {tags &&
+            tags.map(tag => (
+              <Tag
+                name={tag}
+                key={tag}
+                handleTagClick={handleTagClick}
+                isThin
+                hasDeleteIcon
+              />
+            ))}
+        </TagList>
+      </Scrollbars>
 
       <DetailsRow>
         <DetailLink
@@ -186,7 +201,7 @@ const Description = styled.div`
 const TagList = styled.div`
   display: flex;
   flex-wrap: wrap;
-  margin-top: 12px;
+  width: 100%;
   height: 60px;
 `
 const DetailsRow = styled.div`
