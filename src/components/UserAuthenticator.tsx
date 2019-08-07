@@ -105,8 +105,20 @@ const UserAuthenticator = (props: UserAuthenticatorProps) => {
         <Content>
           <p>
             Laniakea helps you categorize and filter your starred repositories.
-            <br />
-            Click below to get started.
+          </p>
+
+          <p>
+            Laniakea uses a GitHub <strong>Personal Access Token</strong> to
+            make requests to the GitHub API.{'  '}
+            <a
+              href="https://github.com/settings/tokens"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Create a new token
+            </a>
+            , no permissions necessary, and enter the token in the box below to
+            get started.
           </p>
 
           <form onSubmit={handleSubmit}>
@@ -120,7 +132,7 @@ const UserAuthenticator = (props: UserAuthenticatorProps) => {
             />
 
             <ButtonWrapper>
-              <Button label="Login with GitHub" type="submit" />
+              <Button label="Authenticate" type="submit" />
             </ButtonWrapper>
           </form>
         </Content>
@@ -170,7 +182,8 @@ const Logo = styled.svg`
 const Content = styled.div`
   width: 610px;
   /* height: 110px; */
-  padding: 30px 0 30px 0;
+  box-sizing: border-box;
+  padding: 30px 40px 30px 40px;
   border-radius: 0 0 16px 16px;
   background-color: ${({ theme }) => theme.color.dark};
   color: white;
@@ -182,6 +195,7 @@ const Content = styled.div`
     line-height: 24px;
   }
 `
+
 const ButtonWrapper = styled.div`
   margin-top: 24px;
   display: flex;
