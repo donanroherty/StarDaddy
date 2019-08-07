@@ -1,5 +1,5 @@
 {
-  "name": "Laniakea",
+  "name": "Star Daddy",
   "description": "A browser extension for sorting and rediscovery of starred GitHub repos",
   "version": "0.01",
   "manifest_version": 2,
@@ -9,7 +9,7 @@
   "permissions": ["activeTab", "tabs"],
   "browser_action": {
     "default_icon": "icons/logo-48.png",
-    "default_title": "Laniakea - GitHub star manager"
+    "default_title": "Star Daddy - Star managment for GitHub users"
   },
   "background": {
     "scripts": ["background.js"]

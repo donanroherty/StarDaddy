@@ -98,17 +98,18 @@ const UserAuthenticator = (props: UserAuthenticatorProps) => {
             </g>
           </Logo>
 
-          <h1>Laniakea</h1>
-          <h4>All your stars in one place</h4>
+          <h1>Star Daddy</h1>
+          <h4>Star managment for GitHub users</h4>
         </Header>
 
         <Content>
           <p>
-            Laniakea helps you categorize and filter your starred repositories.
+            Star Daddy helps you categorize and filter your starred
+            repositories.
           </p>
 
           <p>
-            Laniakea uses a GitHub <strong>Personal Access Token</strong> to
+            Star Daddy uses a GitHub <strong>Personal Access Token</strong> to
             make requests to the GitHub API.{'  '}
             <a
               href="https://github.com/settings/tokens"
