@@ -8,6 +8,8 @@ import { useDrop } from 'react-dnd'
 import useTags from 'state/hooks/useTags'
 import usePopup from 'state/hooks/usePopup'
 import { formatTime } from 'utils/string-helpers'
+import Scrollbars from 'react-custom-scrollbars'
+import { lighten } from 'polished'
 
 export interface RepoProps {
   repo: StarredRepo
@@ -59,6 +61,14 @@ const Repo: React.FC<RepoProps> = ({ repo, style }) => {
     )
   }
 
+  const thumb = () => {
+    const ThumbStyle = styled.div`
+      background-color: ${({ theme }) => lighten(0.4, theme.color.primary)};
+      border-radius: 5px;
+    `
+    return <ThumbStyle />
+  }
+
   return (
     <Wrapper data-testid="repo" ref={dropRef} style={style}>
       <TitleRow>
@@ -72,22 +82,24 @@ const Repo: React.FC<RepoProps> = ({ repo, style }) => {
           {ownerLogin} / <strong>{name}</strong>
         </a>
       </TitleRow>
-
       <Description>{description}</Description>
-
-      <TagList>
-        {tags &&
-          tags.map(tag => (
-            <Tag
-              name={tag}
-              key={tag}
-              handleTagClick={handleTagClick}
-              isThin
-              hasDeleteIcon
-            />
-          ))}
-      </TagList>
-
+      <Scrollbars
+        style={{ width: 400, height: 60 }}
+        renderThumbVertical={thumb}
+      >
+        <TagList>
+          {tags &&
+            tags.map(tag => (
+              <Tag
+                name={tag}
+                key={tag}
+                handleTagClick={handleTagClick}
+                isThin
+                hasDeleteIcon
+              />
+            ))}
+        </TagList>
+      </Scrollbars>
       <DetailsRow>
         <DetailLink
           href={`${htmlUrl}/stargazers`}
@@ -113,23 +125,15 @@ const Repo: React.FC<RepoProps> = ({ repo, style }) => {
           <span>{formatTime(pushedAt, new Date())}</span>
         </LastUpdatedText>
       </DetailsRow>
-
       <HR />
     </Wrapper>
   )
 }
 
-const titleFontSize = 20
-const descFontSize = 14
-const descMarginTop = 15
-const lineHeight = 1.4
-const detailsRowHeight = 18
-const detailsMarginTop = 12
-const hrMargin = 10
-
 const Wrapper = styled.div`
   box-sizing: border-box;
-  width: 500px;
+  min-width: 450px;
+  max-width: 450px;
   height: 248px;
   padding: 24px;
   color: ${({ theme }) => theme.color.text};
@@ -186,8 +190,7 @@ const Description = styled.div`
 const TagList = styled.div`
   display: flex;
   flex-wrap: wrap;
-  margin-top: 12px;
-  height: 60px;
+  width: 100%;
 `
 const DetailsRow = styled.div`
   display: block;
