@@ -9,6 +9,7 @@ import App from './components/App'
 import GithubProvider from 'state/providers/GithubProvider'
 import SearchProvider from 'state/providers/SearchProvider'
 import TagProvider from 'state/providers/TagProvider'
+import SettingsProvider from 'state/providers/SettingsProvider'
 
 import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
@@ -17,19 +18,21 @@ import PopupProvider from 'state/providers/PopupProvider'
 
 ReactDOM.render(
   <AppStateProvider>
-    <GithubProvider>
-      <TagProvider>
-        <SearchProvider>
-          <DndProvider backend={HTML5Backend}>
-            <ThemeProvider theme={theme}>
-              <PopupProvider>
-                <App />
-              </PopupProvider>
-            </ThemeProvider>
-          </DndProvider>
-        </SearchProvider>
-      </TagProvider>
-    </GithubProvider>
+    <SettingsProvider>
+      <GithubProvider>
+        <TagProvider>
+          <SearchProvider>
+            <DndProvider backend={HTML5Backend}>
+              <ThemeProvider theme={theme}>
+                <PopupProvider>
+                  <App />
+                </PopupProvider>
+              </ThemeProvider>
+            </DndProvider>
+          </SearchProvider>
+        </TagProvider>
+      </GithubProvider>
+    </SettingsProvider>
   </AppStateProvider>,
   document.getElementById('root')
 )

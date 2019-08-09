@@ -1,12 +1,9 @@
 import React from 'react'
 import AppBar from '../AppBar'
-import Panels from '../Panels'
 import { render, cleanup, fireEvent } from 'utils/test-utils'
-import { ToolbarPanelOptions } from '../Panels'
-import userData from 'mock-data/user.json'
-import GithubProvider from 'state/providers/GithubProvider'
-import AppStateProvider from 'state/providers/AppStateProvider'
 import { StarredRepo } from 'types/GithubTypes'
+import AppStateProvider from 'state/providers/AppStateProvider'
+import '@testing-library/jest-dom/extend-expect'
 
 afterEach(() => cleanup())
 
@@ -87,38 +84,24 @@ const mockRepos: StarredRepo[] = [
   }
 ]
 
-test('AppBar buttons open correct panels', () => {
-  const { getByTestId, getByTitle } = render(
+test('Clicking settings button opens the settings menu', () => {
+  const { getByTestId } = render(
     <AppStateProvider
       value={{
         user: mockUser,
         stars: mockRepos
       }}
     >
-      <Panels />
+      <AppBar />
     </AppStateProvider>
   )
+  expect(getByTestId('settings-btn')).toBeTruthy()
+  expect(getByTestId('settings-menu')).toBeTruthy()
+  expect(getByTestId('settings-menu')).not.toBeVisible()
 
-  expect(getByTestId('search-tool-panel')).toBeTruthy()
-  fireEvent.click(getByTitle('Settings'))
-  expect(getByTestId('settings-tool-panel')).toBeTruthy()
-  fireEvent.click(getByTitle('Search'))
-  expect(getByTestId('search-tool-panel')).toBeTruthy()
-})
+  fireEvent.click(getByTestId('settings-btn')) // Open menu
+  expect(getByTestId('settings-menu')).toBeVisible()
 
-test('Clicking buttons calls correct functions', () => {
-  const { getByTitle } = render(
-    <AppBar
-      setActiveToolbarPanel={setActiveToolbarPanel}
-      activeToolbarPanel={ToolbarPanelOptions.Search}
-    />
-  )
-  fireEvent.click(getByTitle('Settings'), ToolbarPanelOptions.Settings)
-  expect(setActiveToolbarPanel).toHaveBeenCalledTimes(1)
-  expect(setActiveToolbarPanel).toHaveBeenCalledWith(
-    ToolbarPanelOptions.Settings
-  )
-  fireEvent.click(getByTitle('Search'), ToolbarPanelOptions.Search)
-  expect(setActiveToolbarPanel).toHaveBeenCalledTimes(2)
-  expect(setActiveToolbarPanel).toHaveBeenCalledWith(ToolbarPanelOptions.Search)
+  fireEvent.click(getByTestId('settings-btn')) // Close menu
+  expect(getByTestId('settings-menu')).not.toBeVisible()
 })
