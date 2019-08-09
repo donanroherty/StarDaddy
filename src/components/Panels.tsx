@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import AppBar from './AppBar'
 import ResultsPanel from './ResultsPanel'
-import ToolPanel from './ToolPanel'
+import SearchPanel from './SearchPanel'
 
 export enum ToolbarPanelOptions {
   Search,
@@ -13,7 +13,7 @@ const Panels = () => {
   return (
     <Wrapper data-testid="panels">
       <AppBar />
-      <ToolPanel />
+      <SearchPanel />
       <ResultsPanel />
     </Wrapper>
   )

@@ -19,7 +19,7 @@ test('Login', async () => {
   await waitForElement(() => getByTestId('app-bar'))
   expect(queryByTestId('user-auth')).toBeFalsy()
   expect(queryByTestId('app-bar')).toBeTruthy()
-  expect(queryByTestId('tool-panel')).toBeTruthy()
+  expect(queryByTestId('search-panel')).toBeTruthy()
   expect(queryByTestId('results-panel')).toBeTruthy()
   expect(queryByTestId('repo-list')).toBeTruthy()
 })
