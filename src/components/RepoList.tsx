@@ -53,33 +53,39 @@ const RepoList = () => {
 
   return (
     <Wrapper data-testid="repo-list">
-      <AutoSizer defaultHeight={1000} defaultWidth={450}>
-        {autosizer =>
-          gridLayout ? (
-            <FixedSizeGrid
-              columnCount={2}
-              columnWidth={450}
-              rowCount={reposData.length / 2}
-              rowHeight={248}
-              width={autosizer.width}
-              height={autosizer.height}
-              outerElementType={CustomScrollbarsVirtualList}
-            >
-              {GridCells}
-            </FixedSizeGrid>
-          ) : (
-            <List
-              height={autosizer.height}
-              itemCount={reposData.length}
-              itemSize={248}
-              width={autosizer.width}
-              outerElementType={CustomScrollbarsVirtualList}
-            >
-              {ListItems}
-            </List>
-          )
-        }
-      </AutoSizer>
+      {reposData.length > 0 ? (
+        <AutoSizer defaultHeight={1000} defaultWidth={450}>
+          {autosizer =>
+            gridLayout ? (
+              <FixedSizeGrid
+                columnCount={2}
+                columnWidth={450}
+                rowCount={reposData.length / 2}
+                rowHeight={248}
+                width={autosizer.width}
+                height={autosizer.height}
+                outerElementType={CustomScrollbarsVirtualList}
+              >
+                {GridCells}
+              </FixedSizeGrid>
+            ) : (
+              <List
+                height={autosizer.height}
+                itemCount={reposData.length}
+                itemSize={248}
+                width={autosizer.width}
+                outerElementType={CustomScrollbarsVirtualList}
+              >
+                {ListItems}
+              </List>
+            )
+          }
+        </AutoSizer>
+      ) : (
+        <NoResultsNotice>
+          ...no results matching search criteria
+        </NoResultsNotice>
+      )}
     </Wrapper>
   )
 }
@@ -87,5 +93,15 @@ const RepoList = () => {
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
+`
+const NoResultsNotice = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: ${({ theme }) => theme.color.text};
+  font-weight: bold;
+  font-size: 20px;
 `
 export default RepoList
