@@ -4,6 +4,7 @@ import { stringToArray, sanitizeString } from 'utils/string-helpers'
 import { SearchContext } from '../providers/SearchProvider'
 import { TermSearchResult, TermMatch, SearchResultType } from 'types/Types'
 import { AppStateContext } from 'state/providers/AppStateProvider'
+import useAppState from './useAppState'
 
 export default function useSearch() {
   const context = React.useContext(SearchContext)
@@ -13,6 +14,7 @@ export default function useSearch() {
     throw new Error('useSearch must be used within a AppStateContext')
 
   const { searchTerm, setSearchTerm, searchTags, setSearchTags } = context
+  const { stars } = useAppState()
 
   const addSearchTag = (tag: string) => {
     if (!searchTags.find(val => val === tag))
@@ -23,13 +25,22 @@ export default function useSearch() {
     setSearchTags(prev => prev.filter(t => t !== tag))
   }
 
+  const getSearchResults = () => {
+    const search = getCombinedSearch(stars, searchTerm, searchTags)
+    const reposData = stars.filter(
+      star => search.find((res: any) => star.id === res.id) !== undefined
+    )
+    return reposData
+  }
+
   return {
     searchTerm,
     setSearchTerm,
     searchTags,
     setSearchTags,
     addSearchTag,
-    removeSearchTag
+    removeSearchTag,
+    getSearchResults
   }
 }
 

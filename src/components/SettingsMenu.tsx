@@ -56,6 +56,7 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({ settingsBtnRef }) => {
 }
 
 const Wrapper = styled.div<any>`
+  z-index: 500;
   visibility: ${({ isVisible }) => (isVisible ? 'visible' : 'hidden')};
   width: 240px;
   background-color: white;
