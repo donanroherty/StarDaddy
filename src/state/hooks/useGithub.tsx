@@ -55,7 +55,9 @@ export default function useGithub() {
     stars,
     setStars,
     setLastSyncDate,
-    clearLocalData
+    clearLocalData,
+    tags,
+    setTags
   } = useAppState()
 
   const gqlRequest = (query: string, headers?: any) => {
@@ -118,15 +120,31 @@ export default function useGithub() {
       if (++i < loopCount) {
         fetchStars(accumulator, i, cursor)
       } else {
+        // Data fetching complete, set all the things
         const repos = cleanStarData(accumulator, stars)
         setStars(repos.reverse())
         setIsSyncing(false)
         setLastSyncDate(new Date())
+
+        // Get list of tags on fetched repos
+        const tags = repos.reduce(
+          (acc: string[], curr) => [
+            ...acc,
+            ...curr.tags.filter(t => !acc.find(a => a === t))
+          ],
+          []
+        )
+        updateTags(tags)
       }
     } catch (error) {
       setIsSyncing(false)
       console.error(error)
     }
+  }
+
+  const updateTags = (newTags: string[]) => {
+    const diff = newTags.filter(nt => !tags.find(t => t === nt))
+    setTags(prev => [...prev, ...diff].sort())
   }
 
   const autoLogin = () => {
