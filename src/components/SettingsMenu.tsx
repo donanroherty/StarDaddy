@@ -34,12 +34,20 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({ settingsBtnRef }) => {
         <SettingItem
           onClick={() => {
             logout(true)
+            hideSettingsMenu()
           }}
         >
           Clear local storage
         </SettingItem>
 
-        <SettingItem onClick={() => logout()}>Logout</SettingItem>
+        <SettingItem
+          onClick={() => {
+            logout()
+            hideSettingsMenu()
+          }}
+        >
+          Logout
+        </SettingItem>
       </SettingList>
 
       <Arrow />
