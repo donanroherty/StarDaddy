@@ -24,14 +24,13 @@ const SettingsMenu = () => {
       <SettingList>
         <SettingItem
           onClick={() => {
-            window.localStorage.clear()
-            logout()
+            logout(true)
           }}
         >
           Clear local storage
         </SettingItem>
 
-        <SettingItem onClick={logout}>Logout</SettingItem>
+        <SettingItem onClick={() => logout()}>Logout</SettingItem>
       </SettingList>
 
       <Arrow />

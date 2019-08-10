@@ -54,8 +54,8 @@ export default function useGithub() {
     setUser,
     stars,
     setStars,
-    lastSyncDate,
-    setLastSyncDate
+    setLastSyncDate,
+    clearLocalData
   } = useAppState()
 
   const gqlRequest = (query: string, headers?: any) => {
@@ -135,10 +135,12 @@ export default function useGithub() {
     }
   }
 
-  const logout = () => {
+  const logout = (clearUserData: boolean = false) => {
     setAuthState(AuthState.loggedOut)
     setAccessToken('')
-    window.localStorage.clear()
+    if (clearUserData) {
+      clearLocalData()
+    }
   }
 
   return {
