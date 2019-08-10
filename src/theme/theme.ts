@@ -9,7 +9,8 @@ const theme = {
     bgLight: '#FAFBFC',
     bgLighter: '#FFFFFF',
     success: '#28D058',
-    warning: '#FC4F4F'
+    warning: '#FC4F4F',
+    highlight: '#F1E05A'
   },
   font: {
     primary: 'Open Sans',

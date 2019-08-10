@@ -23,7 +23,12 @@ const SearchPanel = () => {
   } = useTags()
   const { tags } = useAppState()
   const { showConfirmPopup, handleCancel } = usePopup()
-  const { addSearchTag } = useSearch()
+  const {
+    addSearchTag,
+    removeSearchTag,
+    getSearchResults,
+    searchTags
+  } = useSearch()
 
   const displayTags = isAddingTag ? ['new tag', ...tags] : tags
 
@@ -69,7 +74,8 @@ const SearchPanel = () => {
     handleCancel()
 
     if (!event.shiftKey && !event.ctrlKey) {
-      addSearchTag(tag)
+      if (!searchTags.find(t => t === tag)) addSearchTag(tag)
+      else removeSearchTag(tag)
     }
 
     // ! Disabled temporarily pending strategy for editing GitHub language tags
@@ -100,6 +106,8 @@ const SearchPanel = () => {
     return <ThumbStyle />
   }
 
+  const searchResults = getSearchResults()
+
   return (
     <Wrapper data-testid="search-panel">
       <SearchBox />
@@ -113,17 +121,29 @@ const SearchPanel = () => {
         >
           <TagList>
             {displayTags &&
-              displayTags.map((tag, i) => (
-                <Tag
-                  name={tag}
-                  key={tag}
-                  isSearchPanelTag
-                  isEditing={(isAddingTag && i === 0) || editingTag === i}
-                  submitName={submitTagName}
-                  cancelTagOperation={cancelTagOperation}
-                  handleTagClick={handleTagClick}
-                />
-              ))}
+              displayTags.map((tag, i) => {
+                const disabled =
+                  searchResults.filter(sr => sr.tags.find(t => t === tag))
+                    .length > 0
+                    ? false
+                    : true
+
+                const highlight = searchTags.find(t => t === tag) !== undefined
+
+                return (
+                  <Tag
+                    name={tag}
+                    key={tag}
+                    isSearchPanelTag
+                    isEditing={(isAddingTag && i === 0) || editingTag === i}
+                    submitName={submitTagName}
+                    cancelTagOperation={cancelTagOperation}
+                    handleTagClick={handleTagClick}
+                    disabled={disabled}
+                    highlight={highlight}
+                  />
+                )
+              })}
           </TagList>
         </Scrollbars>
       </TagsPanel>

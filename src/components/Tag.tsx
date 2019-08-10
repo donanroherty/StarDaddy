@@ -1,7 +1,7 @@
 import React, { useState, useRef, RefObject } from 'react'
 import styled, { withTheme } from 'styled-components'
 import { lighten } from 'polished'
-import { ThemeInterface } from 'theme/theme'
+import theme, { ThemeInterface } from 'theme/theme'
 import { useDrag } from 'react-dnd'
 import { DnDItemTypes } from '../types/DnDItemTypes'
 import Icon from './Icon'
@@ -14,6 +14,8 @@ interface TagProps {
   hasDeleteIcon?: boolean
   cancelTagOperation?: () => void
   handleTagClick?: (tag: string, event: React.MouseEvent) => void
+  disabled?: boolean
+  highlight?: boolean
   submitName?: (
     name: string,
     prevName: string,
@@ -29,7 +31,9 @@ const Tag: React.FC<TagProps> = props => {
     hasDeleteIcon,
     submitName,
     cancelTagOperation,
-    handleTagClick
+    handleTagClick,
+    disabled,
+    highlight
   } = props
   const [inputValue, setInputValue] = useState(name)
 
@@ -49,15 +53,18 @@ const Tag: React.FC<TagProps> = props => {
   const handleSubmitTagName = (e: any) => {
     // TODO: Validate input for duplicate tag name, illegal characters, etc.
     e.preventDefault()
+    if (disabled) return
     if (!submitName) return
     submitName(inputValue, name, ref)
   }
 
   const handleNameInput = (e: any) => {
+    if (disabled) return
     setInputValue(e.target.value)
   }
 
   const handleBlur = () => {
+    if (disabled) return
     setInputValue(name)
     cancelTagOperation && cancelTagOperation()
   }
@@ -65,12 +72,29 @@ const Tag: React.FC<TagProps> = props => {
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation()
     e.preventDefault()
+    if (disabled) return
     handleTagClick && handleTagClick(name, e)
   }
 
+  const color = disabled
+    ? 'darkgray'
+    : highlight
+    ? 'yellow'
+    : isEditing
+    ? theme.color.success
+    : theme.color.primary
+
   return (
     <Wrapper {...props} ref={ref}>
-      <Inner ref={drag} data-testid="tag" {...props} onClick={handleClick}>
+      <Inner
+        ref={drag}
+        data-testid="tag"
+        {...props}
+        onClick={handleClick}
+        disabled={disabled}
+        highlight={highlight}
+        color={color}
+      >
         {isEditing ? (
           <form onSubmit={handleSubmitTagName}>
             <input
@@ -124,22 +148,26 @@ const Wrapper = styled.span<TagProps>`
     visibility: visible;
   }
 `
-const Inner = styled.span<TagProps>`
+const Inner = styled.span<any>`
   box-sizing: border-box;
   padding: ${({ isThin }) => `${isThin ? 1.5 : 4}`}px
     ${({ isThin }) => `${isThin ? 6 : 12}`}px;
   border-radius: 10px;
-  border: 1px solid
-    ${({ theme, isEditing }) =>
-      lighten(
-        isEditing ? 0.2 : 0.4,
-        isEditing ? theme.color.success : theme.color.primary
-      )};
-  background-color: ${({ theme, isEditing }) =>
-    lighten(
-      isEditing ? 0.45 : 0.55,
-      isEditing ? theme.color.success : theme.color.primary
-    )};
+  border-width: 1px;
+  border-style: solid;
+
+  border-color: ${({ theme, isEditing, disabled, highlight, color }) => {
+    if (disabled) return 'darkgray'
+    else if (highlight) return lighten(0, '#F1E05A')
+    else return lighten(isEditing ? 0.2 : 0.4, color)
+  }};
+
+  background-color: ${({ theme, isEditing, disabled, highlight, color }) => {
+    if (disabled) return 'lightgray'
+    else if (highlight) return lighten(0.3, '#F1E05A')
+    else return lighten(isEditing ? 0.45 : 0.55, color)
+  }};
+
   color: ${({ theme }) => theme.color.text};
   font-size: 12px;
   font-weight: 600;

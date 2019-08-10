@@ -11,7 +11,7 @@ import { CustomScrollbarsVirtualList } from './CustomScrollbar'
 
 const RepoList = () => {
   const { stars } = useAppState()
-  const { searchTerm, searchTags } = useSearch()
+  const { getSearchResults } = useSearch()
   const { fetchStars, authState } = useGithub()
 
   useEffect(() => {
@@ -20,22 +20,20 @@ const RepoList = () => {
 
   if (!stars) return null
 
-  const results = getCombinedSearch(stars, searchTerm, searchTags)
+  const results = getSearchResults()
 
-  const reposData = stars.filter(
-    star => results.find((res: any) => star.id === res.id) !== undefined
-  )
-
+  // Single column
   const ListItems = ({
     index,
     style
   }: {
     index: number
     style: React.CSSProperties
-  }) => <Repo repo={reposData[index]} style={style} />
+  }) => <Repo repo={results[index]} style={style} />
 
-  const col1 = reposData.filter((val, i) => i === 0 || i % 2 === 0)
-  const col2 = reposData.filter((val, i) => i % 2 !== 0)
+  // 2 column grid
+  const col1 = results.filter((val, i) => i === 0 || i % 2 === 0)
+  const col2 = results.filter((val, i) => i % 2 !== 0)
   const GridCells = ({
     columnIndex,
     rowIndex,
@@ -53,14 +51,14 @@ const RepoList = () => {
 
   return (
     <Wrapper data-testid="repo-list">
-      {reposData.length > 0 ? (
+      {results.length > 0 ? (
         <AutoSizer defaultHeight={1000} defaultWidth={450}>
           {autosizer =>
             gridLayout ? (
               <FixedSizeGrid
                 columnCount={2}
                 columnWidth={450}
-                rowCount={reposData.length / 2}
+                rowCount={results.length / 2}
                 rowHeight={248}
                 width={autosizer.width}
                 height={autosizer.height}
@@ -71,7 +69,7 @@ const RepoList = () => {
             ) : (
               <List
                 height={autosizer.height}
-                itemCount={reposData.length}
+                itemCount={results.length}
                 itemSize={248}
                 width={autosizer.width}
                 outerElementType={CustomScrollbarsVirtualList}
