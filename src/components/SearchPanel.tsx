@@ -1,4 +1,4 @@
-import React, { useEffect, RefObject } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import SearchBox from './SearchBox'
 import TagToolbar from './TagToolbar'
@@ -8,7 +8,7 @@ import useAppState from 'state/hooks/useAppState'
 import usePopup from 'state/hooks/usePopup'
 import useKeyPress from 'hooks/useKeyPress'
 
-const SearchToolPanel = () => {
+const SearchPanel = () => {
   const {
     editingTag,
     submitEditTag,
@@ -32,7 +32,7 @@ const SearchToolPanel = () => {
   const submitTagName = (
     tagName: string,
     prevName: string,
-    tagRef: RefObject<HTMLDivElement>
+    tagRef: React.RefObject<HTMLDivElement>
   ) => {
     if (isAddingTag) submitAddTag(tagName)
     else if (editingTag > -1) {
@@ -84,7 +84,7 @@ const SearchToolPanel = () => {
   }
 
   return (
-    <Wrapper data-testid="search-tool-panel">
+    <Wrapper data-testid="search-panel">
       <SearchBox />
 
       <TagToolbar />
@@ -108,11 +108,15 @@ const SearchToolPanel = () => {
 }
 
 const Wrapper = styled.div`
-  width: 100%;
+  width: 289px;
+  height: 100vh;
+  background-color: ${props => props.theme.color.bgLight};
+  border-style: solid;
+  border-width: 0 0.5px 0 0;
+  border-color: ${props => props.theme.color.borderLight};
   padding: 12.8px;
   box-sizing: border-box;
   color: ${props => props.theme.color.light};
-  background-color: ${props => props.theme.color.bgLight};
 `
 
 const TagList = styled.div`
@@ -120,4 +124,4 @@ const TagList = styled.div`
   flex-wrap: wrap;
 `
 
-export default SearchToolPanel
+export default SearchPanel

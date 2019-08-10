@@ -1,5 +1,5 @@
 import React from 'react'
-import SearchToolPanel from '../SearchToolPanel'
+import SearchPanel from '../SearchPanel'
 import ConfirmationPopup from 'components/ConfirmationPopup'
 import { render, cleanup, fireEvent } from 'utils/test-utils'
 import userEvent from '@testing-library/user-event'
@@ -14,9 +14,7 @@ import '@testing-library/jest-dom/extend-expect'
 afterEach(() => cleanup())
 
 test('Clicking add tag button adds a new tag in edit mode', () => {
-  const { getByTestId, getAllByTestId, queryByTestId } = render(
-    <SearchToolPanel />
-  )
+  const { getByTestId, getAllByTestId, queryByTestId } = render(<SearchPanel />)
   expect(queryByTestId('tag-name-input')).toBeFalsy()
   const firstTag = getAllByTestId('tag')[0]
   fireEvent.click(getByTestId('add-tag-button'))
@@ -25,9 +23,7 @@ test('Clicking add tag button adds a new tag in edit mode', () => {
 })
 
 test('Submitting a new tag adds it to the list', () => {
-  const { getByTestId, queryByTestId, getAllByTestId } = render(
-    <SearchToolPanel />
-  )
+  const { getByTestId, queryByTestId, getAllByTestId } = render(<SearchPanel />)
   fireEvent.click(getByTestId('add-tag-button'))
   userEvent.type(getByTestId('tag-name-input'), 'New Tag Name')
   fireEvent.submit(getByTestId('tag-name-input'))
@@ -36,9 +32,7 @@ test('Submitting a new tag adds it to the list', () => {
 })
 
 test('Defocusing a tag in add mode deletes it', () => {
-  const { getByTestId, queryByTestId, getAllByTestId } = render(
-    <SearchToolPanel />
-  )
+  const { getByTestId, queryByTestId, getAllByTestId } = render(<SearchPanel />)
   fireEvent.click(getByTestId('add-tag-button'))
   userEvent.type(getByTestId('tag-name-input'), 'Cancelled Tag Name')
   fireEvent.blur(getByTestId('tag-name-input'))
@@ -52,7 +46,7 @@ describe('Tag renaming process', () => {
 
   test('Shift-clicking makes a tag editible', () => {
     const { queryByTestId, getByTestId, getAllByTestId } = render(
-      <SearchToolPanel />
+      <SearchPanel />
     )
     expect(queryByTestId('tag-name-input')).toBeFalsy()
     const firstTag = getAllByTestId('tag')[0]
@@ -70,7 +64,7 @@ describe('Tag renaming process', () => {
   test('Tag renaming flow', () => {
     const { getByTestId, queryByTestId, getAllByTestId } = render(
       <>
-        <SearchToolPanel />
+        <SearchPanel />
         <ConfirmationPopup />
       </>
     )
@@ -90,7 +84,7 @@ describe('Tag renaming process', () => {
   test('Cancel tag renaming', () => {
     const { getByTestId, getAllByTestId } = render(
       <>
-        <SearchToolPanel />
+        <SearchPanel />
         <ConfirmationPopup />
       </>
     )
@@ -111,7 +105,7 @@ describe('Tag deletion process', () => {
   test('Tag deletion flow', () => {
     const { getAllByTestId, queryByTestId } = render(
       <>
-        <SearchToolPanel />
+        <SearchPanel />
         <ConfirmationPopup />
       </>
     )
@@ -127,7 +121,7 @@ describe('Tag deletion process', () => {
   test('Cancel tag deletion', () => {
     const { getAllByTestId } = render(
       <>
-        <SearchToolPanel />
+        <SearchPanel />
         <ConfirmationPopup />
       </>
     )

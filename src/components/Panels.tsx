@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import AppBar from './AppBar'
 import ResultsPanel from './ResultsPanel'
-import ToolPanel from './ToolPanel'
+import SearchPanel from './SearchPanel'
 
 export enum ToolbarPanelOptions {
   Search,
@@ -10,16 +10,10 @@ export enum ToolbarPanelOptions {
 }
 
 const Panels = () => {
-  const [activeToolbarPanel, setActiveToolbarPanel] = useState(
-    ToolbarPanelOptions.Search
-  )
   return (
     <Wrapper data-testid="panels">
-      <AppBar
-        setActiveToolbarPanel={setActiveToolbarPanel}
-        activeToolbarPanel={activeToolbarPanel}
-      />
-      <ToolPanel activeToolbarPanel={activeToolbarPanel} />
+      <AppBar />
+      <SearchPanel />
       <ResultsPanel />
     </Wrapper>
   )

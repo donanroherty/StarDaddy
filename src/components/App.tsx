@@ -5,9 +5,12 @@ import Panels from './Panels'
 import UserAuthenticator from './UserAuthenticator'
 import ConfirmationPopup from './ConfirmationPopup'
 import useGithub from 'state/hooks/useGithub'
+import useSettings from 'state/hooks/useSettings'
 
 const App: React.FC = () => {
   const { authState, autoLogin } = useGithub()
+  const { settingsMenuOpen } = useSettings()
+
   useEffect(() => autoLogin(), [])
 
   return (

@@ -1,33 +1,30 @@
-import React from 'react'
-import styled from 'styled-components'
-import AppBarButton from './AppBarButton'
-import { ToolbarPanelOptions } from './Panels'
+import React, { useRef } from 'react'
+import styled, { withTheme } from 'styled-components'
+import { GoGear } from 'react-icons/go'
+import { ThemeInterface } from 'theme/theme'
+import SettingsMenu from './SettingsMenu'
+import useSettings from 'state/hooks/useSettings'
 
 interface AppBarProps {
-  activeToolbarPanel: ToolbarPanelOptions
-  setActiveToolbarPanel: (panel: ToolbarPanelOptions) => void
+  theme: ThemeInterface
 }
 
-const AppBar = (props: AppBarProps) => {
+const AppBar: React.FC<AppBarProps> = ({ theme }) => {
+  const { toggleSettingsMenu } = useSettings()
+  const settingsBtnRef = useRef<HTMLDivElement>(null)
+
   return (
     <Wrapper data-testid="app-bar">
       <Buttons>
-        <AppBarButton
-          title="Search"
-          icon="search"
-          onClick={() => {
-            props.setActiveToolbarPanel(ToolbarPanelOptions.Search)
-          }}
-        />
-
-        <AppBarButton
-          title="Settings"
-          icon="settings"
-          onClick={() => {
-            props.setActiveToolbarPanel(ToolbarPanelOptions.Settings)
-          }}
-        />
+        <SettingsButton
+          onClick={toggleSettingsMenu}
+          ref={settingsBtnRef}
+          data-testid="settings-btn"
+        >
+          <GoGear size={35} color={theme.color.light} />
+        </SettingsButton>
       </Buttons>
+      <SettingsMenu settingsBtnRef={settingsBtnRef} />
     </Wrapper>
   )
 }
@@ -39,12 +36,18 @@ const Wrapper = styled.div`
 `
 const Buttons = styled.div`
   height: 100%;
-  display: grid;
-  grid-template-columns: auto;
-  grid-template-rows: auto auto 1fr;
+  display: flex;
+  align-items: flex-end;
+  box-sizing: border-box;
+  padding-bottom: 15px;
+`
+const SettingsButton = styled.div`
+  width: 50px;
+  height: 50px;
+  display: flex;
   * {
-    margin-top: 15px;
+    margin: auto;
   }
 `
 
-export default AppBar
+export default withTheme(AppBar)

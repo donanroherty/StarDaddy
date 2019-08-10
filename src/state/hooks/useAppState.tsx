@@ -19,6 +19,15 @@ export default function useAppState() {
     setLastSyncDate
   } = context
 
+  const clearLocalData = () => {
+    setAccessToken('')
+    setUser(null)
+    setStars([])
+    setTags([])
+    setLastSyncDate(null)
+    localStorage.clear()
+  }
+
   return {
     accessToken,
     setAccessToken,
@@ -29,6 +38,7 @@ export default function useAppState() {
     tags,
     setTags,
     lastSyncDate,
-    setLastSyncDate
+    setLastSyncDate,
+    clearLocalData
   }
 }
