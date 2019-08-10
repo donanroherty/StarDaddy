@@ -7,8 +7,6 @@ import '@testing-library/jest-dom/extend-expect'
 
 afterEach(() => cleanup())
 
-const setActiveToolbarPanel = jest.fn()
-
 const mockUser = {
   login: 'donanroherty',
   id: 5565439,
@@ -84,7 +82,7 @@ const mockRepos: StarredRepo[] = [
   }
 ]
 
-test('Clicking settings button opens the settings menu', () => {
+test('Clicking settings button toggles the settings menu', () => {
   const { getByTestId } = render(
     <AppStateProvider
       value={{

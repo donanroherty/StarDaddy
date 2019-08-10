@@ -1,8 +1,7 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import styled, { withTheme } from 'styled-components'
 import { GoGear } from 'react-icons/go'
 import { ThemeInterface } from 'theme/theme'
-
 import SettingsMenu from './SettingsMenu'
 import useSettings from 'state/hooks/useSettings'
 
@@ -12,15 +11,20 @@ interface AppBarProps {
 
 const AppBar: React.FC<AppBarProps> = ({ theme }) => {
   const { toggleSettingsMenu } = useSettings()
+  const settingsBtnRef = useRef<HTMLDivElement>(null)
 
   return (
     <Wrapper data-testid="app-bar">
       <Buttons>
-        <SettingsButton onClick={toggleSettingsMenu} data-testid="settings-btn">
+        <SettingsButton
+          onClick={toggleSettingsMenu}
+          ref={settingsBtnRef}
+          data-testid="settings-btn"
+        >
           <GoGear size={35} color={theme.color.light} />
         </SettingsButton>
       </Buttons>
-      <SettingsMenu />
+      <SettingsMenu settingsBtnRef={settingsBtnRef} />
     </Wrapper>
   )
 }

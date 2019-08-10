@@ -1,16 +1,25 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import styled from 'styled-components'
 import useAppState from 'state/hooks/useAppState'
 import useGithub from 'state/hooks/useGithub'
 import useSettings from 'state/hooks/useSettings'
+import useOutsideClick from 'hooks/useOutsideClick'
 
-const SettingsMenu = () => {
+interface SettingsMenuProps {
+  settingsBtnRef: React.RefObject<HTMLDivElement>
+}
+
+const SettingsMenu: React.FC<SettingsMenuProps> = ({ settingsBtnRef }) => {
   const { user } = useAppState()
   const { logout } = useGithub()
-  const { settingsMenuOpen } = useSettings()
+  const { settingsMenuOpen, hideSettingsMenu } = useSettings()
+
+  const ref = useRef<HTMLDivElement>(null)
+
+  useOutsideClick(ref, hideSettingsMenu, [settingsBtnRef]) // Hide on outside click
 
   return (
-    <Wrapper isVisible={settingsMenuOpen} data-testid="settings-menu">
+    <Wrapper ref={ref} isVisible={settingsMenuOpen} data-testid="settings-menu">
       <UserDetails>
         <AccountRealName>{user.name}</AccountRealName>
         <a
