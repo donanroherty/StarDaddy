@@ -7,6 +7,8 @@ import Tag from './Tag'
 import useAppState from 'state/hooks/useAppState'
 import usePopup from 'state/hooks/usePopup'
 import useKeyPress from 'hooks/useKeyPress'
+import Scrollbars from 'react-custom-scrollbars'
+import { lighten } from 'polished'
 
 const SearchPanel = () => {
   const {
@@ -83,26 +85,39 @@ const SearchPanel = () => {
     }
   }
 
+  const thumb = () => {
+    const ThumbStyle = styled.div`
+      background-color: ${({ theme }) => lighten(0.4, theme.color.primary)};
+      border-radius: 5px;
+    `
+    return <ThumbStyle />
+  }
+
   return (
     <Wrapper data-testid="search-panel">
       <SearchBox />
 
       <TagToolbar />
 
-      <TagList>
-        {displayTags &&
-          displayTags.map((tag, i) => (
-            <Tag
-              name={tag}
-              key={tag}
-              isSearchPanelTag
-              isEditing={(isAddingTag && i === 0) || editingTag === i}
-              submitName={submitTagName}
-              cancelTagOperation={cancelTagOperation}
-              handleTagClick={handleTagClick}
-            />
-          ))}
-      </TagList>
+      <Scrollbars
+        style={{ width: '100%', height: '100%' }}
+        renderThumbVertical={thumb}
+      >
+        <TagList>
+          {displayTags &&
+            displayTags.map((tag, i) => (
+              <Tag
+                name={tag}
+                key={tag}
+                isSearchPanelTag
+                isEditing={(isAddingTag && i === 0) || editingTag === i}
+                submitName={submitTagName}
+                cancelTagOperation={cancelTagOperation}
+                handleTagClick={handleTagClick}
+              />
+            ))}
+        </TagList>
+      </Scrollbars>
     </Wrapper>
   )
 }
@@ -122,6 +137,7 @@ const Wrapper = styled.div`
 const TagList = styled.div`
   display: flex;
   flex-wrap: wrap;
+  width: 100%;
 `
 
 export default SearchPanel

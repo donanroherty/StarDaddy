@@ -117,7 +117,7 @@ const Wrapper = styled.span<TagProps>`
   display: flex;
   flex-direction: row;
   height: ${({ isThin }) => `${isThin ? '22px' : 'auto'}`};
-  margin: 4px 10px 4px 0px;
+  margin: 4px 6px 4px 0px;
   user-select: none;
 
   &:hover ${StyledIcon} {
@@ -126,7 +126,7 @@ const Wrapper = styled.span<TagProps>`
 `
 const Inner = styled.span<TagProps>`
   box-sizing: border-box;
-  padding: ${({ isThin }) => `${isThin ? 1.5 : 6}`}px
+  padding: ${({ isThin }) => `${isThin ? 1.5 : 4}`}px
     ${({ isThin }) => `${isThin ? 6 : 12}`}px;
   border-radius: 10px;
   border: 1px solid
