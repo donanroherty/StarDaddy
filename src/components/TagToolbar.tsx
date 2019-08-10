@@ -13,13 +13,15 @@ const TagToolbar: React.FC<TagToolbarProps> = () => {
 
   return (
     <Wrapper>
-      <Button onClick={beginAddTag} data-testid="add-tag-button">
+      {/* <Button onClick={beginAddTag} data-testid="add-tag-button">
         <div>+</div>
-      </Button>
+      </Button> */}
 
       <div>
-        <ShortcutNotice>shift + click tag to rename</ShortcutNotice>
-        <ShortcutNotice>ctrl + click tag to delete</ShortcutNotice>
+        {/* <ShortcutNotice>shift + click tag to rename</ShortcutNotice> */}
+        {/* <ShortcutNotice>ctrl + click tag to delete</ShortcutNotice> */}
+        <ShortcutNotice>click a tag to search for it</ShortcutNotice>
+        <ShortcutNotice>drag tags on a repo to tag it</ShortcutNotice>
       </div>
     </Wrapper>
   )

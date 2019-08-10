@@ -9,6 +9,7 @@ import usePopup from 'state/hooks/usePopup'
 import useKeyPress from 'hooks/useKeyPress'
 import Scrollbars from 'react-custom-scrollbars'
 import { lighten } from 'polished'
+import useSearch from 'state/hooks/useSearch'
 
 const SearchPanel = () => {
   const {
@@ -22,6 +23,7 @@ const SearchPanel = () => {
   } = useTags()
   const { tags } = useAppState()
   const { showConfirmPopup, handleCancel } = usePopup()
+  const { addSearchTag } = useSearch()
 
   const displayTags = isAddingTag ? ['new tag', ...tags] : tags
 
@@ -66,23 +68,28 @@ const SearchPanel = () => {
   const handleTagClick = (tag: string, event: React.MouseEvent) => {
     handleCancel()
 
-    event.shiftKey && beginEditTag(tag)
-
-    if (event.ctrlKey) {
-      const target = event.target as HTMLDivElement
-
-      showConfirmPopup(
-        <div>
-          Delete <strong>{tag}</strong>?
-        </div>,
-        false,
-        [target.offsetLeft, target.offsetTop],
-        () => {
-          deleteTag(tag)
-        },
-        () => {}
-      )
+    if (!event.shiftKey && !event.ctrlKey) {
+      addSearchTag(tag)
     }
+
+    // ! Disabled temporarily pending strategy for editing GitHub language tags
+    // event.shiftKey && beginEditTag(tag)
+
+    // if (event.ctrlKey) {
+    //   const target = event.target as HTMLDivElement
+
+    //   showConfirmPopup(
+    //     <div>
+    //       Delete <strong>{tag}</strong>?
+    //     </div>,
+    //     false,
+    //     [target.offsetLeft, target.offsetTop],
+    //     () => {
+    //       deleteTag(tag)
+    //     },
+    //     () => {}
+    //   )
+    // }
   }
 
   const thumb = () => {
@@ -99,25 +106,27 @@ const SearchPanel = () => {
 
       <TagToolbar />
 
-      <Scrollbars
-        style={{ width: '100%', height: '100%' }}
-        renderThumbVertical={thumb}
-      >
-        <TagList>
-          {displayTags &&
-            displayTags.map((tag, i) => (
-              <Tag
-                name={tag}
-                key={tag}
-                isSearchPanelTag
-                isEditing={(isAddingTag && i === 0) || editingTag === i}
-                submitName={submitTagName}
-                cancelTagOperation={cancelTagOperation}
-                handleTagClick={handleTagClick}
-              />
-            ))}
-        </TagList>
-      </Scrollbars>
+      <TagsPanel>
+        <Scrollbars
+          style={{ width: '100%', height: '100%' }}
+          renderThumbVertical={thumb}
+        >
+          <TagList>
+            {displayTags &&
+              displayTags.map((tag, i) => (
+                <Tag
+                  name={tag}
+                  key={tag}
+                  isSearchPanelTag
+                  isEditing={(isAddingTag && i === 0) || editingTag === i}
+                  submitName={submitTagName}
+                  cancelTagOperation={cancelTagOperation}
+                  handleTagClick={handleTagClick}
+                />
+              ))}
+          </TagList>
+        </Scrollbars>
+      </TagsPanel>
     </Wrapper>
   )
 }
@@ -133,7 +142,11 @@ const Wrapper = styled.div`
   box-sizing: border-box;
   color: ${props => props.theme.color.light};
 `
-
+const TagsPanel = styled.div`
+  width: 100%;
+  height: 100%;
+  margin-top: 30px;
+`
 const TagList = styled.div`
   display: flex;
   flex-wrap: wrap;
