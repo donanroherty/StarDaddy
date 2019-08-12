@@ -9,7 +9,6 @@ import useSettings from 'state/hooks/useSettings'
 
 const App: React.FC = () => {
   const { authState, autoLogin } = useGithub()
-  const { settingsMenuOpen } = useSettings()
 
   useEffect(() => autoLogin(), [])
 
