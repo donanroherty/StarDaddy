@@ -70,7 +70,10 @@ export default function useGithub() {
     )
   }
 
-  const authorize = async (token: string) => {
+  const authorize = async (
+    token: string,
+    cb: (success: boolean, payload: any) => void = () => {}
+  ) => {
     try {
       const res = await gqlRequest(GET_USER, {
         Authorization: `bearer ${token}`
@@ -86,15 +89,18 @@ export default function useGithub() {
           avatar_url: data.avatarUrl
         })
         setAuthState(AuthState.loggedIn)
+        cb(true, res)
       } else {
         reject(new Error('status failed')).catch(e => {
           setAuthState(AuthState.loggedOut)
+          cb(false, res)
           console.error(e, res)
         })
       }
     } catch (error) {
       setAuthState(AuthState.loggedOut)
-      console.error(error)
+      cb(false, error)
+      console.error(error.response)
     }
   }
 
