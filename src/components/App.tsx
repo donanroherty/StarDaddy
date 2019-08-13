@@ -4,11 +4,13 @@ import { AuthState } from 'types/GithubTypes'
 import Panels from './Panels'
 import UserAuthenticator from './UserAuthenticator'
 import ConfirmationPopup from './ConfirmationPopup'
+import About from './About'
 import useGithub from 'state/hooks/useGithub'
 import useSettings from 'state/hooks/useSettings'
 
 const App: React.FC = () => {
   const { authState, autoLogin } = useGithub()
+  const { aboutModalIsVisible, dismissAboutModal } = useSettings()
 
   useEffect(() => autoLogin(), [])
 
@@ -16,7 +18,9 @@ const App: React.FC = () => {
     <Wrapper>
       <GlobalStyle />
       <ConfirmationPopup />
-      {authState === AuthState.loggedIn ? <Panels /> : <UserAuthenticator />}
+      <About show={aboutModalIsVisible} dismiss={dismissAboutModal} />
+      <UserAuthenticator show={authState !== AuthState.loggedIn} />
+      {authState === AuthState.loggedIn && <Panels />}
     </Wrapper>
   )
 }

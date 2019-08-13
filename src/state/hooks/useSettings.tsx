@@ -6,7 +6,12 @@ export default function useSettings() {
   if (!context)
     throw new Error('useSettings must be used within a SettingsProvider')
 
-  const { settingsMenuOpen, setSettingsMenuOpen } = context
+  const {
+    settingsMenuOpen,
+    setSettingsMenuOpen,
+    aboutModalIsVisible,
+    setAboutModalIsVisible
+  } = context
 
   const showSettingsMenu = () => {
     setSettingsMenuOpen(true)
@@ -20,10 +25,20 @@ export default function useSettings() {
     setSettingsMenuOpen(prev => (prev ? false : true))
   }
 
+  const openAboutModal = () => {
+    setAboutModalIsVisible(true)
+  }
+  const dismissAboutModal = () => {
+    setAboutModalIsVisible(false)
+  }
+
   return {
     settingsMenuOpen,
     showSettingsMenu,
     hideSettingsMenu,
-    toggleSettingsMenu
+    toggleSettingsMenu,
+    aboutModalIsVisible,
+    openAboutModal,
+    dismissAboutModal
   }
 }

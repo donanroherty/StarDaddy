@@ -12,7 +12,7 @@ interface SettingsMenuProps {
 const SettingsMenu: React.FC<SettingsMenuProps> = ({ settingsBtnRef }) => {
   const { user } = useAppState()
   const { logout } = useGithub()
-  const { settingsMenuOpen, hideSettingsMenu } = useSettings()
+  const { settingsMenuOpen, hideSettingsMenu, openAboutModal } = useSettings()
 
   const ref = useRef<HTMLDivElement>(null)
 
@@ -33,6 +33,12 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({ settingsBtnRef }) => {
       <SettingList>
         <SettingItem
           onClick={() => {
+            openAboutModal()
+            hideSettingsMenu()
+          }}
+        >
+          About
+        </SettingItem>
             logout(true)
             hideSettingsMenu()
           }}
