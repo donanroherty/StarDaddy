@@ -30,6 +30,7 @@ const About: React.FC<AboutProps> = ({ show, dismiss }) => {
           Got feedback, a bug report or feature request? Shoot me an email at
           <br /> <strong>ronandohertydev@gmail.com</strong>
         </p>
+        <p>❤</p>
       </TextContent>
 
       <ButtonWrapper>
