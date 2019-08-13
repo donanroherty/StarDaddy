@@ -52,7 +52,7 @@ const RepoList = () => {
   return (
     <Wrapper data-testid="repo-list">
       {results.length > 0 ? (
-        <AutoSizer defaultHeight={1000} defaultWidth={450}>
+        <AutoSizer>
           {autosizer =>
             gridLayout ? (
               <FixedSizeGrid

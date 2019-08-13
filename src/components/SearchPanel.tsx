@@ -165,7 +165,7 @@ const Wrapper = styled.div`
 const TagsPanel = styled.div`
   width: 100%;
   height: 100%;
-  margin-top: 30px;
+  margin-top: 15px;
 `
 const TagList = styled.div`
   display: flex;

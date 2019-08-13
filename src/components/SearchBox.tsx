@@ -62,7 +62,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ theme }) => {
       <HR />
 
       {searchTags.length === 0 && (
-        <DragPrompt>Drag tags here to filter</DragPrompt>
+        <DragPrompt>{/* Drag tags here to filter */}</DragPrompt>
       )}
 
       <TagList>
@@ -109,8 +109,10 @@ const HR = styled.div`
 const DragPrompt = styled.div`
   color: ${({ theme }) => theme.color.light};
   font-size: 12px;
+  height: 30px;
+  box-sizing: border-box;
   padding-left: 10px;
-  padding-top: 5px;
+  padding-top: 8px;
 `
 const TagList = styled.div`
   display: flex;
