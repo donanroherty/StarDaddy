@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import Repo from './Repo'
-import useSearch, { getCombinedSearch } from 'state/hooks/useSearch'
+import useSearch from 'state/hooks/useSearch'
 import useGithub from 'state/hooks/useGithub'
 import { AuthState } from 'types/GithubTypes'
 import useAppState from 'state/hooks/useAppState'
@@ -97,7 +97,6 @@ const NoResultsNotice = styled.div`
   height: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
   color: ${({ theme }) => theme.color.text};
   font-weight: bold;
   font-size: 20px;
