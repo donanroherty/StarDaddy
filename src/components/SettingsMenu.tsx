@@ -4,6 +4,7 @@ import useAppState from 'state/hooks/useAppState'
 import useGithub from 'state/hooks/useGithub'
 import useSettings from 'state/hooks/useSettings'
 import useOutsideClick from 'hooks/useOutsideClick'
+import usePopup from 'state/hooks/usePopup'
 
 interface SettingsMenuProps {
   settingsBtnRef: React.RefObject<HTMLDivElement>
@@ -12,7 +13,8 @@ interface SettingsMenuProps {
 const SettingsMenu: React.FC<SettingsMenuProps> = ({ settingsBtnRef }) => {
   const { user } = useAppState()
   const { logout } = useGithub()
-  const { settingsMenuOpen, hideSettingsMenu } = useSettings()
+  const { settingsMenuOpen, hideSettingsMenu, openAboutModal } = useSettings()
+  const { showConfirmPopup, handleCancel } = usePopup()
 
   const ref = useRef<HTMLDivElement>(null)
 
@@ -33,8 +35,27 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({ settingsBtnRef }) => {
       <SettingList>
         <SettingItem
           onClick={() => {
-            logout(true)
+            openAboutModal()
             hideSettingsMenu()
+          }}
+        >
+          About
+        </SettingItem>
+
+        <SettingItem
+          onClick={() => {
+            showConfirmPopup(
+              <div>Clear all locally saved data and settings?</div>,
+              true,
+              [0, 0],
+              () => {
+                logout(true)
+                hideSettingsMenu()
+              },
+              () => {
+                handleCancel()
+              }
+            )
           }}
         >
           Clear local storage
