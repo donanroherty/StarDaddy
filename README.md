@@ -13,19 +13,19 @@ See [Requirements Doc](https://github.com/donanroherty/StarDaddy/wiki/Requiremen
 ## Build instructions
 
 ```
-# Software versions
+// Software versions
 node: v10.16.2
 yarn: 1.17.3
 ```
 
 
-```
-# Development
+```javascript
+// Development
 yarn start
 
-# Run tests
+// Run tests
 yarn test
 
-# Build
-yarn build    <-- outputs to `project-root/build`
+// Build
+yarn build    // outputs to `project-root/build`
 ```
