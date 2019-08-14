@@ -7,8 +7,9 @@ This project is a **work in progress** and still in early alpha.
 See [Requirements Doc](https://github.com/donanroherty/StarDaddy/wiki/Requirements) for more info, or download [AdobeXD Design File](https://1drv.ms/u/s!Arcuy-4Tl1Q4laUjFtirvPZLcqeYHg).
 
 ## Build instructions
-Software versions:
+
 ```
+# Software versions
 node: v10.16.2
 yarn: 1.17.3
 ```
