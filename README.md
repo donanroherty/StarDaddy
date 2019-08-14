@@ -27,6 +27,5 @@ yarn start
 yarn test
 
 # Build
-yarn build 
-// outputs to `project-root/build`
+yarn build    <-- outputs to `project-root/build`
 ```
