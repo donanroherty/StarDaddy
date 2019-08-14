@@ -13,9 +13,6 @@ node: v10.16.2
 yarn: 1.17.3
 ```
 
-Development:```yarn start```
-Run tests: ```yarn test```
-Build: ```yarn build```
 
 ```
 # Development
@@ -25,7 +22,6 @@ yarn start
 yarn test
 
 # Build
-yarn build
+yarn build 
+// outputs to `project-root/build`
 ```
-
-Successful builds output to `/build`
