@@ -19,7 +19,7 @@ const App: React.FC = () => {
       <GlobalStyle />
       <ConfirmationPopup />
       <About show={aboutModalIsVisible} dismiss={dismissAboutModal} />
-      <UserAuthenticator show={authState !== AuthState.loggedIn} />
+
       {authState === AuthState.loggedIn ? (
         <Panels />
       ) : (

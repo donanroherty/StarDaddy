@@ -9,10 +9,8 @@ afterAll(() => mock.restore())
 afterEach(() => cleanup())
 
 test('Login', async () => {
-  const { getByTitle, getByText, getByTestId, queryByTestId, debug } = render(
-    <App />
-  )
-  fireEvent.change(getByTitle(/access token/i), {
+  const { getByText, getByTestId, queryByTestId, debug } = render(<App />)
+  fireEvent.change(getByTestId('access-token-input'), {
     target: { value: 'abcdef' }
   })
   fireEvent.click(getByText(/Authenticate/i))
