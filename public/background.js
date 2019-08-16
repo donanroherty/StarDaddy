@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 
 function openAppPage() {
-  browser.tabs
+  chrome.tabs
     .create({
       url: './index.html'
     })
@@ -10,4 +10,4 @@ function openAppPage() {
     })
 }
 
-browser.browserAction.onClicked.addListener(openAppPage)
+chrome.browserAction.onClicked.addListener(openAppPage)
