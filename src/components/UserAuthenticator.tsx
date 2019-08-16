@@ -92,9 +92,10 @@ const UserAuthenticator: React.FC<UserAuthenticatorProps> = ({ show }) => {
           </ReactTooltip>
           <AccessTokenInput
             type="text"
-            name="access token"
-            title="access token"
-            placeholder="access token"
+            name="personal access token"
+            title="personal access token"
+            data-testid="access-token-input"
+            placeholder="personal access token"
             value={input}
             onChange={e => setInput(e.target.value)}
           />
