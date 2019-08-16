@@ -1,7 +1,7 @@
 {
   "name": "Star Daddy",
-  "description": "A browser extension for sorting and rediscovery of starred GitHub repos",
-  "version": "0.01",
+  "description": "A browser extension for rediscovering starred GitHub repos",
+  "version": "1.0.0",
   "manifest_version": 2,
   "icons": {
     "48": "icons/logo-48.png"

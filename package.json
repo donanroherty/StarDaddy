@@ -1,9 +1,10 @@
 {
   "name": "star-daddy",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@types/react-tooltip": "^3.9.3",
+    "addons-linter": "^1.12.1",
     "axios": "^0.19.0",
     "polished": "^3.4.1",
     "react": "^16.9.0-alpha.0",
@@ -22,11 +23,12 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "run-ext": "cd build && web-ext run --firefox=firefoxdeveloperedition",
-    "build": "INLINE_RUNTIME_CHUNK=false react-scripts build",
+    "build": "react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!react-dnd)/\"",
     "eject": "react-scripts eject",
-    "netlify": "react-scripts build && netlify deploy --prod"
+    "netlify": "react-scripts build && netlify deploy --prod",
+    "firefox": "react-scripts build && cd build && web-ext run",
+    "addons-linter": "react-scripts build && cd build && addons-linter ./"
   },
   "eslintConfig": {
     "extends": "react-app"
