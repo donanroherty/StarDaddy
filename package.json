@@ -1,6 +1,6 @@
 {
   "name": "star-daddy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "dependencies": {
     "@types/react-tooltip": "^3.9.3",
