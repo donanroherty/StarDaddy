@@ -12,7 +12,7 @@ const About: React.FC<AboutProps> = ({ show, dismiss }) => {
     <Modal show={show}>
       <TextContent>
         <p>
-          <strong>v0.01</strong>
+          <strong>v1.0.1-alpha</strong>
         </p>
         <p>Thanks for trying StarDaddy!</p>
         <p>
